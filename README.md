@@ -9,7 +9,7 @@ This is a Application which allows the user to create and edit existing Java Cla
 To build the project run the following maven command:  
 `mvn clean install -Pproduction` 
 
-After executing the ready to use electron application can be found under `target/electron/<your-archtype>`
+After executing the ready to use electron application can be found `target/electron/designer-for-flow-<archtype>`.
 
 # Branching
 
@@ -19,4 +19,4 @@ After executing the ready to use electron application can be found under `target
 
 # License
 
-This Project is released under the L-GPL License. 
+This Project is licensed with L-GPL. 
