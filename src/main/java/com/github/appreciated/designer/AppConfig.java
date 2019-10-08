@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
-    @Value("${developer-mode}")
+    @Value("${developer}")
     Boolean developerMode;
 
     public Boolean getDeveloperMode() {

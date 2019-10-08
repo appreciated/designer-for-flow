@@ -88,4 +88,8 @@ public class ProjectService {
     public AppConfig getConfig() {
         return config;
     }
+
+    public void close(DesignCompilerInformation info) {
+        project.getTemplates().remove(info);
+    }
 }
