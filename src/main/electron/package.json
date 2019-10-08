@@ -1,8 +1,8 @@
 {
-  "name": "Flow-Designer",
+  "name": "spring-boot-electron-wrapper",
   "version": "0.1.0",
   "main": "main.js",
-  "description": "A Designer for Vaadin Flow",
+  "description": "Electron wrapper for 'Designer for Flow'",
   "dependencies": {
     "electron-packager": "^13.1.1",
     "minimal-request-promise": "^1.4.0",

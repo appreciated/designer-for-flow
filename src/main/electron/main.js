@@ -13,15 +13,15 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
     app.quit()
 } else {
-    app.on('second-instance', (event, commandLine, workingDirectory) = > {
-        if(mainWindow) {
-            if (mainWindow.isMinimized()) {
-                mainWindow.restore();
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+            if (mainWindow) {
+                if (mainWindow.isMinimized()) {
+                    mainWindow.restore();
+                }
+                mainWindow.focus();
             }
-            mainWindow.focus();
         }
-    }
-)
+    )
 
     var fs = require("fs");
     var files = fs.readdirSync("./resources/app/java/");
@@ -72,9 +72,9 @@ if (!gotTheLock) {
             , height: 250
         });
         loading.loadURL(app.getAppPath() + '/loading.html');
-        loading.once('ready-to-show', () = > {
+        loading.once('ready-to-show', () => {
             loading.show();
-    })
+        })
         platform = process.platform;
         if (platform === 'win32') {
             serverProcess = require('child_process').spawn('java.exe', ['-jar', filename], {
@@ -99,10 +99,10 @@ if (!gotTheLock) {
             });
             mainWindow.setMenu(null);
             mainWindow.loadURL(appUrl);
-            mainWindow.once('ready-to-show', () = > {
+            mainWindow.once('ready-to-show', () => {
                 loading.hide();
-            mainWindow.show();
-        })
+                mainWindow.show();
+            })
             ;
             mainWindow.on('closed', function () {
                 mainWindow = null;
