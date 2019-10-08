@@ -69,7 +69,7 @@ if (!gotTheLock) {
             show: false
             , frame: false
             , width: 500
-            , height: 250
+            , height: 280
         });
         loading.loadURL(app.getAppPath() + '/loading.html');
         loading.once('ready-to-show', () => {
