@@ -1,16 +1,8 @@
 # Designer for Flow
 
-This project can be used as a starting point to create your own Vaadin Flow application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+This is a Application which allows to create and edit existing Java Classes which make using of the Vaadin Platform.    
 
-The best way to use it by via [vaadin.com/start](https://vaadin.com/start) - you can get only the necessary parts and choose the package naming you want to use.
-
-Import the project to the IDE of your choosing as a Maven project. 
-
-Run application using `mvn spring-boot:run` or directly running Application class from your IDE.
-
-Open http://localhost:8080/ in browser
-
+# Building
 
 For documentation on using Vaadin Flow and Spring, visit [vaadin.com/docs](https://vaadin.com/docs/v10/flow/spring/tutorial-spring-basic.html)
 
@@ -20,3 +12,7 @@ Branching information:
 * `master` the latest version of the starter, using the latest platform snapshot
 * `v15` the version for Vaadin 15
 * `master` for Vaadin 14
+
+# License
+
+This Project is released under the L-GPL License. 
