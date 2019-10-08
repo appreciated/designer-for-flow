@@ -1,4 +1,7 @@
-# Designer for Flow
+<p align="center"><img src="https://raw.githubusercontent.com/appreciated/blob/master/app-layout/logo_low_res.png">
+<br>
+  <h1>Designer for Flow</h1>
+</p>    
 
 This is a Application which allows to create and edit existing Java Classes which make using of the Vaadin Platform.    
 
