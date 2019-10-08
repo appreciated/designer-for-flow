@@ -1,6 +1,5 @@
 <p align="center"><img src="https://raw.githubusercontent.com/appreciated/blob/master/app-layout/logo_low_res.png">
 <br>
-<br>
 </p>    
 
 # Designer for Flow
