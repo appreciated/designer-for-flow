@@ -225,6 +225,8 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <jvmArguments>-Dvaadin.productionMode</jvmArguments>
+                            <executable>true</executable>
+                            <outputDirectory>target/electron/java</outputDirectory>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -239,27 +241,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <!-- Production mode can be activated with either property or profile -->
-            <id>build-electron</id>
-            <properties>
-                <vaadin.productionMode>true</vaadin.productionMode>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>true</executable>
-                            <outputDirectory>target/electron/java</outputDirectory>
-                        </configuration>
-                    </plugin>
-
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>3.1.0</version>
@@ -320,34 +301,18 @@
                                     <arguments>install electron-packager -g</arguments>
                                 </configuration>
                             </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.6.0</version>
-                        <executions>
                             <execution>
-                                <phase>install</phase>
+                                <id>package electron</id>
                                 <goals>
-                                    <goal>exec</goal>
+                                    <goal>npm</goal>
                                 </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <arguments>run package</arguments>
+                                    <workingDirectory>target/electron</workingDirectory>
+                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <executable>node\electron-packager.cmd</executable>
-                            <workingDirectory>target/electron/</workingDirectory>
-                            <arguments>
-                                <argument>.</argument>
-                                <argument>--icon=icon.ico</argument>
-                                <argument>--ignore=README.md</argument>
-                                <argument>--ignore=.idea</argument>
-                                <argument>--ignore=src</argument>
-                                <argument>--ignore=pom.xml</argument>
-                                <!-- <argument>- -platform=darwin</argument> -->
-                                <!-- platform all, or one or more of: darwin, linux, mas, win32 (comma-delimited if multiple). -->
-                            </arguments>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

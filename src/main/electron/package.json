@@ -1,5 +1,5 @@
 {
-  "name": "Designer for Flow",
+  "name": "designer-for-flow",
   "version": "0.5.0",
   "main": "main.js",
   "description": "Electron wrapper for 'Designer for Flow'",
@@ -7,6 +7,13 @@
     "electron-packager": "^13.1.1",
     "minimal-request-promise": "^1.4.0",
     "tree-kill": "^1.1.0"
+  },
+  "scripts": {
+    "package": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml",
+    "package-windows": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=windows",
+    "package-linux": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=darwin",
+    "package-mac": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=darwin",
+    "package-all": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=a"
   },
   "devDependencies": {
     "electron": "^5.0.1"
