@@ -6,6 +6,7 @@ import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
 import com.github.appreciated.designer.view.BaseView;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.dnd.DropEffect;
@@ -91,14 +92,12 @@ public class DesignView extends BaseView {
 
         if (projectService.getCurrentFile().getComponent() == null) {
             DropTarget<HorizontalLayout> dropTarget = DropTarget.create(designHolder);
-
             dropTarget.addDropListener(dropEvent -> {
                 dropEvent.getDragSourceComponent().ifPresent(dragSourceExtension -> {
                     Component droppedRoot = transformDesignerComponentLabel(dragSourceExtension);
                     designWrapper.removeAll();
                     designWrapper.add(droppedRoot);
                     projectService.getCurrentFile().setComponent(droppedRoot);
-                    notifyStructureListeners();
                 });
             });
         } else {
@@ -110,7 +109,6 @@ public class DesignView extends BaseView {
                 ((DesignerComponentWrapper) component).getActualComponent().getChildren().forEach(component1 -> initDesignerComponentWrapper((DesignerComponentWrapper) component1));
             }
             initDragAndDropListeners(component);
-            notifyStructureListeners();
             addDropListeners(component);
         }
 
@@ -121,6 +119,12 @@ public class DesignView extends BaseView {
                 designWrapper.getElement().getStyle().set(var.getVariable().getVariableName(), var.getValue());
             }));
         });
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        notifyStructureListeners();
     }
 
     private Icon getRotatedIcon(VaadinIcon icon, int degree) {
