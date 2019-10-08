@@ -1,4 +1,4 @@
-# Project Base for Vaadin Flow and Spring Boot
+# Designer for Flow
 
 This project can be used as a starting point to create your own Vaadin Flow application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
