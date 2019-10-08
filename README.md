@@ -5,11 +5,14 @@
 
 This is a Application which allows the user to create and edit existing Java Classes which use the Vaadin Platform.    
 
+# Executing
+For developement purposes the Application can be run using `mvn spring-boot:run` or directly by running the `com.github.appreciated.designer.Application` class from your IDE. 
+
 # Building
 To build the project run the following maven command:  
 `mvn clean install -Pproduction` 
 
-After executing the ready to use electron application can be found `target/electron/designer-for-flow-<archtype>`.
+After executing the ready to use electron application can be found under `target/electron/designer-for-flow-<archtype>`.
 
 # Branching
 
