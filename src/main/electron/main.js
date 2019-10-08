@@ -77,7 +77,7 @@ if (!gotTheLock) {
         })
         platform = process.platform;
         if (platform === 'win32') {
-            serverProcess = require('child_process').spawn('java.exe', ['-jar', filename, ' --logging.file=flow-designer.log'], {
+            serverProcess = require('child_process').spawn('java.exe', ['-jar', filename, '--logging.file=flow-designer.log'], {
                 cwd: './resources/app/java/'
             });
         } else if (platform === 'darwin') {
