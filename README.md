@@ -6,7 +6,7 @@
 This is a Application which allows the user to create and edit existing Java Classes which use the Vaadin Platform.    
 
 # Executing
-Before starting the application execute `mvn clean install`.
+Before starting the application via IDE execute `mvn clean install`.
 
 For developement purposes the Application can be run using `mvn spring-boot:run` or directly by running the `com.github.appreciated.designer.Application` class from your IDE. 
 
