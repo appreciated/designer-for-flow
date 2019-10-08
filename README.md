@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/appreciated/blob/master/app-layout/logo_low_res.png">
+<p align="center"><img src="https://github.com/appreciated/designer-for-flow/blob/master/logo-floating-low.png">
 <br>
   <h1>Designer for Flow</h1>
 </p>    
