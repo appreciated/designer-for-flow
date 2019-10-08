@@ -4,3 +4,5 @@
 *.iml
 /target/
 /database/db.mv.db
+webpack.config.js
+webpack.generated.js
