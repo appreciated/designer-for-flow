@@ -1,0 +1,51 @@
+.droptarget {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.dragover {
+    border: 1px solid var(--lumo-primary-color-50pct);
+    background: #eaeaea !important;
+}
+
+html {
+    --lumo-base-color: #fafafa;
+    --design-background: var(--lumo-base-color);
+    --design-grid-color-1: var(--lumo-contrast-10pct);
+    --design-grid-color-2: var(--lumo-contrast-5pct);
+    --design-shadow: var(--lumo-box-shadow-s);
+    --design-focus-shadow-normal: 0 0px 0px 2px var(--lumo-primary-color-50pct) inset, 0 3px 12px -1px var(--lumo-primary-color-50pct);
+    --design-focus-shadow-inset: 0 0px 1px 2px var(--lumo-primary-color-50pct) inset;
+}
+
+.design-view {
+    box-shadow: var(--design-shadow);
+    background-color: var(--design-background);
+    background-image: linear-gradient(var(--design-grid-color-1) -1px, transparent 1px),
+    linear-gradient(90deg, var(--design-grid-color-1) 0px, transparent 0px),
+    linear-gradient(var(--design-grid-color-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--design-grid-color-2) 1px, transparent 0px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
+.design-view > * {
+    box-shadow: var(--lumo-box-shadow-s);
+    color: var(--lumo-body-text-color);
+    background-color: var(--lumo-base-color);
+}
+
+.design-view > * {
+    --design-focus-shadow: var(--design-focus-shadow-inset);
+}
+
+.design-view > * > * {
+    --design-focus-shadow: var(--design-focus-shadow-normal);
+}
+
+.design-holder {
+    min-width: 200px;
+    min-height: 100px;
+    box-shadow: var(--lumo-box-shadow-l);
+    border-radius: var(--lumo-border-radius);
+}
