@@ -6,12 +6,13 @@
 This is a Application which allows the user to create and edit existing Java Classes which use the Vaadin Platform.    
 
 # Building
+To build the project run the following maven command:  
+`mvn clean install -Pproduction` 
 
-For documentation on using Vaadin Flow and Spring, visit [vaadin.com/docs](https://vaadin.com/docs/v10/flow/spring/tutorial-spring-basic.html)
+After executing the ready to use electron application can be found under `target/electron/<your-archtype>`
 
-For more information on Vaadin Flow, visit https://vaadin.com/flow.
+# Branching
 
-Branching information:
 * `master` the latest version of the starter, using the latest platform snapshot
 * `v15` the version for Vaadin 15
 * `master` for Vaadin 14
