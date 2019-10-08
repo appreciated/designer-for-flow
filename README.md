@@ -19,4 +19,4 @@ After executing the ready to use electron application can be found `target/elect
 
 # License
 
-This Project is licensed with L-GPL. 
+This Project is licensed under the GNU Lesser General Public License v3.0
