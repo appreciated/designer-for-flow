@@ -20,7 +20,6 @@ After executing the ready to use electron application can be found under `target
 
 * `master` the latest version of the starter, using the latest platform snapshot
 * `v15` the version for Vaadin 15
-* `master` for Vaadin 14
 
 # License
 
