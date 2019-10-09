@@ -1,30 +1,26 @@
 const {
     app, session, protocol, BrowserWindow, Menu, globalShortcut
 } = require('electron');
-
 const remote = require('electron').remote;
-
 const path = require('path');
 let mainWindow = null;
 let loading = null;
 let serverProcess = null;
 const gotTheLock = app.requestSingleInstanceLock();
-
 if (!gotTheLock) {
     app.quit()
-} else {
+}
+else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
-            if (mainWindow) {
-                if (mainWindow.isMinimized()) {
-                    mainWindow.restore();
-                }
-                mainWindow.focus();
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore();
             }
+            mainWindow.focus();
         }
-    )
-
+    })
     var fs = require("fs");
-    var files = fs.readdirSync("./resources/app/java/");
+    var files = fs.readdirSync(app.getAppPath() + "/java/");
     var filename = null;
     for (var i in files) {
         if (path.extname(files[i]) === ".jar") {
@@ -54,41 +50,35 @@ if (!gotTheLock) {
             if (args[0] === 'maximize') {
                 if (!mainWindow.isMaximized()) {
                     mainWindow.maximize();
-                } else {
+                }
+                else {
                     mainWindow.unmaximize();
                 }
             }
         }
     };
-
     app.on('window-all-closed', function () {
         app.quit();
     });
     app.on('ready', function () {
         loading = new BrowserWindow({
-            show: false
-            , frame: false
+            show: true
+            , frame: true
             , width: 500
             , height: 280
         });
-        loading.loadURL(app.getAppPath() + '/loading.html');
-        loading.once('ready-to-show', () => {
-            loading.show();
-        })
+        loading.loadURL('file://' + app.getAppPath() + '/loading.html');
         platform = process.platform;
         if (platform === 'win32') {
             serverProcess = require('child_process').spawn('java.exe', ['-jar', filename, '--logging.file=flow-designer.log'], {
-                cwd: './resources/app/java/'
+                cwd: app.getAppPath() + '/java/'
             });
-        } else if (platform === 'darwin') {
-            serverProcess = require('child_process').spawn(app.getAppPath() + './resources/app/java/');
         }
-        serverProcess.stdout.on('data', function (data) {
-            console.log('Server: ' + data);
-        });
+        else if (platform === 'darwin') {
+            serverProcess = require('child_process').spawn(app.getAppPath() + '/java/' + filename);
+        }
         console.log("Server PID: " + serverProcess.pid);
         let appUrl = 'http://localhost:8080';
-
         const openWindow = function () {
             mainWindow = new BrowserWindow({
                 title: 'Flow Designer'
@@ -102,8 +92,7 @@ if (!gotTheLock) {
             mainWindow.once('ready-to-show', () => {
                 loading.hide();
                 mainWindow.show();
-            })
-            ;
+            });
             mainWindow.on('closed', function () {
                 mainWindow = null;
                 app.quit();
