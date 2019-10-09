@@ -3,6 +3,7 @@ package com.github.appreciated.designer.view;
 import com.github.appreciated.designer.service.ExceptionService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -24,6 +25,7 @@ public class ErrorPage extends VerticalLayout {
         Label message = new Label("Unfortunately an error occurred, please help fixing this error by reporting it");
         message.getStyle().set("text-align", "center");
         Button send = new Button("Create bugreport");
+        send.addThemeVariants(ButtonVariant.LUMO_ERROR);
         send.addClickListener(event -> {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
