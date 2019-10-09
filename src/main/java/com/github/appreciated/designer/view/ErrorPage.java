@@ -32,6 +32,9 @@ public class ErrorPage extends VerticalLayout {
             if (exceptionService.getError() != null) {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
+                pw.println("### Designer Template");
+                pw.println("If you think the issue might be related to your template files please consider providing it to make it easier to reproduce your issue. ");
+                pw.println("### Stacktrace");
                 pw.println("```");
                 exceptionService.getError().printStackTrace(pw);
                 pw.println("```");
