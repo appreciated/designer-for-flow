@@ -63,7 +63,7 @@ else {
     app.on('ready', function () {
         loading = new BrowserWindow({
             show: true
-            , frame: true
+            , frame: false
             , width: 500
             , height: 280
         });
