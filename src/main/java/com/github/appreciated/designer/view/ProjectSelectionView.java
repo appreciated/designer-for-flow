@@ -12,9 +12,11 @@ import com.github.appreciated.designer.component.AddButton;
 import com.github.appreciated.designer.dialog.OpenProjectDialog;
 import com.github.appreciated.designer.model.ProjectPath;
 import com.github.appreciated.designer.model.project.ProjectTypes;
+import com.github.appreciated.designer.service.ExceptionService;
 import com.github.appreciated.designer.service.ProjectRepository;
 import com.github.appreciated.layout.FlexibleGridLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -45,9 +47,11 @@ import java.util.Map;
 public class ProjectSelectionView extends VerticalLayout {
 
     private ProjectRepository repository;
+    private ExceptionService exceptionService;
 
-    public ProjectSelectionView(@Autowired ProjectRepository repository) {
+    public ProjectSelectionView(@Autowired ProjectRepository repository, @Autowired ExceptionService exceptionService) {
         this.repository = repository;
+        this.exceptionService = exceptionService;
         FlexibleGridLayout layout = new FlexibleGridLayout()
                 .withColumns(Repeat.RepeatMode.AUTO_FILL, new MinMax(new Length("320px"), new Flex(1)))
                 .withPadding(true)
@@ -70,6 +74,10 @@ public class ProjectSelectionView extends VerticalLayout {
         });
         button.setBottom("30px");
         add(button);
+        UI.getCurrent().getSession().setErrorHandler(event -> {
+            exceptionService.setError(event.getThrowable());
+            UI.getCurrent().navigate(ErrorPage.class);
+        });
     }
 
     private Component getCard(ProjectPath projectPath) {

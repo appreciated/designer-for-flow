@@ -7,8 +7,11 @@ import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.github.appreciated.designer.dialog.AddNewDesignTabDialog;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.service.EventService;
+import com.github.appreciated.designer.service.ExceptionService;
 import com.github.appreciated.designer.service.ProjectService;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
@@ -41,10 +44,12 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
     private String projectPath;
     private EventService eventService;
     private ProjectService projectService;
+    private ExceptionService exceptionService;
 
-    public ProjectView(@Autowired EventService eventService, @Autowired ProjectService projectService) {
+    public ProjectView(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         this.eventService = eventService;
         this.projectService = projectService;
+        this.exceptionService = exceptionService;
         tabs = new Tabs();
 
         AddButton dial = new AddButton(VaadinIcon.PLUS.create(), event -> {
@@ -68,7 +73,9 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
                 .set("z-index", "1");
         appBar.setWidthFull();
         tabs.getStyle().set("--lumo-size-s", "var(--lumo-size-xl)");
-
+        appBar.add(new Button("Error", event -> {
+            throw new IllegalArgumentException("This is a test");
+        }));
         add(appBar);
 
         content = new IronPages();
@@ -87,6 +94,10 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
         setSpacing(false);
         add(dial);
         setSizeFull();
+        UI.getCurrent().getSession().setErrorHandler(event -> {
+            exceptionService.setError(event.getThrowable());
+            UI.getCurrent().navigate(ErrorPage.class);
+        });
     }
 
     public void addTab(DesignCompilerInformation info) {
