@@ -308,13 +308,24 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>package electron</id>
+                                <id>package electron windows</id>
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
                                 <phase>package</phase>
                                 <configuration>
-                                    <arguments>run package</arguments>
+                                    <arguments>run package-windows</arguments>
+                                    <workingDirectory>target/electron</workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>package electron mac</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <arguments>run package-mac</arguments>
                                     <workingDirectory>target/electron</workingDirectory>
                                 </configuration>
                             </execution>
