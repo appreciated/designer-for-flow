@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +23,27 @@ public class ErrorPage extends VerticalLayout {
     public ErrorPage(@Autowired ExceptionService exceptionService) {
         Icon bug = VaadinIcon.BUG.create();
         bug.setSize("75px");
-        Label message = new Label("Unfortunately an error occurred, please help fixing this error by reporting it");
+
+        Label message = new Label("Unfortunately an error occurred. Please help fixing this issue by reporting it!");
         message.getStyle().set("text-align", "center");
         Button send = new Button("Create bugreport");
         send.addThemeVariants(ButtonVariant.LUMO_ERROR);
         send.addClickListener(event -> {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            pw.println("```");
-            exceptionService.getError().printStackTrace(pw);
-            pw.println("```");
-            try {
-                String stackTrace = URLEncoder.encode(sw.toString(), "UTF-8");
-                String title = URLEncoder.encode(exceptionService.getError().getClass().getSimpleName(), "UTF-8");
-                UI.getCurrent().getPage().executeJs("window.open(\"https://github.com/appreciated/designer-for-flow/issues/new?title=" + title + "&body=" + stackTrace + "\")");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if (exceptionService.getError() != null) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                pw.println("```");
+                exceptionService.getError().printStackTrace(pw);
+                pw.println("```");
+                try {
+                    String stackTrace = URLEncoder.encode(sw.toString(), "UTF-8");
+                    String title = URLEncoder.encode(exceptionService.getError().getClass().getSimpleName(), "UTF-8");
+                    UI.getCurrent().getPage().executeJs("window.open(\"https://github.com/appreciated/designer-for-flow/issues/new?title=" + title + "&body=" + stackTrace + "\")");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Notification.show("Nothing here to report");
             }
         });
         VerticalLayout wrapper = new VerticalLayout(bug, message, send);
@@ -47,16 +53,16 @@ public class ErrorPage extends VerticalLayout {
         wrapper.setSizeUndefined();
         wrapper.getStyle()
                 .set("background", "var(--lumo-error-color-10pct)")
-                .set("border-radius", "10px")
+                .set("border-radius", "var(--lumo-border-radius)")
                 .set("box-shadow", "var(--lumo-box-shadow-m)");
-        wrapper.setWidth("260px");
-        wrapper.setHeight("340px");
+        wrapper.setWidth("300px");
+        wrapper.setHeight("360px");
         add(wrapper);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSizeFull();
         getElement().getStyle()
-                .set("background", "var(--lumo-primary-contrast-color)");
+                .set("background", "var(--lumo-error-color-10pct)");
     }
 
 }
