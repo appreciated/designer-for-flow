@@ -95,8 +95,11 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
         add(dial);
         setSizeFull();
         UI.getCurrent().getSession().setErrorHandler(event -> {
-            exceptionService.setError(event.getThrowable());
-            UI.getCurrent().navigate(ErrorPage.class);
+            event.getThrowable().printStackTrace();
+            if (projectService.getConfig().getDeveloperMode()) {
+                exceptionService.setError(event.getThrowable());
+                UI.getCurrent().navigate(ErrorPage.class);
+            }
         });
     }
 

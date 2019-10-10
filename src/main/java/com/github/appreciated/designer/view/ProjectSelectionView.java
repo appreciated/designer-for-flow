@@ -8,6 +8,7 @@ import com.github.appreciated.css.grid.sizes.Flex;
 import com.github.appreciated.css.grid.sizes.Length;
 import com.github.appreciated.css.grid.sizes.MinMax;
 import com.github.appreciated.css.grid.sizes.Repeat;
+import com.github.appreciated.designer.AppConfig;
 import com.github.appreciated.designer.component.AddButton;
 import com.github.appreciated.designer.dialog.OpenProjectDialog;
 import com.github.appreciated.designer.model.ProjectPath;
@@ -49,7 +50,7 @@ public class ProjectSelectionView extends VerticalLayout {
     private ProjectRepository repository;
     private ExceptionService exceptionService;
 
-    public ProjectSelectionView(@Autowired ProjectRepository repository, @Autowired ExceptionService exceptionService) {
+    public ProjectSelectionView(@Autowired ProjectRepository repository, @Autowired ExceptionService exceptionService, @Autowired AppConfig config) {
         this.repository = repository;
         this.exceptionService = exceptionService;
         FlexibleGridLayout layout = new FlexibleGridLayout()
@@ -75,8 +76,11 @@ public class ProjectSelectionView extends VerticalLayout {
         button.setBottom("30px");
         add(button);
         UI.getCurrent().getSession().setErrorHandler(event -> {
-            exceptionService.setError(event.getThrowable());
-            UI.getCurrent().navigate(ErrorPage.class);
+            event.getThrowable().printStackTrace();
+            if (config.getDeveloperMode()) {
+                exceptionService.setError(event.getThrowable());
+                UI.getCurrent().navigate(ErrorPage.class);
+            }
         });
     }
 

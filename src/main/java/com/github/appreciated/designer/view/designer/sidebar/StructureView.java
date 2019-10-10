@@ -8,7 +8,9 @@ import com.github.appreciated.designer.view.designer.DesignerView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 
 import java.util.Collections;
@@ -42,23 +44,49 @@ public class StructureView extends BaseView {
         });
 
         grid.addDragStartListener(componentGridDragStartEvent -> dragged = componentGridDragStartEvent.getDraggedItems());
-        grid.addDragEndListener(componentGridDragEndEvent -> {
-            //TODO
-        });
+
+        //  Actual Parent Layout
+        //      |
+        //  DesignerComponentWrapper
+        //      |
+        //  Component
 
         grid.addDropListener(componentGridDropEvent -> {
-            componentGridDropEvent.getDropTargetItem().ifPresent(component -> {
-                component.getParent().ifPresent(parent -> {
-                    if (parent instanceof DesignerComponentWrapper) {
-                        parent.getParent().ifPresent(actualParent -> {
-                            dragged.forEach(components -> ((HasComponents) actualParent).remove(components.getParent().get()));
-                            dragged.forEach(components -> ((HasComponents) actualParent).add(components.getParent().get()));
+            GridDropLocation name = componentGridDropEvent.getDropLocation();
+            if (name == GridDropLocation.BELOW || name == GridDropLocation.ABOVE) {
+                componentGridDropEvent.getDropTargetItem().ifPresent(component -> {
+                    component.getParent().ifPresent(parent -> {
+                        if (parent instanceof DesignerComponentWrapper) {
+                            parent.getParent().ifPresent(actualParent -> {
+                                dragged.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
+                                dragged.forEach(draggedComponent -> ((HasComponents) actualParent).addComponentAtIndex(
+                                        actualParent.getElement().indexOfChild(parent.getElement()) + (name == GridDropLocation.BELOW ? 1 : 0),
+                                        draggedComponent.getParent().get()
+                                ));
+                            });
+                        } else {
+                            System.err.println(parent.getClass().getName() + " not supported!");
+                        }
+                    });
+                });
+            } else if (name == GridDropLocation.ON_TOP) {
+                componentGridDropEvent.getDropTargetItem().ifPresent(component -> {
+                    if (component instanceof HasComponents) {
+                        component.getParent().ifPresent(parent -> {
+                            if (parent instanceof DesignerComponentWrapper) {
+                                parent.getParent().ifPresent(actualParent -> {
+                                    dragged.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
+                                    dragged.forEach(draggedComponent -> ((HasComponents) component).add(draggedComponent.getParent().get()));
+                                });
+                            } else {
+                                System.err.println(parent.getClass().getName() + " not supported!");
+                            }
                         });
                     } else {
-                        System.err.println(parent.getClass().getName() + " not supported!");
+                        Notification.show("Elements cannot be dropped on items that do not extend HasComponents");
                     }
                 });
-            });
+            }
             updateStructure(projectService.getCurrentFile().getComponent());
         });
         grid.addItemClickListener(event -> eventService.getFocusedEventPublisher().publish(event.getItem()));
