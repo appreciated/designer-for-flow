@@ -4,7 +4,6 @@ import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
 import com.github.appreciated.designer.view.BaseView;
-import com.github.appreciated.designer.view.designer.DesignerView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.UI;
@@ -23,7 +22,6 @@ public class StructureView extends BaseView {
     private final TreeGrid<Component> grid;
     private final UI ui;
     private List<Component> dragged;
-    private DesignerView designerComponentView;
 
 
     public StructureView(ProjectService projectService, EventService eventService) {

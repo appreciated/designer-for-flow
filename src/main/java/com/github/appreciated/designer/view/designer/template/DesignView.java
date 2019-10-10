@@ -9,6 +9,7 @@ import com.github.appreciated.designer.view.BaseView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.dnd.DropEffect;
 import com.vaadin.flow.component.dnd.DropEvent;
 import com.vaadin.flow.component.dnd.DropTarget;
@@ -90,6 +91,7 @@ public class DesignView extends BaseView {
         wrapperContainer.setJustifyContentMode(JustifyContentMode.CENTER);
         add(tabs, wrapperContainer);
 
+        // Opened without File
         if (projectService.getCurrentFile().getComponent() == null) {
             DropTarget<HorizontalLayout> dropTarget = DropTarget.create(designHolder);
             dropTarget.addDropListener(dropEvent -> {
@@ -101,14 +103,13 @@ public class DesignView extends BaseView {
                 });
             });
         } else {
+            // Openend with a existing file
             designWrapper.removeAll();
             Component component = projectService.getCurrentFile().getComponent();
+            component.setId("test");
             designWrapper.add(component);
-            initDesignerComponentWrapper((DesignerComponentWrapper) component);
-            if (((DesignerComponentWrapper) component).getActualComponent() instanceof HasComponents) {
-                ((DesignerComponentWrapper) component).getActualComponent().getChildren().forEach(component1 -> initDesignerComponentWrapper((DesignerComponentWrapper) component1));
-            }
-            initDragAndDropListeners(component);
+            initDesignerComponentWrappers((DesignerComponentWrapper) component);
+            ((DesignerComponentWrapper) component).getActualComponent().getChildren().forEach(this::initDragAndDropListeners);
             addDropListeners(component);
         }
 
@@ -121,10 +122,21 @@ public class DesignView extends BaseView {
         });
     }
 
+    private void initDesignerComponentWrappers(DesignerComponentWrapper component) {
+        initDesignerComponentWrapper(component);
+        if (component.getActualComponent() instanceof HasComponents) {
+            component.getActualComponent().getChildren().forEach(component1 -> initDesignerComponentWrappers((DesignerComponentWrapper) component1));
+        }
+    }
+
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         notifyStructureListeners();
+    }
+
+    private void notifyStructureListeners() {
+        eventService.getStructureChangedEventPublisher().publish(projectService.getCurrentFile().getComponent());
     }
 
     private Icon getRotatedIcon(VaadinIcon icon, int degree) {
@@ -137,9 +149,11 @@ public class DesignView extends BaseView {
         if (component instanceof DesignerComponentWrapper) {
             initDesignerComponentWrapper((DesignerComponentWrapper) component);
             initDragAndDropListeners(((DesignerComponentWrapper) component).getActualComponent());
+            addDragListeners(component);
         } else {
             if (component instanceof HasComponents) {
                 component.getChildren().forEach(this::initDragAndDropListeners);
+                addDropListeners(component);
             }
         }
     }
@@ -151,13 +165,21 @@ public class DesignView extends BaseView {
             DropTarget<Component> dropTarget = DropTarget.create(root);
             dropTarget.setDropEffect(DropEffect.MOVE);
             dropTarget.addDropListener(this::handleDrop);
-            root.getChildren().forEach(this::addDropListeners);
         }
     }
 
-    private void handleDrop(DropEvent event) {
+    private void addDragListeners(Component root) {
+        if (root instanceof DesignerComponentWrapper) {
+            DragSource<Component> dragSource = DragSource.create(root);
+            dragSource.setDraggable(true);
+        } else {
+            throw new IllegalStateException("This should never happen");
+        }
+    }
+
+    private void handleDrop(DropEvent<Component> event) {
         event.getDragSourceComponent().ifPresent(extension -> {
-            Component source = (Component) extension;
+            Component source = extension;
             // If a DesignerComponentLabel is dropped onto the root it needs to be transformed into the actual representation
             if (source instanceof DesignerComponentLabel) {
                 Component transformedComponent = transformDesignerComponentLabel(source);
@@ -168,15 +190,16 @@ public class DesignView extends BaseView {
                     ((HasComponents) event.getComponent()).add(transformedComponent);
                 }
             } else {
-                if (event.getComponent() instanceof DesignerComponentWrapper) {
-                    Component actualComponent = ((DesignerComponentWrapper) event.getComponent()).getActualComponent();
-                    event.getComponent().getParent().ifPresent(parent -> {
+                if (event.getDragSourceComponent().get() instanceof DesignerComponentWrapper) {
+                    event.getDragSourceComponent().get().getParent().ifPresent(parent -> {
                         if (parent instanceof HasComponents) {
                             ((HasComponents) parent).remove(source);
                         }
                     });
-                    if (actualComponent instanceof HasComponents) {
-                        ((HasComponents) actualComponent).add(source);
+                    if (event.getComponent() instanceof HasComponents) {
+                        ((HasComponents) event.getComponent()).add(source);
+                    } else {
+                        throw new IllegalStateException("This should never happen");
                     }
                 } else {
                     throw new IllegalStateException("This should never happen");
@@ -189,6 +212,8 @@ public class DesignView extends BaseView {
     private Component transformDesignerComponentLabel(Component component) {
         DesignerComponentWrapper generatedComponent = ((DesignerComponentLabel) component).getDesignerComponent().generateComponent();
         initDesignerComponentWrapper(generatedComponent);
+        addDragListeners(generatedComponent);
+        addDropListeners(generatedComponent);
         return generatedComponent;
     }
 
@@ -197,12 +222,6 @@ public class DesignView extends BaseView {
             System.out.println(generatedComponent.getActualComponent().getClass().getSimpleName());
             notifyFocusListeners(generatedComponent.getActualComponent(), generatedComponent);
         });
-
-        // If the transformed element is from type #{com.vaadin.flow.component.HasComponents} it needs to be possible to drop elements in it
-        if (generatedComponent.getActualComponent() instanceof HasComponents) {
-            DropTarget<Component> dropTarget = DropTarget.create(generatedComponent);
-            dropTarget.addDropListener(event -> handleDrop(event));
-        }
     }
 
     private void focusElementVisually(DesignerComponentWrapper generatedComponent) {
@@ -211,10 +230,6 @@ public class DesignView extends BaseView {
         }
         generatedComponent.setFocus(true);
         currentFocus = generatedComponent;
-    }
-
-    private void notifyStructureListeners() {
-        eventService.getStructureChangedEventPublisher().publish(projectService.getCurrentFile().getComponent());
     }
 
     private void notifyFocusListeners(Component actualComponent, DesignerComponentWrapper parent) {
