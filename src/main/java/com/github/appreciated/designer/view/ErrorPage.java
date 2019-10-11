@@ -21,6 +21,8 @@ import java.net.URLEncoder;
 public class ErrorPage extends VerticalLayout {
 
     public ErrorPage(@Autowired ExceptionService exceptionService) {
+        getElement().executeJs("for (let item of document.getElementsByTagName(\"vaadin-dialog\")) { item.opened = false; }");
+
         Icon bug = VaadinIcon.BUG.create();
         bug.setSize("75px");
 
@@ -33,7 +35,7 @@ public class ErrorPage extends VerticalLayout {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
                 pw.println("### Designer Template");
-                pw.println("If you think the issue might be related to your template files please consider providing it to make it easier to reproduce your issue. ");
+                pw.println("If you think the issue could be related to your template files please consider providing it to make it easier to reproduce your issue. ");
                 pw.println("### Stacktrace");
                 pw.println("```");
                 exceptionService.getError().printStackTrace(pw);

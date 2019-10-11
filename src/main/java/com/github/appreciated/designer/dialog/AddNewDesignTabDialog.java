@@ -67,6 +67,7 @@ public class AddNewDesignTabDialog extends FileChooserDialog {
                 JavaFile javaFile = new JavaFile();
                 HashMap<String, Object> objectHashMap = new HashMap<>();
                 objectHashMap.put(PACKAGE, file.getPath().substring(parent.getPath().length()).replace(File.separator, "."));
+                objectHashMap.put(JavaFile.SOURCE_FILE, parent);
                 javaFile.setPreconditions(objectHashMap);
                 new PreconditionDialog(javaFile, o -> {
                     javaFile.create();
