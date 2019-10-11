@@ -2,7 +2,7 @@ package com.github.appreciated.designer;
 
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.template.java.compiler.DesignerComponentTreeCompiler;
+import com.github.appreciated.designer.template.java.generator.DesignerComponentTreeJavaGenerator;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +36,14 @@ public class Shortcuts {
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_Y, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
-            DesignerComponentTreeCompiler compiler = new DesignerComponentTreeCompiler(service);
+            DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service);
             compiler.save();
             Notification.show("Design was saved!");
         }, Key.KEY_S, KeyModifier.CONTROL);
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
             System.out.println("StructureChanged!");
             if (service.getCurrentFile() != null) {
-                DesignerComponentTreeCompiler compiler = new DesignerComponentTreeCompiler(service);
+                DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service);
                 compiler.save();
             }
         });

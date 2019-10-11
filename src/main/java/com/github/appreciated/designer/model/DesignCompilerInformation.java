@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.model;
 
 import com.github.appreciated.designer.model.project.Project;
-import com.github.appreciated.designer.template.java.compiler.ComponentInformation;
+import com.github.appreciated.designer.template.java.generator.ComponentInformation;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.Component;
 import org.springframework.beans.factory.annotation.Configurable;
