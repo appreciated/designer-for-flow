@@ -15,14 +15,27 @@ import static com.github.appreciated.designer.file.JavaFile.PACKAGE;
 
 public class AddNewDesignTabDialog extends FileChooserDialog {
 
+    private final Button addButton;
     private File parent;
 
     public AddNewDesignTabDialog(File parent, Consumer<File> fileConsumer) {
         super(parent, fileConsumer);
         this.parent = parent;
-        getButtons().addComponentAtIndex(0, new Button("Create", buttonClickEvent -> onCreate()));
+        addButton = new Button("Add new Design", buttonClickEvent -> onCreate());
+        getButtons().addComponentAtIndex(0, addButton);
+        getGrid().addItemClickListener(fileItemClickEvent -> {
+            if (fileItemClickEvent.getItem().isDirectory()) {
+                getSelect().setEnabled(false);
+                addButton.setEnabled(true);
+            } else {
+                getSelect().setEnabled(true);
+                addButton.setEnabled(false);
+            }
+        });
+        getSelect().setEnabled(false);
+        addButton.setEnabled(false);
+        getHeader().setText("Select a File or Directory");
     }
-
 
     protected File[] getFiles(File root) {
         if (root.listFiles() == null) {

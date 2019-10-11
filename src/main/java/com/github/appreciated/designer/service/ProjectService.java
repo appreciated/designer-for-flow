@@ -31,7 +31,9 @@ public class ProjectService {
     }
 
     public void setCurrentFile(int selectedIndex) {
-        currentFile = project.getTemplates().get(selectedIndex);
+        if (selectedIndex != -1) {
+            currentFile = project.getTemplates().get(selectedIndex);
+        }
     }
 
     public void add(File file) {

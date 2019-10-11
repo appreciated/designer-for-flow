@@ -42,7 +42,6 @@ import java.util.Map;
 
 
 @Route("")
-@PWA(name = "Project Base for Vaadin Flow with Spring", shortName = "Project Base")
 @Push(transport = Transport.LONG_POLLING)
 @Configurable
 public class ProjectSelectionView extends VerticalLayout {

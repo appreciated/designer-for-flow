@@ -35,17 +35,17 @@ public class Shortcuts {
         }, Key.KEY_Z, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_Y, KeyModifier.CONTROL);
-
         ui.addShortcutListener(shortcutEvent -> {
             DesignerComponentTreeCompiler compiler = new DesignerComponentTreeCompiler(service);
             compiler.save();
             Notification.show("Design was saved!");
         }, Key.KEY_S, KeyModifier.CONTROL);
-
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
             System.out.println("StructureChanged!");
-            DesignerComponentTreeCompiler compiler = new DesignerComponentTreeCompiler(service);
-            compiler.save();
+            if (service.getCurrentFile() != null) {
+                DesignerComponentTreeCompiler compiler = new DesignerComponentTreeCompiler(service);
+                compiler.save();
+            }
         });
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
             System.out.println("FocusedEvent!");

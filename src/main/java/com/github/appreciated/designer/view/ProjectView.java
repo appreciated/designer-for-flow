@@ -128,8 +128,11 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
         projectPath = URLDecoder.decode(parametersMap.get("path").get(0));
         projectService.initProject(new File(projectPath));
         if (projectService.getConfig().getDeveloperMode()) {
-            projectService.add(new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\TestDesign.java"));
-            addTab(projectService.getCurrentFile());
+            File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\TestDesign.java");
+            if (defaultFile.exists()) {
+                projectService.add(defaultFile);
+                addTab(projectService.getCurrentFile());
+            }
         }
     }
 
