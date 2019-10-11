@@ -45,6 +45,8 @@ public class DesignerComponentTreeCompiler {
             sourceRoot = new SourceRoot(service.getProject().getProjectRoot().toPath());
             compilationUnit = new CompilationUnit();
             compilationUnit.setStorage(file.toPath());
+            String packageName = file.getParentFile().getPath().substring(service.getProject().getSourceFolder().getPath().length() + 1).replace(File.separator, ".");
+            compilationUnit.setPackageDeclaration(packageName);
             sourceRoot.add(compilationUnit);
             componentClass = compilationUnit.addClass(file.getName().substring(0, file.getName().length() - 5));
             constructor = componentClass.addConstructor(Modifier.Keyword.PUBLIC);
