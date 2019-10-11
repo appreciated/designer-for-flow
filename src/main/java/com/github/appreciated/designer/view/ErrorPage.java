@@ -41,7 +41,7 @@ public class ErrorPage extends VerticalLayout {
                 try {
                     String stackTrace = URLEncoder.encode(sw.toString(), "UTF-8");
                     String title = URLEncoder.encode(exceptionService.getError().getClass().getSimpleName(), "UTF-8");
-                    UI.getCurrent().getPage().executeJs("window.open(\"https://github.com/appreciated/designer-for-flow/issues/new?labels=bug&title=" + title + "&body=" + stackTrace + "\")");
+                    UI.getCurrent().getPage().executeJs("window.open(\"https://github.com/appreciated/designer-for-flow/issues/new?labels=bug&title=" + title + "&body=" + (stackTrace.length() < 400 ? stackTrace : stackTrace.substring(0, 400)) + "\")");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

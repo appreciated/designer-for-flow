@@ -21,6 +21,7 @@ public class FileChooserDialog extends Dialog {
 
     private final TreeGrid<File> grid;
     private final HorizontalLayout buttons;
+    private final H2 header;
     private Consumer<File> fileConsumer;
 
     public FileChooserDialog(File parent, Consumer<File> fileConsumer) {
@@ -55,7 +56,8 @@ public class FileChooserDialog extends Dialog {
         buttons = new HorizontalLayout(select);
         buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         buttons.setWidthFull();
-        VerticalLayout wrapper = new VerticalLayout(new H2("Select a File"), grid, buttons);
+        header = new H2("Select a File");
+        VerticalLayout wrapper = new VerticalLayout(header, grid, buttons);
         wrapper.setMargin(false);
         wrapper.setPadding(false);
         wrapper.setSizeFull();
@@ -92,5 +94,9 @@ public class FileChooserDialog extends Dialog {
 
     public HorizontalLayout getButtons() {
         return buttons;
+    }
+
+    public H2 getHeader() {
+        return header;
     }
 }

@@ -12,6 +12,7 @@ public class OpenProjectDialog extends FileChooserDialog {
     public OpenProjectDialog(Consumer<File> fileConsumer) {
         super(new File(System.getProperty("user.home")), fileConsumer);
         getGrid().setPageSize(100);
+        getHeader().setText("Select a Project Folder");
     }
 
     @Override
