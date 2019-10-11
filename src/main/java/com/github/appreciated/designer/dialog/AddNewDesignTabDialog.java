@@ -37,6 +37,31 @@ public class AddNewDesignTabDialog extends FileChooserDialog {
         getHeader().setText("Select a File or Directory");
     }
 
+    private void onCreate() {
+        getGrid().getSelectedItems().stream().findFirst().ifPresent(file -> {
+            if (file.isDirectory()) {
+                JavaFile javaFile = new JavaFile();
+                HashMap<String, Object> objectHashMap = new HashMap<>();
+                String packageName = file.getPath().substring(parent.getPath().length()).replace(File.separator, ".");
+                if (packageName.startsWith(".")) {
+                    packageName = packageName.substring(1);
+                }
+                objectHashMap.put(PACKAGE, packageName);
+                objectHashMap.put(JavaFile.SOURCE_FILE, parent);
+                javaFile.setPreconditions(objectHashMap);
+                new PreconditionDialog(javaFile, o -> {
+                    getFileConsumer().accept(javaFile.create());
+                    close();
+                }).open();
+            } else {
+                Notification.show("Please select a Java file");
+            }
+        });
+        if (getGrid().getSelectedItems().isEmpty()) {
+            Notification.show("Please select a Java file");
+        }
+    }
+
     protected File[] getFiles(File root) {
         if (root.listFiles() == null) {
             return null;
@@ -52,28 +77,6 @@ public class AddNewDesignTabDialog extends FileChooserDialog {
             if (FilenameUtils.getExtension(file.getName()).equals("java")) {
                 getFileConsumer().accept(file);
                 close();
-            } else {
-                Notification.show("Please select a Java file");
-            }
-        });
-        if (getGrid().getSelectedItems().isEmpty()) {
-            Notification.show("Please select a Java file");
-        }
-    }
-
-    private void onCreate() {
-        getGrid().getSelectedItems().stream().findFirst().ifPresent(file -> {
-            if (file.isDirectory()) {
-                JavaFile javaFile = new JavaFile();
-                HashMap<String, Object> objectHashMap = new HashMap<>();
-                objectHashMap.put(PACKAGE, file.getPath().substring(parent.getPath().length()).replace(File.separator, "."));
-                objectHashMap.put(JavaFile.SOURCE_FILE, parent);
-                javaFile.setPreconditions(objectHashMap);
-                new PreconditionDialog(javaFile, o -> {
-                    javaFile.create();
-                    getFileConsumer().accept(file);
-                    close();
-                }).open();
             } else {
                 Notification.show("Please select a Java file");
             }

@@ -43,7 +43,6 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
     private String projectPath;
     private EventService eventService;
     private ProjectService projectService;
-    private ExceptionService exceptionService;
 
     public ProjectView(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         UI.getCurrent().getSession().setErrorHandler(event -> {
@@ -55,7 +54,6 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
         });
         this.eventService = eventService;
         this.projectService = projectService;
-        this.exceptionService = exceptionService;
         tabs = new Tabs();
 
         AddButton dial = new AddButton(VaadinIcon.PLUS.create(), event -> {
@@ -127,7 +125,7 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
         projectPath = URLDecoder.decode(parametersMap.get("path").get(0));
         projectService.initProject(new File(projectPath));
-        if (projectService.getConfig().getDeveloperMode()) {
+        if (false && projectService.getConfig().getDeveloperMode()) {
             File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\TestDesign.java");
             if (defaultFile.exists()) {
                 projectService.add(defaultFile);
