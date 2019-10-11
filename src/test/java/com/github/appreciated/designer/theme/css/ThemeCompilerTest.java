@@ -15,16 +15,16 @@ public class ThemeCompilerTest {
     @Test
     public void readAndWriteThemeWithoutHTMLClass() throws IOException {
         File file = TempFile.get(new File(getClass().getClassLoader().getResource("styles-without-html.css").getFile()));
-        Theme theme = new Theme(file);
-        theme.init();
+        Theme theme = new Theme();
+        theme.parseCss(file);
 
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
         Assert.assertFalse(styles.containsKey(LumoVariables.BASE_COLOR));
         styles.put(LumoVariables.BASE_COLOR, new CssVariable(LumoVariables.BASE_COLOR, "#f9f9f9"));
-        theme.save();
+        theme.save(file);
 
-        theme = new Theme(file);
-        theme.init();
+        theme = new Theme();
+        theme.parseCss(file);
         styles = theme.getStyles();
         Assert.assertEquals("#f9f9f9", styles.get(LumoVariables.BASE_COLOR).getValue());
     }
@@ -32,17 +32,18 @@ public class ThemeCompilerTest {
     @Test
     public void readAndWriteThemeClass() throws IOException {
         File file = TempFile.get(new File(getClass().getClassLoader().getResource("styles.css").getFile()));
-        Theme theme = new Theme(file);
-        theme.init();
+        Theme theme = new Theme();
+        theme.parseCss(file);
 
         // Read
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
         Assert.assertEquals("#fafafa", styles.get(LumoVariables.BASE_COLOR).getValue());
         //write
         styles.put(LumoVariables.BASE_COLOR, new CssVariable(LumoVariables.BASE_COLOR, "#ffffff"));
-        theme.save();
+        theme.save(file);
 
-        theme = new Theme(file);
+        theme = new Theme();
+        theme.parseCss(file);
         // Read
         styles = theme.getStyles();
         Assert.assertEquals("#ffffff", styles.get(LumoVariables.BASE_COLOR).getValue());

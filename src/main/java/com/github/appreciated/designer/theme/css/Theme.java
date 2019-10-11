@@ -24,16 +24,25 @@ public class Theme {
     public void init() {
         if (project.hasThemeFile()) {
             themeFile = project.getThemeFile();
-            CssParser parser = new CssParser(project.getThemeFile());
-            styles = parser.getLumoVariables();
+            parseCss(themeFile);
         }
     }
 
-    public Theme(File file) {
+    public void parseCss(File file) {
+        CssParser parser = new CssParser(file);
+        styles = parser.getLumoVariables();
+    }
+
+    public Theme() {
+
     }
 
     public void save() {
-        CssCompiler cssCompiler = new CssCompiler(themeFile, styles);
+        save(themeFile);
+    }
+
+    public void save(File file) {
+        CssCompiler cssCompiler = new CssCompiler(file, styles);
         cssCompiler.save();
     }
 
