@@ -38,7 +38,9 @@ public class DesignCompilerInformation {
 
     public void setProject(Project project) {
         this.project = project;
-        this.theme = new Theme(project);
+        if (project.hasThemeFile()) {
+            this.theme = new Theme(project);
+        }
     }
 
     public Component getComponent() {

@@ -78,7 +78,7 @@ public class MavenProject extends Project {
 
     @Override
     public boolean hasThemeFile() {
-        return (themeFile == null || new File(getProjectRoot().getPath() + File.separator + defaultThemePath + File.separator + defaultThemeFileName).exists());
+        return (themeFile != null || new File(getProjectRoot().getPath() + File.separator + defaultThemePath + File.separator + defaultThemeFileName).exists());
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.github.appreciated.designer.service.ExceptionService;
 import com.github.appreciated.designer.service.ProjectService;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
@@ -47,6 +46,13 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
     private ExceptionService exceptionService;
 
     public ProjectView(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
+        UI.getCurrent().getSession().setErrorHandler(event -> {
+            if (projectService.getConfig().getDeveloperMode()) {
+                event.getThrowable().printStackTrace();
+            }
+            exceptionService.setError(event.getThrowable());
+            UI.getCurrent().navigate(ErrorPage.class);
+        });
         this.eventService = eventService;
         this.projectService = projectService;
         this.exceptionService = exceptionService;
@@ -73,9 +79,6 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
                 .set("z-index", "1");
         appBar.setWidthFull();
         tabs.getStyle().set("--lumo-size-s", "var(--lumo-size-xl)");
-        appBar.add(new Button("Error", event -> {
-            throw new IllegalArgumentException("This is a test");
-        }));
         add(appBar);
 
         content = new IronPages();
@@ -94,26 +97,21 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Strin
         setSpacing(false);
         add(dial);
         setSizeFull();
-        UI.getCurrent().getSession().setErrorHandler(event -> {
-            event.getThrowable().printStackTrace();
-            if (projectService.getConfig().getDeveloperMode()) {
-                exceptionService.setError(event.getThrowable());
-                UI.getCurrent().navigate(ErrorPage.class);
-            }
-        });
     }
 
     public void addTab(DesignCompilerInformation info) {
-        Tab tab = new Tab();
-        tab.add(new Label(info.getDesign().getName()),
-                new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> {
-                    projectService.close(info);
-                    tabs.remove(tab);
-                })
-        );
-        views.put(tab, info);
-        tabs.add(tab);
-        tabs.setSelectedTab(tab);
+        if (info != null) {
+            Tab tab = new Tab();
+            tab.add(new Label(info.getDesign().getName()),
+                    new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> {
+                        projectService.close(info);
+                        tabs.remove(tab);
+                    })
+            );
+            views.put(tab, info);
+            tabs.add(tab);
+            tabs.setSelectedTab(tab);
+        }
     }
 
     @Override

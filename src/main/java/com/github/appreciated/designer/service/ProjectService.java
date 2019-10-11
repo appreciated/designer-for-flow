@@ -35,16 +35,20 @@ public class ProjectService {
     }
 
     public void add(File file) {
-        DesignerComponentTreeParser parser = null;
-        try {
-            parser = new DesignerComponentTreeParser(file, this);
-        } catch (ParseException | ClassNotFoundException e) {
-            e.printStackTrace();
+        if (file.exists()) {
+            DesignerComponentTreeParser parser = null;
+            try {
+                parser = new DesignerComponentTreeParser(file, this);
+            } catch (ParseException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            DesignCompilerInformation info = parser.getDesignCompilerInformation();
+            info.setProject(project);
+            project.getTemplates().add(info);
+            currentFile = info;
+        } else {
+            Notification.show("This file does not exist!");
         }
-        DesignCompilerInformation info = parser.getDesignCompilerInformation();
-        info.setProject(project);
-        project.getTemplates().add(info);
-        currentFile = info;
     }
 
     public Project getProject() {
@@ -73,7 +77,7 @@ public class ProjectService {
             DesignerComponentTreeParser parser = new DesignerComponentTreeParser(designFile, this);
             DesignCompilerInformation info = parser.getDesignCompilerInformation();
             Theme theme = new Theme(project);
-            theme.init(themeFile);
+            theme.init();
             info.setTheme(theme);
             info.setProject(project);
             project.getTemplates().add(info);

@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 public class FileChooserDialog extends Dialog {
 
     private final TreeGrid<File> grid;
+    private final HorizontalLayout buttons;
     private Consumer<File> fileConsumer;
 
     public FileChooserDialog(File parent, Consumer<File> fileConsumer) {
@@ -51,7 +52,7 @@ public class FileChooserDialog extends Dialog {
         grid.setWidthFull();
         Button select = new Button("Select", event -> onSelect());
         select.setThemeName(ButtonVariant.LUMO_PRIMARY.getVariantName());
-        HorizontalLayout buttons = new HorizontalLayout(select);
+        buttons = new HorizontalLayout(select);
         buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         buttons.setWidthFull();
         VerticalLayout wrapper = new VerticalLayout(new H2("Select a File"), grid, buttons);
@@ -87,5 +88,9 @@ public class FileChooserDialog extends Dialog {
 
     public TreeGrid<File> getGrid() {
         return grid;
+    }
+
+    public HorizontalLayout getButtons() {
+        return buttons;
     }
 }

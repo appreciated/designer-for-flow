@@ -76,11 +76,11 @@ public class ProjectSelectionView extends VerticalLayout {
         button.setBottom("30px");
         add(button);
         UI.getCurrent().getSession().setErrorHandler(event -> {
-            event.getThrowable().printStackTrace();
             if (config.getDeveloperMode()) {
-                exceptionService.setError(event.getThrowable());
-                UI.getCurrent().navigate(ErrorPage.class);
+                event.getThrowable().printStackTrace();
             }
+            exceptionService.setError(event.getThrowable());
+            UI.getCurrent().navigate(ErrorPage.class);
         });
     }
 

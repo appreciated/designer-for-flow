@@ -18,18 +18,18 @@ public class Theme {
 
     public Theme(Project project) {
         this.project = project;
+        init();
+    }
+
+    public void init() {
         if (project.hasThemeFile()) {
-            init(this.project.getThemeFile());
+            themeFile = project.getThemeFile();
+            CssParser parser = new CssParser(project.getThemeFile());
+            styles = parser.getLumoVariables();
         }
     }
 
-    public void init(File file) {
-        themeFile = file;
-        CssParser parser = new CssParser(file);
-        styles = parser.getLumoVariables();
-    }
-
-    public Theme() {
+    public Theme(File file) {
     }
 
     public void save() {

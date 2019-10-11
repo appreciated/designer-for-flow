@@ -15,29 +15,33 @@ import com.vaadin.flow.component.tabs.Tabs;
 
 public class ThemeView extends BaseView {
 
-    private final Tabs tabs;
-    private final IronPages content;
+    private Tabs tabs;
+    private IronPages content;
 
     public ThemeView(ProjectService projectService, EventService eventService) {
         super("Theme");
-        ColorStyleView colorStyleView = new ColorStyleView(projectService, eventService);
-        TypographyStyleView typographyView = new TypographyStyleView(projectService, eventService);
-        SizeAndSpaceStyleView sizeAndSpaceStyleView = new SizeAndSpaceStyleView(projectService, eventService);
-        OtherStyleView otherStyleView = new OtherStyleView(projectService, eventService);
+        if (projectService.getProject().hasThemeFile()) {
+            ColorStyleView colorStyleView = new ColorStyleView(projectService, eventService);
+            TypographyStyleView typographyView = new TypographyStyleView(projectService, eventService);
+            SizeAndSpaceStyleView sizeAndSpaceStyleView = new SizeAndSpaceStyleView(projectService, eventService);
+            OtherStyleView otherStyleView = new OtherStyleView(projectService, eventService);
 
-        tabs = new Tabs();
-        Tab colorTab = new Tab(VaadinIcon.PALETE.create(), new Label("Color"));
-        Tab typographyTab = new Tab(VaadinIcon.FONT.create(), new Label("Typography"));
-        Tab sizeTab = new Tab(VaadinIcon.BACKSPACE.create(), new Label("Size & Space"));
-        Tab otherTab = new Tab(VaadinIcon.EDIT.create(), new Label("Other"));
-        tabs.add(colorTab, typographyTab, sizeTab, otherTab);
-        add(tabs);
-        content = new IronPages();
-        content.setSizeFull();
-        content.add(colorStyleView, typographyView, sizeAndSpaceStyleView, otherStyleView);
-        add(content);
-        tabs.setWidthFull();
-        tabs.addSelectedChangeListener(selectedChangeEvent -> content.setSelected(tabs.getSelectedIndex()));
-        tabs.setSelectedTab(colorTab);
+            tabs = new Tabs();
+            Tab colorTab = new Tab(VaadinIcon.PALETE.create(), new Label("Color"));
+            Tab typographyTab = new Tab(VaadinIcon.FONT.create(), new Label("Typography"));
+            Tab sizeTab = new Tab(VaadinIcon.BACKSPACE.create(), new Label("Size & Space"));
+            Tab otherTab = new Tab(VaadinIcon.EDIT.create(), new Label("Other"));
+            tabs.add(colorTab, typographyTab, sizeTab, otherTab);
+            add(tabs);
+            content = new IronPages();
+            content.setSizeFull();
+            content.add(colorStyleView, typographyView, sizeAndSpaceStyleView, otherStyleView);
+            add(content);
+            tabs.setWidthFull();
+            tabs.addSelectedChangeListener(selectedChangeEvent -> content.setSelected(tabs.getSelectedIndex()));
+            tabs.setSelectedTab(colorTab);
+        } else {
+            add(new Label("There was no theme file found!"));
+        }
     }
 }

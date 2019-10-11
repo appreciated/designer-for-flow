@@ -14,9 +14,9 @@ public class ThemeParserTest {
 
     @Test
     public void readThemeClass() throws IOException {
-        Theme theme = new Theme();
         File file = TempFile.get(new File(getClass().getClassLoader().getResource("styles.css").getFile()));
-        theme.init(file);
+        Theme theme = new Theme(file);
+        theme.init();
 
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
         Assert.assertEquals("#fafafa", styles.get(LumoVariables.BASE_COLOR).getValue());
@@ -24,9 +24,9 @@ public class ThemeParserTest {
 
     @Test
     public void readThemeWithoutHTMLClass() throws IOException {
-        Theme theme = new Theme();
         File file = TempFile.get(new File(getClass().getClassLoader().getResource("styles-without-html.css").getFile()));
-        theme.init(file);
+        Theme theme = new Theme(file);
+        theme.init();
 
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
         Assert.assertFalse(styles.containsKey(LumoVariables.BASE_COLOR));
