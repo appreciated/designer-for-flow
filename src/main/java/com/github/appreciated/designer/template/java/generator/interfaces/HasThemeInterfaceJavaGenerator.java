@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.compiler.interfaces;
+package com.github.appreciated.designer.template.java.generator.interfaces;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -10,7 +10,7 @@ import com.vaadin.flow.component.HasTheme;
 
 import java.util.stream.Stream;
 
-public class HasThemeInterfaceCompiler implements VaadinComponentCompiler<HasTheme> {
+public class HasThemeInterfaceJavaGenerator implements VaadinComponentJavaGenerator<HasTheme> {
 
     @Override
     public boolean canParse(Component propertyParent) {

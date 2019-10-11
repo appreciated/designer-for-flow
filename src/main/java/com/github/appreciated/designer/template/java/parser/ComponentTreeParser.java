@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ComponentTreeGenerator {
+public class ComponentTreeParser {
 
     private final ClassOrInterfaceDeclaration classDefinition;
     Component rootComponent;
@@ -25,7 +25,7 @@ public class ComponentTreeGenerator {
     private CompilationUnit compilationUnit;
     private String className;
 
-    public ComponentTreeGenerator(CompilationUnit compilationUnit) throws ParseException, ClassNotFoundException {
+    public ComponentTreeParser(CompilationUnit compilationUnit) throws ParseException, ClassNotFoundException {
         this.compilationUnit = compilationUnit;
         if (compilationUnit.getPrimaryType().isPresent()) {
             TypeDeclaration<?> definition = compilationUnit.getPrimaryType().get();

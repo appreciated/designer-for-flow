@@ -1,8 +1,8 @@
-package com.github.appreciated.designer.template.java.compiler;
+package com.github.appreciated.designer.template.java.generator;
 
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.template.java.compiler.interfaces.VaadinInterfaceCompilerCollection;
+import com.github.appreciated.designer.template.java.generator.interfaces.VaadinComponentJavaGeneratorCollection;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -20,17 +20,17 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DesignerComponentTreeCompiler {
+public class DesignerComponentTreeJavaGenerator {
     private final CompilationUnit compilationUnit;
     private final ClassOrInterfaceDeclaration componentClass;
     private final ConstructorDeclaration constructor;
     private final SourceRoot sourceRoot;
     private final ProjectService service;
     int i = 0;
-    private VaadinInterfaceCompilerCollection compilerCollection;
+    private VaadinComponentJavaGeneratorCollection compilerCollection;
 
-    public DesignerComponentTreeCompiler(ProjectService service) {
-        compilerCollection = new VaadinInterfaceCompilerCollection(service);
+    public DesignerComponentTreeJavaGenerator(ProjectService service) {
+        compilerCollection = new VaadinComponentJavaGeneratorCollection(service);
         this.service = service;
         Component component = service.getCurrentFile().getComponent();
         File file = service.getCurrentFile().getDesign();

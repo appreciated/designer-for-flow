@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.compiler.interfaces;
+package com.github.appreciated.designer.template.java.generator.interfaces;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class HasSizeInterfaceCompiler implements VaadinComponentCompiler<HasSize> {
+public class HasSizeInterfaceJavaGenerator implements VaadinComponentJavaGenerator<HasSize> {
 
     @Override
     public boolean canParse(Component propertyParent) {

@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.compiler.interfaces;
+package com.github.appreciated.designer.template.java.generator.interfaces;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FlexComponentCompiler implements VaadinComponentCompiler<FlexComponent> {
+public class FlexComponentJavaGenerator implements VaadinComponentJavaGenerator<FlexComponent> {
 
     @Override
     public boolean canParse(Component propertyParent) {

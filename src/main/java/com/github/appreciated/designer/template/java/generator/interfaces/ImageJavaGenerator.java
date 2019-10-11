@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.compiler.interfaces;
+package com.github.appreciated.designer.template.java.generator.interfaces;
 
 import com.github.appreciated.designer.service.ProjectService;
 import com.github.javaparser.ast.CompilationUnit;
@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ImageCompiler implements VaadinComponentCompiler<Image> {
+public class ImageJavaGenerator implements VaadinComponentJavaGenerator<Image> {
 
     private ProjectService service;
 
-    public ImageCompiler(ProjectService service) {
+    public ImageJavaGenerator(ProjectService service) {
         this.service = service;
     }
 

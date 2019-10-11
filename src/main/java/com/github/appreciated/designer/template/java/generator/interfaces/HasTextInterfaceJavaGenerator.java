@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.compiler.interfaces;
+package com.github.appreciated.designer.template.java.generator.interfaces;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -10,7 +10,7 @@ import com.vaadin.flow.component.HasText;
 
 import java.util.stream.Stream;
 
-public class HasTextInterfaceCompiler implements VaadinComponentCompiler<HasText> {
+public class HasTextInterfaceJavaGenerator implements VaadinComponentJavaGenerator<HasText> {
     @Override
     public boolean canParse(Component propertyParent) {
         return propertyParent instanceof HasText;

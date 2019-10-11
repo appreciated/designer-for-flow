@@ -20,14 +20,14 @@ public class DesignerComponentTreeParser {
     private static DesignerComponentTreeParser parser;
     private final File file;
     private final ProjectService projectService;
-    private final ComponentTreeGenerator generator;
+    private final ComponentTreeParser generator;
 
     public DesignerComponentTreeParser(File file, ProjectService projectService) throws ParseException, ClassNotFoundException {
         this.file = file;
         this.projectService = projectService;
         SourceRoot sourceRoot = new SourceRoot(projectService.getProject().getProjectRoot().toPath());
         CompilationUnit compilationUnit = sourceRoot.parse(CodeGenerationUtils.packageToPath(file.getParent()), file.getName());
-        generator = new ComponentTreeGenerator(compilationUnit);
+        generator = new ComponentTreeParser(compilationUnit);
     }
 
     public static Component wrap(Component component) {
@@ -45,7 +45,7 @@ public class DesignerComponentTreeParser {
         info.setDesign(file);
         info.setProject(projectService.getProject());
         Component parsedComponent = generator.getComponent();
-        TemplateNormalizer.normalize(parsedComponent, info);
+        DesignerComponentNormalizer.normalize(parsedComponent, info);
         info.setComponent(wrap(parsedComponent));
         info.setClassName(generator.getClassName());
         return info;

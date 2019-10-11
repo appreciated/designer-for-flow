@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.compiler;
+package com.github.appreciated.designer.template.java.generator;
 
 public class ComponentInformation {
     String variableName;

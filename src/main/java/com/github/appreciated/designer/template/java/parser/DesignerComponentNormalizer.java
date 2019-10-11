@@ -8,16 +8,16 @@ import com.vaadin.flow.component.html.Image;
 
 import java.io.File;
 
-public class TemplateNormalizer {
+public class DesignerComponentNormalizer {
     private DesignCompilerInformation compilerInformation;
 
-    public TemplateNormalizer(Component parsedComponent, DesignCompilerInformation compilerInformation) {
+    public DesignerComponentNormalizer(Component parsedComponent, DesignCompilerInformation compilerInformation) {
         this.compilerInformation = compilerInformation;
         iterate(parsedComponent);
     }
 
     public static void normalize(Component parsedComponent, DesignCompilerInformation compilerInformation) {
-        new TemplateNormalizer(parsedComponent, compilerInformation);
+        new DesignerComponentNormalizer(parsedComponent, compilerInformation);
     }
 
     public void iterate(Component component) {
