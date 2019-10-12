@@ -77,7 +77,7 @@ const getJavaFile = function () {
     }
     return filename;
 };
-var isPortAvailable = function (callback) {
+const isPortAvailable = function (callback) {
     var server = require('net').createServer(function (socket) {
         socket.write('Echo server\r\n');
         socket.pipe(socket);
@@ -92,15 +92,37 @@ var isPortAvailable = function (callback) {
         callback(true);
     });
 };
+const showStartUpErrorMessage = function () {
+    setTimeout(function () {
+        dialog.showMessageBox(null, {
+            type: 'error'
+            ,
+            buttons: ['Ok']
+            ,
+            title: 'Java Runtime not available'
+            ,
+            message: '"Designer for Flow" is not able to start. This usually happens if no Java Runtime is avaible. Make sure it is accessable via your path variable.'
+        });
+        app.quit();
+    }, 200);
+}
 const spawnServerProcess = function () {
     var filename = getJavaFile();
     platform = process.platform;
     if (platform === 'win32') {
-        return require('child_process').spawn('java.exe', ['-jar', filename, '--logging.file=flow-designer.log'], {
+        return require('child_process')
+        .spawn('java.exe', ['-jar', filename, '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/'
+        })
+        .on('error', function (code, signal) {
+            showStartUpErrorMessage();
         });
     } else if (platform === 'darwin') {
-        return require('child_process').spawn(app.getAppPath() + '/java/' + filename);
+        return require('child_process')
+        .spawn(app.getAppPath() + '/java/' + filename)
+        .on('error', function (code, signal) {
+            showStartUpErrorMessage();
+        });
     } else {
         throw new Error("Platform not supported");
     }
