@@ -1,0 +1,1 @@
+zip -r target/electron/designer-for-flow-darwin-x64 target/electron/designer-for-flow-darwin-x64
