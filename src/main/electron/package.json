@@ -1,6 +1,6 @@
 {
   "name": "designer-for-flow",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "main.js",
   "license": "LGPL-3.0",
   "description": "Electron wrapper for 'Designer for Flow'",
