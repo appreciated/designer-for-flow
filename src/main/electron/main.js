@@ -128,7 +128,7 @@ if (!gotTheLock) {
                 dialog.showMessageBox(null, {
                     type: 'error'
                     , buttons: ['Ok']
-                    , title: 'Port not avaiable'
+                    , title: 'Port not available'
                     , message: '"Designer for Flow" is not able to start if port ' + port + ' is not free.'
                 });
                 app.quit();

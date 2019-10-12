@@ -156,6 +156,8 @@ public class ComponentTreeParser {
                 Component relatedComponent = resolveComponent(methodCallExpr);
                 String method = methodCallExpr.getNameAsString();
                 invokeMethodOnComponent(methodCallExpr, relatedComponent, method);
+                //} else if (expression instanceof VariableDeclarationExpr) {
+                //    expression.g
             } else {
                 throw new UnsupportedOperationException("Currently only MethodCallExpr are supported");
             }
