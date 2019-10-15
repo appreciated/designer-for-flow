@@ -105,8 +105,8 @@ const spawnServerProcess = function () {
     var filename = getJavaFile();
     platform = process.platform;
     if (platform === 'win32') {
-        return require('child_process').spawn('java', ['-jar', ('../../' + filename), '--logging.file=flow-designer.log'], {
-            cwd: app.getAppPath() + '/java/jre/bin/'
+        return require('child_process').spawn('jre/bin/java', ['-jar', filename, '--logging.file=flow-designer.log'], {
+            cwd: app.getAppPath() + '/java/'
         }).on('error', function (code, signal) {
             showStartUpErrorMessage();
         });
@@ -162,12 +162,15 @@ else {
             }
             else {
                 showLoadingScreen();
-                spawnServerProcess();
+                serverProcess = spawnServerProcess();
                 var appUrl = "http://localhost:" + port;
                 awaitStartUp(appUrl, function () {
                     showDesigner(appUrl);
                 });
             }
         });
+    });
+    app.on('will-quit', function () {
+        serverProcess.kill('SIGINT');
     });
 }
