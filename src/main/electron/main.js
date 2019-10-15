@@ -101,7 +101,7 @@ const showStartUpErrorMessage = function () {
             ,
             title: 'Java Runtime not available'
             ,
-            message: '"Designer for Flow" is not able to start. This usually happens if no Java Runtime is avaible. Make sure it is accessable via your path variable.'
+            message: '"Designer for Flow" is not able to start. There seem to be issues related to the shipped Open JDK.'
         });
         app.quit();
     }, 200);
@@ -113,14 +113,14 @@ const spawnServerProcess = function () {
         return require('child_process').spawn('java', ['-jar', ('../../' + filename), '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/jre/bin/'
         }).on('error', function (code, signal) {
-            showStartUpErrorMessage(code + ":" + signal);
+            showStartUpErrorMessage();
         });
     }
     else if (platform === 'darwin') {
         return require('child_process').spawn('java', ['-jar', ('../../../../' + filename), '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/jre/Contents/Home/bin/'
         }).on('error', function (code, signal) {
-            showStartUpErrorMessage(code + ":" + signal);
+            showStartUpErrorMessage();
         });
     }
     else {
