@@ -7,9 +7,7 @@ let mainWindow = null;
 let loading = null;
 let serverProcess = null;
 const gotTheLock = app.requestSingleInstanceLock();
-
 const port = 8080;
-
 const showDesigner = function (appUrl) {
     mainWindow = new BrowserWindow({
         title: 'Flow Designer'
@@ -82,7 +80,6 @@ const isPortAvailable = function (callback) {
         socket.write('Echo server\r\n');
         socket.pipe(socket);
     });
-
     server.listen(port, '127.0.0.1');
     server.on('error', function (e) {
         callback(false);
@@ -96,17 +93,15 @@ const showStartUpErrorMessage = function () {
     setTimeout(function () {
         dialog.showMessageBox(null, {
             type: 'error'
-            ,
-            buttons: ['Ok']
-            ,
-            title: 'Java Runtime not available'
-            ,
-            message: '"Designer for Flow" is not able to start. There seem to be issues related to the shipped Open JDK.'
+            , buttons: ['Ok']
+            , title: 'Java Runtime not available'
+            , message: '"Designer for Flow" is not able to start. There seem to be issues related to the shipped Open JDK.'
         });
         app.quit();
     }, 200);
 }
 const spawnServerProcess = function () {
+    require('child_process').exec('chmod +X ' + app.getAppPath() + '/java/jre/Contents/Home/bin/' + 'java');
     var filename = getJavaFile();
     platform = process.platform;
     if (platform === 'win32') {
@@ -117,8 +112,18 @@ const spawnServerProcess = function () {
         });
     }
     else if (platform === 'darwin') {
-        return require('child_process').spawn('java', ['-jar', ('../../../../' + filename), '--logging.file=flow-designer.log'], {
-            cwd: app.getAppPath() + '/java/jre/Contents/Home/bin/'
+        if (!app.getAppPath().startsWith("/Applications/")) {
+            dialog.showMessageBox(null, {
+                type: 'error'
+                , buttons: ['Ok']
+                , title: 'Wrong directory'
+                , message: '"Designer for Flow" is not able to start. Please move the application folder to "Applications".'
+            });
+            app.quit();
+            return null;
+        }
+        return require('child_process').spawn('jre/Contents/Home/bin/java', ['-jar', filename, '--logging.file=flow-designer.log'], {
+            cwd: app.getAppPath() + '/java/'
         }).on('error', function (code, signal) {
             showStartUpErrorMessage();
         });
@@ -136,10 +141,10 @@ const showLoadingScreen = function () {
     });
     loading.loadURL('file://' + app.getAppPath() + '/loading.html');
 };
-
 if (!gotTheLock) {
     app.quit()
-} else {
+}
+else {
     focusSecondInstance();
     app.on('window-all-closed', function () {
         app.quit();
@@ -154,7 +159,8 @@ if (!gotTheLock) {
                     , message: '"Designer for Flow" is not able to start if port ' + port + ' is not free.'
                 });
                 app.quit();
-            } else {
+            }
+            else {
                 showLoadingScreen();
                 spawnServerProcess();
                 var appUrl = "http://localhost:" + port;
