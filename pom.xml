@@ -242,34 +242,6 @@
                     </plugin>
                     <!-- Electron build begin -->
                     <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <!-- here the phase you need -->
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${basedir}/target/electron</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>src/main/electron</directory>
-                                        </resource>
-                                        <resource>
-                                            <directory>.</directory>
-                                            <includes>
-                                                <include>LICENSE</include>
-                                            </includes>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>1.7.6</version>
@@ -307,17 +279,17 @@
                                     <arguments>install electron-packager -g</arguments>
                                 </configuration>
                             </execution>
-<!--                            <execution>-->
-<!--                                <id>package electron windows</id>-->
-<!--                                <goals>-->
-<!--                                    <goal>npm</goal>-->
-<!--                                </goals>-->
-<!--                                <phase>package</phase>-->
-<!--                                <configuration>-->
-<!--                                    <arguments>run package-windows</arguments>-->
-<!--                                    <workingDirectory>target/electron</workingDirectory>-->
-<!--                                </configuration>-->
-<!--                            </execution>-->
+                            <execution>
+                                <id>package electron windows</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <arguments>run package-windows</arguments>
+                                    <workingDirectory>target/electron</workingDirectory>
+                                </configuration>
+                            </execution>
                             <execution>
                                 <id>package electron mac</id>
                                 <goals>
@@ -347,7 +319,7 @@
                                     <url>
                                         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_x64_windows_hotspot_8u222b10.zip
                                     </url>
-                                    <outputDirectory>${project.build.directory}/openjdk-jre/</outputDirectory>
+                                    <outputDirectory>${project.build.directory}/openjdk-jre/windows/</outputDirectory>
                                     <outputFileName>jre_windows.zip</outputFileName>
                                 </configuration>
                             </execution>
@@ -361,7 +333,7 @@
                                     <url>
                                         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_x64_mac_hotspot_8u222b10.tar.gz
                                     </url>
-                                    <outputDirectory>${project.build.directory}/openjdk-jre/</outputDirectory>
+                                    <outputDirectory>${project.build.directory}/openjdk-jre/mac-os/</outputDirectory>
                                     <outputFileName>jre_mac.tar.gz</outputFileName>
                                 </configuration>
                             </execution>
@@ -380,8 +352,10 @@
                                 <phase>package</phase>
                                 <configuration>
                                     <fileset>
-                                        <directory>${project.build.directory}/openjdk-jre/jre_mac.tar.gz</directory>
-                                        <outputDirectory>${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java/jre/</outputDirectory>
+                                        <directory>${project.build.directory}/openjdk-jre/mac-os/jre_mac.tar.gz
+                                        </directory>
+                                        <outputDirectory>${project.build.directory}/openjdk-jre/mac-os/
+                                        </outputDirectory>
                                     </fileset>
                                 </configuration>
                             </execution>
@@ -393,9 +367,74 @@
                                 <phase>package</phase>
                                 <configuration>
                                     <fileset>
-                                        <directory>${project.build.directory}/openjdk-jre/jre_windows.zip</directory>
+                                        <directory>${project.build.directory}/openjdk-jre/windows/jre_windows.zip
+                                        </directory>
                                         <outputDirectory>${project.build.directory}/openjdk-jre/windows/</outputDirectory>
                                     </fileset>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <!-- here the phase you need -->
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/electron</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/electron</directory>
+                                        </resource>
+                                        <resource>
+                                            <directory>.</directory>
+                                            <includes>
+                                                <include>LICENSE</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-openjdk-jre-windows</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>
+                                        ${project.build.directory}/electron/designer-for-flow-win32-x64/resources/app/java/jre
+                                    </outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/openjdk-jre/windows/jdk8u222-b10-jre
+                                            </directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-openjdk-jre-mac-os</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>
+                                        ${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java/jre/
+                                    </outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/openjdk-jre/mac-os/jdk8u222-b10-jre
+                                            </directory>
+                                        </resource>
+                                    </resources>
                                 </configuration>
                             </execution>
                         </executions>
