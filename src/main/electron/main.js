@@ -110,10 +110,10 @@ const spawnServerProcess = function () {
     var filename = getJavaFile();
     platform = process.platform;
     if (platform === 'win32') {
-        return require('child_process').spawn('java.exe', ['-jar', filename, '--logging.file=flow-designer.log'], {
-            cwd: app.getAppPath() + '/java/'
+        return require('child_process').spawn('java', ['-jar', ('../../' + filename), '--logging.file=flow-designer.log'], {
+            cwd: app.getAppPath() + '/java/jre/bin/'
         }).on('error', function (code, signal) {
-            showStartUpErrorMessage();
+            showStartUpErrorMessage(code + ":" + signal);
         });
     }
     else if (platform === 'darwin') {
