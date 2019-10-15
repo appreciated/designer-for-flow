@@ -162,12 +162,15 @@ else {
             }
             else {
                 showLoadingScreen();
-                spawnServerProcess();
+                serverProcess = spawnServerProcess();
                 var appUrl = "http://localhost:" + port;
                 awaitStartUp(appUrl, function () {
                     showDesigner(appUrl);
                 });
             }
         });
+    });
+    app.on('will-quit', function () {
+        serverProcess.kill('SIGINT');
     });
 }
