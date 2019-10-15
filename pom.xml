@@ -200,75 +200,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- open-jdk download -->
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <version>1.4.2</version>
-                <executions>
-                    <execution>
-                        <id>install-openjdk-windows</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>
-                                https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_windows_hotspot_8u222b10.zip
-                            </url>
-                            <outputDirectory>${project.build.directory}/openjdk/</outputDirectory>
-                            <outputFileName>jdk_windows.zip</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>install-openjdk-mac-os</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>
-                                https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_mac_hotspot_8u222b10.tar.gz
-                            </url>
-                            <outputDirectory>${project.build.directory}/openjdk/</outputDirectory>
-                            <outputFileName>jdk_mac.tar.gz</outputFileName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>truezip-maven-plugin</artifactId>
-                <version>1.2</version>
-                <executions>
-                    <execution>
-                        <id>unpack-mac-open-jdk</id>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <fileset>
-                                <directory>${project.build.directory}/openjdk/jdk_mac.tar.gz</directory>
-                                <outputDirectory>${project.build.directory}/openjdk/mac/</outputDirectory>
-                            </fileset>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unpack-windows-open-jdk</id>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <fileset>
-                                <directory>${project.build.directory}/openjdk/jdk_windows.zip</directory>
-                                <outputDirectory>${project.build.directory}/openjdk/windows/</outputDirectory>
-                            </fileset>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     <profiles>
@@ -376,17 +307,17 @@
                                     <arguments>install electron-packager -g</arguments>
                                 </configuration>
                             </execution>
-                            <execution>
-                                <id>package electron windows</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <configuration>
-                                    <arguments>run package-windows</arguments>
-                                    <workingDirectory>target/electron</workingDirectory>
-                                </configuration>
-                            </execution>
+<!--                            <execution>-->
+<!--                                <id>package electron windows</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>npm</goal>-->
+<!--                                </goals>-->
+<!--                                <phase>package</phase>-->
+<!--                                <configuration>-->
+<!--                                    <arguments>run package-windows</arguments>-->
+<!--                                    <workingDirectory>target/electron</workingDirectory>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
                             <execution>
                                 <id>package electron mac</id>
                                 <goals>
@@ -396,6 +327,75 @@
                                 <configuration>
                                     <arguments>run package-mac</arguments>
                                     <workingDirectory>target/electron</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- open-jdk download -->
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <version>1.4.2</version>
+                        <executions>
+                            <execution>
+                                <id>download-openjdk-jre-windows</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <url>
+                                        https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_x64_windows_hotspot_8u222b10.zip
+                                    </url>
+                                    <outputDirectory>${project.build.directory}/openjdk-jre/</outputDirectory>
+                                    <outputFileName>jre_windows.zip</outputFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>download-openjdk-jre-mac-os</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <url>
+                                        https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_x64_mac_hotspot_8u222b10.tar.gz
+                                    </url>
+                                    <outputDirectory>${project.build.directory}/openjdk-jre/</outputDirectory>
+                                    <outputFileName>jre_mac.tar.gz</outputFileName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>truezip-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>unpack-openjdk-jre-mac-os</id>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <fileset>
+                                        <directory>${project.build.directory}/openjdk-jre/jre_mac.tar.gz</directory>
+                                        <outputDirectory>${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java/jre/</outputDirectory>
+                                    </fileset>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>unpack-openjdk-jre-windows</id>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <fileset>
+                                        <directory>${project.build.directory}/openjdk-jre/jre_windows.zip</directory>
+                                        <outputDirectory>${project.build.directory}/openjdk-jre/windows/</outputDirectory>
+                                    </fileset>
                                 </configuration>
                             </execution>
                         </executions>
