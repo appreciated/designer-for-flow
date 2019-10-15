@@ -200,9 +200,77 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- open-jdk download -->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.4.2</version>
+                <executions>
+                    <execution>
+                        <id>install-openjdk-windows</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>
+                                https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_windows_hotspot_8u222b10.zip
+                            </url>
+                            <outputDirectory>${project.build.directory}/openjdk/</outputDirectory>
+                            <outputFileName>jdk_windows.zip</outputFileName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-openjdk-mac-os</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>
+                                https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_mac_hotspot_8u222b10.tar.gz
+                            </url>
+                            <outputDirectory>${project.build.directory}/openjdk/</outputDirectory>
+                            <outputFileName>jdk_mac.tar.gz</outputFileName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>truezip-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <id>unpack-mac-open-jdk</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <fileset>
+                                <directory>${project.build.directory}/openjdk/jdk_mac.tar.gz</directory>
+                                <outputDirectory>${project.build.directory}/openjdk/mac/</outputDirectory>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-windows-open-jdk</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <fileset>
+                                <directory>${project.build.directory}/openjdk/jdk_windows.zip</directory>
+                                <outputDirectory>${project.build.directory}/openjdk/windows/</outputDirectory>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <!-- Production mode is activated using -Pproduction -->
@@ -241,6 +309,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- Electron build begin -->
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>3.1.0</version>
