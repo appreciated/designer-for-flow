@@ -82,7 +82,7 @@ public class FileChooserDialog extends Dialog {
         if (files.stream().count() == 1 && files.stream().anyMatch(File::isDirectory)) {
             return singleDirectoriesRecursive(Arrays.asList(files.stream().findFirst().get().listFiles()), ++expand);
         }
-        return expand;
+        return Math.max(expand, 0);
     }
 
     protected void onSelect() {
