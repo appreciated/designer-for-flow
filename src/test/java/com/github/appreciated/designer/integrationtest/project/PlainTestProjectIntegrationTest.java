@@ -8,7 +8,7 @@ import org.junit.Test;
 public class PlainTestProjectIntegrationTest extends IntegrationTestBase {
     @Test
     public void testPlainProject() {
-        openPath("project/" + UrlEncoder.encode(ResourceHelper.getPlainTestProject()));
+        openPath("project?path=" + UrlEncoder.encode(ResourceHelper.getPlainTestProject()));
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {

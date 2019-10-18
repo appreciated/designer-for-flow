@@ -8,7 +8,7 @@ import org.junit.Test;
 public class SpringBootTestProjectIntegrationTest extends IntegrationTestBase {
     @Test
     public void testPlainProject() {
-        openPath("project/" + UrlEncoder.encode(ResourceHelper.getSpringBootTestProject()));
+        openPath("project?path=" + UrlEncoder.encode(ResourceHelper.getSpringBootTestProject()));
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
