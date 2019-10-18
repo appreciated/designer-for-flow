@@ -14,6 +14,7 @@ import com.vaadin.flow.data.provider.hierarchy.HierarchicalQuery;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -50,6 +51,8 @@ public class FileChooserDialog extends Dialog {
             }
         });
 
+        grid.addExpandListener(event -> grid.expandRecursively(event.getItems(), recursiveDirectory(event.getItems(), 1)));
+
         grid.addHierarchyColumn(File::getName).setHeader("Name");
         grid.setWidthFull();
         select = new Button("Select", event -> onSelect());
@@ -73,6 +76,13 @@ public class FileChooserDialog extends Dialog {
             return Arrays.stream(root.listFiles())
                     .toArray(File[]::new);
         }
+    }
+
+    int recursiveDirectory(Collection<File> files, int expand) {
+        if (files.stream().count() == 1 && files.stream().anyMatch(File::isDirectory)) {
+            return recursiveDirectory(Arrays.asList(files.stream().findFirst().get().listFiles()), ++expand);
+        }
+        return expand;
     }
 
     protected void onSelect() {
