@@ -51,7 +51,7 @@ public class FileChooserDialog extends Dialog {
             }
         });
 
-        grid.addExpandListener(event -> grid.expandRecursively(event.getItems(), recursiveDirectory(event.getItems(), 1)));
+        grid.addExpandListener(event -> grid.expandRecursively(event.getItems(), singleDirectoriesRecursive(event.getItems(), -1)));
 
         grid.addHierarchyColumn(File::getName).setHeader("Name");
         grid.setWidthFull();
@@ -78,9 +78,9 @@ public class FileChooserDialog extends Dialog {
         }
     }
 
-    int recursiveDirectory(Collection<File> files, int expand) {
+    int singleDirectoriesRecursive(Collection<File> files, int expand) {
         if (files.stream().count() == 1 && files.stream().anyMatch(File::isDirectory)) {
-            return recursiveDirectory(Arrays.asList(files.stream().findFirst().get().listFiles()), ++expand);
+            return singleDirectoriesRecursive(Arrays.asList(files.stream().findFirst().get().listFiles()), ++expand);
         }
         return expand;
     }
