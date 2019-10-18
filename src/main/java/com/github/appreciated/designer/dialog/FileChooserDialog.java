@@ -70,16 +70,11 @@ public class FileChooserDialog extends Dialog {
     }
 
     protected File[] getFiles(File root) {
-        if (root.listFiles() == null) {
-            return null;
-        } else {
-            return Arrays.stream(root.listFiles())
-                    .toArray(File[]::new);
-        }
+        return root.listFiles();
     }
 
-    int singleDirectoriesRecursive(Collection<File> files, int expand) {
-        if (files.stream().count() == 1 && files.stream().anyMatch(File::isDirectory)) {
+    private int singleDirectoriesRecursive(Collection<File> files, int expand) {
+        if ((long) files.size() == 1 && files.stream().anyMatch(File::isDirectory)) {
             return singleDirectoriesRecursive(Arrays.asList(files.stream().findFirst().get().listFiles()), ++expand);
         }
         return Math.max(expand, 0);
