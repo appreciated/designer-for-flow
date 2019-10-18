@@ -1,11 +1,27 @@
-package com.github.appreciated.designer.template.java.parser;
+package com.github.appreciated.designer.integrationtest.parser;
 
-public class ComponentTreeCompilerTest {
-/*
+import com.github.appreciated.designer.integrationtest.IntegrationTestBase;
+import com.vaadin.flow.component.Component;
+import org.junit.Test;
+
+import java.io.File;
+import java.text.ParseException;
+
+public class ComponentTreeCompilerIntegrationTest extends IntegrationTestBase {
+
     @Test
     public void testComponentTreeCompiler() throws ParseException, ClassNotFoundException {
 
-        File file = new File(getClass().getClassLoader().getResource("com/designer/test/TestDesign.java").getFile());
+        //
+        openPath("");
+
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        /*File file =
         Component component = getComponentFromFile(file);
 
         File saveFile = new File(file.getParentFile().getPath() + File.separator + "TestDesign2.java");
@@ -19,14 +35,23 @@ public class ComponentTreeCompilerTest {
 
         Component compiledComponent = getComponentFromFile(saveFile);
         Assert.assertTrue(compiledComponent instanceof DesignerComponentWrapper);
-        ComponentComparer.compare(compiledComponent,component);
+        ComponentComparer.compare(compiledComponent,component);*/
     }
 
     private Component getComponentFromFile(File file) throws ParseException, ClassNotFoundException {
+        /*
         TestProject project = new TestProject();
         DesignerComponentTreeParser parser = new DesignerComponentTreeParser(file, project);
         DesignCompilerInformation info = parser.getDesignCompilerInformation();
-        return info.getComponent();
-    }*/
+        return info.getComponent();*/
+        return null;
+    }
+
+    public static void main(String[] args) {
+
+        // System.out.println(f.getPath());
+        // System.out.println(f.getPath());
+    }
+
 
 }

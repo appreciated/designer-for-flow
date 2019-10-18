@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.template.java.parser;
+package com.github.appreciated.designer.integrationtest.parser;
 
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.vaadin.converter.FileStreamResource;

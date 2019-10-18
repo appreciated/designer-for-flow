@@ -168,9 +168,18 @@
             <artifactId>cssparser</artifactId>
             <version>0.9.27</version>
         </dependency>
+        <!-- Testing -->
+        <!-- Testing and Selenide Dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>5.2.8</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -181,6 +190,22 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!--
@@ -196,6 +221,34 @@
                     <execution>
                         <goals>
                             <goal>prepare-frontend</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*IntegrationTest</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <includes>
+                        <include>**/*IntegrationTest</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>

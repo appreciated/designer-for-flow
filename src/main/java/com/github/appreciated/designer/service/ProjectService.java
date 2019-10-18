@@ -1,10 +1,10 @@
 package com.github.appreciated.designer.service;
 
 import com.github.appreciated.designer.AppConfig;
+import com.github.appreciated.designer.integrationtest.parser.DesignerComponentTreeParser;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.model.project.ProjectTypes;
-import com.github.appreciated.designer.template.java.parser.DesignerComponentTreeParser;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.github.javaparser.ParseException;
 import com.vaadin.flow.component.notification.Notification;

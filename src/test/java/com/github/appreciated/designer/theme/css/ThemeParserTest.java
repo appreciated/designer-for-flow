@@ -1,5 +1,6 @@
 package com.github.appreciated.designer.theme.css;
 
+import com.github.appreciated.designer.helper.resources.ResourceHelper;
 import com.github.appreciated.designer.io.TempFile;
 import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.model.LumoVariables;
@@ -14,7 +15,7 @@ public class ThemeParserTest {
 
     @Test
     public void readThemeClass() throws IOException {
-        File file = TempFile.get(new File(getClass().getClassLoader().getResource("styles.css").getFile()));
+        File file = TempFile.get(ResourceHelper.getFileForResource("test-files/styles.css"));
         Theme theme = new Theme();
         theme.parseCss(file);
 
@@ -24,7 +25,7 @@ public class ThemeParserTest {
 
     @Test
     public void readThemeWithoutHTMLClass() throws IOException {
-        File file = TempFile.get(new File(getClass().getClassLoader().getResource("styles-without-html.css").getFile()));
+        File file = TempFile.get(ResourceHelper.getFileForResource("test-files/styles-without-html.css"));
         Theme theme = new Theme();
         theme.parseCss(file);
 
