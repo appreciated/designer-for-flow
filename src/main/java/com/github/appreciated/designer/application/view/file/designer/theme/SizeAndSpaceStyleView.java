@@ -1,15 +1,15 @@
-package com.github.appreciated.designer.application.view.designer.theme;
+package com.github.appreciated.designer.application.view.file.designer.theme;
 
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.component.designer.TextFieldEditorDetails;
 import com.github.appreciated.designer.model.LumoVariables;
 import com.github.appreciated.designer.service.EventService;
-import com.github.appreciated.designer.service.ProjectService;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class SizeAndSpaceStyleView extends VerticalLayout {
-    public SizeAndSpaceStyleView(ProjectService projectService, EventService eventService) {
-        Theme theme = projectService.getCurrentFile().getTheme();
+    public SizeAndSpaceStyleView(ProjectFileModel projectFileModel, EventService eventService) {
+        Theme theme = projectFileModel.getInformation().getTheme();
 
         TextFieldEditorDetails fontSize = new TextFieldEditorDetails("Unit Size", eventService, false);
         fontSize.withFormField(LumoVariables.SIZE_XL, theme)

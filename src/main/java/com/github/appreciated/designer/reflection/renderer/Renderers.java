@@ -1,5 +1,6 @@
 package com.github.appreciated.designer.reflection.renderer;
 
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.reflection.renderer.property.component.ComponentRenderer;
 import com.github.appreciated.designer.reflection.renderer.property.component.ImageRenderer;
 import com.github.appreciated.designer.reflection.renderer.property.interfaces.FlexComponentInterfaceRenderer;
@@ -7,7 +8,6 @@ import com.github.appreciated.designer.reflection.renderer.property.interfaces.H
 import com.github.appreciated.designer.reflection.renderer.property.interfaces.HasTextInterfaceRenderer;
 import com.github.appreciated.designer.reflection.renderer.property.interfaces.HasThemeInterfaceRenderer;
 import com.github.appreciated.designer.reflection.renderer.type.*;
-import com.github.appreciated.designer.service.ProjectService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class Renderers {
     private List<com.github.appreciated.designer.reflection.renderer.type.AbstractPropertyRenderer> typeRenderer = new ArrayList<>();
     private List<AbstractPropertyRenderer> propertyRenderer = new ArrayList<>();
 
-    public Renderers(ProjectService service) {
+    public Renderers(ProjectFileModel projectFileModel) {
         typeRenderer.addAll(Arrays.asList(
                 new StringPropertyRenderer(),
                 new BooleanPropertyRenderer(),
@@ -34,8 +34,8 @@ public class Renderers {
                 new ComponentRenderer(),
                 new ImageRenderer()
         ));
-        typeRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectService(service));
-        propertyRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectService(service));
+        typeRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
+        propertyRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
     }
 
     public List<com.github.appreciated.designer.reflection.renderer.type.AbstractPropertyRenderer> getTypeRenderers() {

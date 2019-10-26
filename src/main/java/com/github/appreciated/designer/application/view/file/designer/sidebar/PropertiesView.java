@@ -1,5 +1,6 @@
-package com.github.appreciated.designer.application.view.designer.sidebar;
+package com.github.appreciated.designer.application.view.file.designer.sidebar;
 
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.ComponentPropertyParser;
 import com.github.appreciated.designer.component.designer.StyleEditorDetails;
@@ -7,8 +8,6 @@ import com.github.appreciated.designer.reflection.renderer.RenderPair;
 import com.github.appreciated.designer.reflection.renderer.Renderers;
 import com.github.appreciated.designer.reflection.renderer.property.interfaces.HasStyleInterfaceRenderer;
 import com.github.appreciated.designer.reflection.renderer.type.AbstractPropertyRenderer;
-import com.github.appreciated.designer.service.EventService;
-import com.github.appreciated.designer.service.ProjectService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
@@ -28,18 +27,16 @@ import java.util.stream.Stream;
 public class PropertiesView extends BaseView {
     private final VerticalLayout properties;
     private final Renderers renderers;
-    private EventService eventService;
 
-    public PropertiesView(ProjectService projectService, EventService eventService) {
+    public PropertiesView(ProjectFileModel projectFileModel) {
         super("Properties");
-        this.eventService = eventService;
         properties = new VerticalLayout();
         properties.setSizeFull();
         properties.setPadding(false);
         properties.setMargin(false);
         add(properties);
-        renderers = new Renderers(projectService);
-        eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
+        renderers = new Renderers(projectFileModel);
+        projectFileModel.getEventService().getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
             getUI().ifPresent(ui -> ui.access(() -> onFocus(elementFocusedEvent.getFocus())));
         });
     }

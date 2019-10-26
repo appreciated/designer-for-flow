@@ -1,15 +1,15 @@
-package com.github.appreciated.designer.application.view.designer.theme;
+package com.github.appreciated.designer.application.view.file.designer.theme;
 
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.component.designer.TextFieldEditorDetails;
 import com.github.appreciated.designer.model.LumoVariables;
 import com.github.appreciated.designer.service.EventService;
-import com.github.appreciated.designer.service.ProjectService;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class TypographyStyleView extends VerticalLayout {
-    public TypographyStyleView(ProjectService projectService, EventService eventService) {
-        Theme theme = projectService.getCurrentFile().getTheme();
+    public TypographyStyleView(ProjectFileModel projectFileModel, EventService eventService) {
+        Theme theme = projectFileModel.getInformation().getTheme();
 
         TextFieldEditorDetails fontSize = new TextFieldEditorDetails("Font Size", eventService, false);
         fontSize.withFormField(LumoVariables.FONT_SIZE_XXXL, theme)

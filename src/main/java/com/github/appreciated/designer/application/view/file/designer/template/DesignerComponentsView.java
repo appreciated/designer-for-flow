@@ -1,9 +1,8 @@
-package com.github.appreciated.designer.application.view.designer.template;
+package com.github.appreciated.designer.application.view.file.designer.template;
 
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.service.ComponentService;
-import com.github.appreciated.designer.service.ProjectService;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.dnd.DragSource;
@@ -22,7 +21,7 @@ public class DesignerComponentsView extends BaseView {
     Accordion accordion = new Accordion();
 
 
-    public DesignerComponentsView(ProjectService projectService) {
+    public DesignerComponentsView() {
         super("Components");
         ComponentService service = new ComponentService();
         search = new TextField();

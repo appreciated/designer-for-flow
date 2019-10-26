@@ -27,8 +27,8 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
     public Stream<RenderPair> render(Image component) {
         TextField src = new TextField();
         src.setSuffixComponent(new IconButton(VaadinIcon.FOLDER.create(), buttonClickEvent -> {
-            new FileChooserDialog(getService().getProject().getFrontendFolder(),
-                    file -> src.setValue("." + file.getPath().substring(getService().getProject().getFrontendFolder().getPath().length()).replace("\\", "/")))
+            new FileChooserDialog(getProjectFileModel().getInformation().getProject().getFrontendFolder(),
+                    file -> src.setValue("." + file.getPath().substring(getProjectFileModel().getInformation().getProject().getFrontendFolder().getPath().length()).replace("\\", "/")))
                     .open();
         }));
         src.setErrorMessage("This source does not exist");
@@ -38,13 +38,13 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
             is.setSrc(component.getSrc());
             src.setValue(component.getSrc());
             setSrc(component, src);
-        } else if (getService().getCurrentFile().getComponentMetainfo(component).hasPropertyReplacement("src")) {
-            is.setSrc((String) getService().getCurrentFile().getComponentMetainfo(component).getPropertyReplacement("src"));
+        } else if (getProjectFileModel().getInformation().getComponentMetainfo(component).hasPropertyReplacement("src")) {
+            is.setSrc((String) getProjectFileModel().getInformation().getComponentMetainfo(component).getPropertyReplacement("src"));
         }
         sourceBinder.setBean(is);
         src.addBlurListener(textFieldBlurEvent -> sourceBinder.validate());
         sourceBinder.forField(src)
-                .withValidator(new PathValidator(getService()))
+                .withValidator(new PathValidator(getProjectFileModel()))
                 .bind(ImageSource::getSrc, ImageSource::setSrc);
 
         sourceBinder.addStatusChangeListener(event -> {
@@ -63,11 +63,11 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
 
     public void setSrc(Image component, TextField src) {
         if (src.getValue() != null) {
-            component.setSrc(new FileStreamResource(new File(getService().getProject().getFrontendFolder() + File.separator + src.getValue().replace("/", File.separator))));
-            getService().getCurrentFile().getComponentMetainfo(component).setPropertyReplacement("src", src.getValue());
+            component.setSrc(new FileStreamResource(new File(getProjectFileModel().getInformation().getProject().getFrontendFolder() + File.separator + src.getValue().replace("/", File.separator))));
+            getProjectFileModel().getInformation().getComponentMetainfo(component).setPropertyReplacement("src", src.getValue());
         } else {
             component.getElement().setAttribute("src", "");
-            getService().getCurrentFile().getComponentMetainfo(component).setPropertyReplacement("src", null);
+            getProjectFileModel().getInformation().getComponentMetainfo(component).setPropertyReplacement("src", null);
         }
     }
 

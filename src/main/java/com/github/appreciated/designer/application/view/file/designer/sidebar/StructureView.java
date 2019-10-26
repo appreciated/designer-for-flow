@@ -1,9 +1,8 @@
-package com.github.appreciated.designer.application.view.designer.sidebar;
+package com.github.appreciated.designer.application.view.file.designer.sidebar;
 
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
-import com.github.appreciated.designer.service.EventService;
-import com.github.appreciated.designer.service.ProjectService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.UI;
@@ -24,7 +23,7 @@ public class StructureView extends BaseView {
     private List<Component> dragged;
 
 
-    public StructureView(ProjectService projectService, EventService eventService) {
+    public StructureView(ProjectFileModel projectFileModel) {
         super("Structure");
         ui = UI.getCurrent();
         grid = new TreeGrid<>();
@@ -34,7 +33,7 @@ public class StructureView extends BaseView {
         grid.setSizeFull();
         grid.setRowsDraggable(true);
         grid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
-        grid.setDragFilter(component -> component != projectService.getCurrentFile().getComponent());
+        grid.setDragFilter(component -> component != projectFileModel.getInformation().getComponent());
         grid.addItemClickListener(event -> {
             event.getItem().getParent().ifPresent(component -> {
 
@@ -85,22 +84,22 @@ public class StructureView extends BaseView {
                     }
                 });
             }
-            updateStructure(projectService.getCurrentFile().getComponent());
+            updateStructure(projectFileModel.getInformation().getComponent());
         });
-        grid.addItemClickListener(event -> eventService.getFocusedEventPublisher().publish(event.getItem()));
+        grid.addItemClickListener(event -> projectFileModel.getEventService().getFocusedEventPublisher().publish(event.getItem()));
         add(grid);
-        eventService.getStructureChangedEventListener().addEventConsumer(event -> {
+        projectFileModel.getEventService().getStructureChangedEventListener().addEventConsumer(event -> {
             System.out.println("StructureChangedEvent");
-            if (event.getComponent() == projectService.getCurrentFile().getComponent()) {
+            if (event.getComponent() == projectFileModel.getInformation().getComponent()) {
                 updateStructure(event.getComponent());
             }
         });
-        eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
+        projectFileModel.getEventService().getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
             getUI().ifPresent(ui1 -> ui1.access(() -> {
                 grid.select(elementFocusedEvent.getFocus());
             }));
         });
-        updateStructure(projectService.getCurrentFile().getComponent());
+        updateStructure(projectFileModel.getInformation().getComponent());
     }
 
     private void updateStructure(Component designRootComponent) {

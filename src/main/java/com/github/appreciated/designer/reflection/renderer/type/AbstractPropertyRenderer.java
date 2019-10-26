@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.reflection.renderer.type;
 
-import com.github.appreciated.designer.service.ProjectService;
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public abstract class AbstractPropertyRenderer {
 
-    private ProjectService service;
+    private ProjectFileModel projectFileModel;
 
     public abstract boolean canRender(Component propertyParent, String propertyName, PropertyDescriptor propertyDescriptor);
 
@@ -30,11 +30,11 @@ public abstract class AbstractPropertyRenderer {
         }
     }
 
-    public void setProjectService(ProjectService service) {
-        this.service = service;
+    public void setProjectFileModel(ProjectFileModel projectFileModel) {
+        this.projectFileModel = projectFileModel;
     }
 
-    public ProjectService getService() {
-        return service;
+    public ProjectFileModel getProjectFileModel() {
+        return projectFileModel;
     }
 }

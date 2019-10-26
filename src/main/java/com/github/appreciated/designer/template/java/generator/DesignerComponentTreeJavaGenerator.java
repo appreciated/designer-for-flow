@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.template.java.generator;
 
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
-import com.github.appreciated.designer.service.ProjectService;
+import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.template.java.generator.interfaces.VaadinComponentJavaGeneratorCollection;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -25,16 +25,16 @@ public class DesignerComponentTreeJavaGenerator {
     private final ClassOrInterfaceDeclaration componentClass;
     private final ConstructorDeclaration constructor;
     private final SourceRoot sourceRoot;
-    private final ProjectService service;
+    private final DesignCompilerInformation designCompilerInformation;
     int i = 0;
     private VaadinComponentJavaGeneratorCollection compilerCollection;
 
-    public DesignerComponentTreeJavaGenerator(ProjectService service) {
-        compilerCollection = new VaadinComponentJavaGeneratorCollection(service);
-        this.service = service;
-        Component component = service.getCurrentFile().getComponent();
-        File file = service.getCurrentFile().getDesign();
-        if (service.getCurrentFile().getDesign().getName().endsWith(".java")) {
+    public DesignerComponentTreeJavaGenerator(DesignCompilerInformation designCompilerInformation) {
+        compilerCollection = new VaadinComponentJavaGeneratorCollection(designCompilerInformation);
+        this.designCompilerInformation = designCompilerInformation;
+        Component component = designCompilerInformation.getComponent();
+        File file = designCompilerInformation.getDesign();
+        if (designCompilerInformation.getDesign().getName().endsWith(".java")) {
             if (!file.exists()) {
                 try {
                     file.createNewFile();
@@ -42,10 +42,10 @@ public class DesignerComponentTreeJavaGenerator {
                     e.printStackTrace();
                 }
             }
-            sourceRoot = new SourceRoot(service.getProject().getProjectRoot().toPath());
+            sourceRoot = new SourceRoot(designCompilerInformation.getProject().getProjectRoot().toPath());
             compilationUnit = new CompilationUnit();
             compilationUnit.setStorage(file.toPath());
-            String packageName = file.getParentFile().getPath().substring(service.getProject().getSourceFolder().getPath().length() + 1).replace(File.separator, ".");
+            String packageName = file.getParentFile().getPath().substring(designCompilerInformation.getProject().getSourceFolder().getPath().length() + 1).replace(File.separator, ".");
             compilationUnit.setPackageDeclaration(packageName);
             sourceRoot.add(compilationUnit);
             componentClass = compilationUnit.addClass(file.getName().substring(0, file.getName().length() - 5));
@@ -60,7 +60,7 @@ public class DesignerComponentTreeJavaGenerator {
     }
 
     public void save() {
-        sourceRoot.saveAll(service.getCurrentFile().getDesign().toPath());
+        sourceRoot.saveAll(designCompilerInformation.getDesign().toPath());
     }
 
     private FieldDeclaration addComponent(Component component) {

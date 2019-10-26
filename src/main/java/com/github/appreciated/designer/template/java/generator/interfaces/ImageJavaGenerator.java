@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.template.java.generator.interfaces;
 
-import com.github.appreciated.designer.service.ProjectService;
+import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -15,10 +15,10 @@ import java.util.stream.Stream;
 
 public class ImageJavaGenerator implements VaadinComponentJavaGenerator<Image> {
 
-    private ProjectService service;
+    private final DesignCompilerInformation designCompilerInformation;
 
-    public ImageJavaGenerator(ProjectService service) {
-        this.service = service;
+    public ImageJavaGenerator(DesignCompilerInformation designCompilerInformation) {
+        this.designCompilerInformation = designCompilerInformation;
     }
 
     @Override
@@ -34,8 +34,8 @@ public class ImageJavaGenerator implements VaadinComponentJavaGenerator<Image> {
     @Override
     public Stream<Expression> parse(CompilationUnit compilationUnit, Image propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
-        if (propertyParent.getSrc() != null && service.getCurrentFile().getComponentMetainfo(propertyParent).hasPropertyReplacement("src")) {
-            expressionList.add(new MethodCallExpr(nameExpr, "setSrc", new NodeList<>(new StringLiteralExpr((String) service.getCurrentFile().getComponentMetainfo(propertyParent).getPropertyReplacement("src")))));
+        if (propertyParent.getSrc() != null && designCompilerInformation.getComponentMetainfo(propertyParent).hasPropertyReplacement("src")) {
+            expressionList.add(new MethodCallExpr(nameExpr, "setSrc", new NodeList<>(new StringLiteralExpr((String) designCompilerInformation.getComponentMetainfo(propertyParent).getPropertyReplacement("src")))));
         }
         return expressionList.stream();
     }

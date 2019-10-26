@@ -18,7 +18,7 @@ public class Shortcuts {
                 currentFocus.getParent().get().getParent().ifPresent(parent -> {
                     if (parent instanceof HasComponents) {
                         ((HasComponents) parent).remove(currentFocus.getParent().get());
-                        eventService.getStructureChangedEventPublisher().publish(service.getCurrentFile().getComponent());
+                        eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFile().getComponent());
                     } else {
                         Notification.show("Parent is not of type HasComponents");
                     }
@@ -36,14 +36,14 @@ public class Shortcuts {
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_Y, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
-            DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service);
+            DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFile());
             compiler.save();
             Notification.show("Design was saved!");
         }, Key.KEY_S, KeyModifier.CONTROL);
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
             System.out.println("StructureChanged!");
-            if (service.getCurrentFile() != null) {
-                DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service);
+            if (service.getCurrentProjectFile() != null) {
+                DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFile());
                 compiler.save();
             }
         });

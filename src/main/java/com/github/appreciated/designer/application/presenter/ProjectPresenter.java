@@ -2,10 +2,11 @@ package com.github.appreciated.designer.application.presenter;
 
 import com.github.appreciated.designer.Shortcuts;
 import com.github.appreciated.designer.application.model.ProjectModel;
-import com.github.appreciated.designer.application.view.DividerView;
+import com.github.appreciated.designer.application.presenter.file.ProjectFilePresenter;
 import com.github.appreciated.designer.application.view.ErrorPageView;
 import com.github.appreciated.designer.application.view.ProjectView;
 import com.github.appreciated.designer.dialog.AddNewDesignTabDialog;
+import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ExceptionService;
 import com.github.appreciated.designer.service.ProjectService;
@@ -53,9 +54,10 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
     }
 
     public void addTab(File file) {
-        projectService.add(file);
-        getContent().addTab(projectService.getCurrentFile().getDesign().getName(), event -> projectService.close(projectService.getCurrentFile()));
-        getContent().getContent().add(new DividerView(projectService, eventService));
+        DesignCompilerInformation info = projectService.create(file);
+        ProjectFilePresenter presenter = new ProjectFilePresenter(info, eventService);
+        getContent().addTab(info.getDesign().getName(), event -> getContent().getContent().remove(presenter));
+        getContent().getContent().add(presenter);
     }
 
     @Override
@@ -71,10 +73,9 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
         projectPath = URLDecoder.decode(parametersMap.get("path").get(0));
         projectService.initProject(new File(projectPath));
-        if (false && projectService.getConfig().getDeveloperMode()) {
+        if (projectService.getConfig().getDeveloperMode()) {
             File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\TestDesign.java");
             if (defaultFile.exists()) {
-                projectService.add(defaultFile);
                 addTab(defaultFile);
             }
         }

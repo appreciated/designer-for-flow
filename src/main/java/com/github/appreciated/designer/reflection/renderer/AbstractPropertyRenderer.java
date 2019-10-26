@@ -1,13 +1,13 @@
 package com.github.appreciated.designer.reflection.renderer;
 
-import com.github.appreciated.designer.service.ProjectService;
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 
 import java.util.stream.Stream;
 
 public abstract class AbstractPropertyRenderer<T> {
-    ProjectService service;
+    ProjectFileModel projectFileModel;
 
     public abstract boolean canRender(Component propertyParent);
 
@@ -19,12 +19,8 @@ public abstract class AbstractPropertyRenderer<T> {
         }
     }
 
-    public ProjectService getService() {
-        return service;
-    }
-
-    public void setService(ProjectService service) {
-        this.service = service;
+    public ProjectFileModel getProjectFileModel() {
+        return projectFileModel;
     }
 
     public Stream<String> rendersCssStyle() {
@@ -37,7 +33,7 @@ public abstract class AbstractPropertyRenderer<T> {
 
     public abstract Stream<RenderPair> render(T propertyParent);
 
-    public void setProjectService(ProjectService service) {
-        this.service = service;
+    public void setProjectFileModel(ProjectFileModel projectFileModel) {
+        this.projectFileModel = projectFileModel;
     }
 }
