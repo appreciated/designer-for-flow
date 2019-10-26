@@ -151,6 +151,11 @@
             <artifactId>flow-dnd</artifactId>
             <version>3.0.0.alpha4</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>mvp-flow</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- Java Parsing library -->
         <dependency>
             <groupId>com.github.javaparser</groupId>

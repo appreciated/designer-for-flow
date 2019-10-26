@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.view;
+package com.github.appreciated.designer.application.view;
 
 import com.github.appreciated.designer.controller.AdvancedTestDesignController;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

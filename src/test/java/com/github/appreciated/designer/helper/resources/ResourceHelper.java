@@ -15,11 +15,11 @@ public class ResourceHelper {
     }
 
     public static String getPlainTestProject() {
-        return getPathForResource("plain-test-project");
+        return getFileForResource("plain-test-project").getPath();
     }
 
     public static String getSpringBootTestProject() {
-        return getPathForResource("spring-boot-test-project");
+        return getFileForResource("spring-boot-test-project").getPath();
     }
 
     @Test

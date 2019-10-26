@@ -1,11 +1,11 @@
-package com.github.appreciated.designer.view;
+package com.github.appreciated.designer.application.view;
 
+import com.github.appreciated.designer.application.view.designer.DesignerView;
+import com.github.appreciated.designer.application.view.designer.SideBarView;
+import com.github.appreciated.designer.application.view.designer.ThemeView;
+import com.github.appreciated.designer.application.view.designer.template.DesignerComponentsView;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.designer.DesignerComponentsView;
-import com.github.appreciated.designer.view.designer.DesignerView;
-import com.github.appreciated.designer.view.designer.SideBarView;
-import com.github.appreciated.designer.view.designer.ThemeView;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 
 public class DividerView extends SplitLayout {

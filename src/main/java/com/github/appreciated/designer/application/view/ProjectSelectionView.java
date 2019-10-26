@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.view;
+package com.github.appreciated.designer.application.view;
 
 import com.github.appreciated.card.RippleClickableCard;
 import com.github.appreciated.card.label.PrimaryLabelComponent;
@@ -9,6 +9,7 @@ import com.github.appreciated.css.grid.sizes.Length;
 import com.github.appreciated.css.grid.sizes.MinMax;
 import com.github.appreciated.css.grid.sizes.Repeat;
 import com.github.appreciated.designer.AppConfig;
+import com.github.appreciated.designer.application.presenter.ProjectPresenter;
 import com.github.appreciated.designer.component.AddButton;
 import com.github.appreciated.designer.dialog.OpenProjectDialog;
 import com.github.appreciated.designer.model.ProjectPath;
@@ -28,7 +29,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.shared.ui.Transport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -79,7 +79,7 @@ public class ProjectSelectionView extends VerticalLayout {
                 event.getThrowable().printStackTrace();
             }
             exceptionService.setError(event.getThrowable());
-            UI.getCurrent().navigate(ErrorPage.class);
+            UI.getCurrent().navigate(ErrorPageView.class);
         });
     }
 
@@ -113,15 +113,14 @@ public class ProjectSelectionView extends VerticalLayout {
 
 
     private void openProject(ProjectPath directory) {
-        getUI().ifPresent(ui -> ui.getRouter().getRegistry()
-                .getTargetUrl(ProjectView.class)
-                .ifPresent(urlPath -> {
-                    urlPath = urlPath.replace("{String}", "");
-                    Map<String, List<String>> map = new HashMap<>();
-                    map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath())));
-                    // using UI#navigate causes many Components to not be drawn incorrectly
-                    ui.getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
-                }));
+        getUI().flatMap(ui -> ui.getRouter().getRegistry()
+                .getTargetUrl(ProjectPresenter.class)).ifPresent(urlPath -> {
+            urlPath = urlPath.replace("{String}", "");
+            Map<String, List<String>> map = new HashMap<>();
+            map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath())));
+            // using UI#navigate causes many Components to not be drawn incorrectly
+            getUI().get().getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
+        });
     }
 
 }

@@ -1,9 +1,9 @@
-package com.github.appreciated.designer.view.designer.sidebar;
+package com.github.appreciated.designer.application.view.designer.sidebar;
 
+import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.BaseView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.UI;

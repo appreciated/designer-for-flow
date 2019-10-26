@@ -3,7 +3,7 @@ package com.github.appreciated.designer.integrationtest.parser;
 import com.github.appreciated.designer.integrationtest.IntegrationTestBase;
 import org.junit.Test;
 
-public class ComponentTreeParserTest extends IntegrationTestBase {
+public class ComponentTreeParserIntegrationTest extends IntegrationTestBase {
 
     @Test
     public void testComponentTreeParser() {

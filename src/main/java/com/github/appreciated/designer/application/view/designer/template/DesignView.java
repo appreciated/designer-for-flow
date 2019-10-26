@@ -1,11 +1,11 @@
-package com.github.appreciated.designer.view.designer.template;
+package com.github.appreciated.designer.application.view.designer.template;
 
+import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.BaseView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;

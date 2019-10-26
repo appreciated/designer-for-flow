@@ -1,10 +1,10 @@
-package com.github.appreciated.designer.view.designer;
+package com.github.appreciated.designer.application.view.designer;
 
+import com.github.appreciated.designer.application.view.designer.sidebar.PropertiesView;
+import com.github.appreciated.designer.application.view.designer.sidebar.StructureView;
 import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.designer.sidebar.PropertiesView;
-import com.github.appreciated.designer.view.designer.sidebar.StructureView;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

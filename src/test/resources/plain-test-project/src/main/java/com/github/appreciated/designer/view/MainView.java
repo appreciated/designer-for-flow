@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.view;
+package com.github.appreciated.designer.application.view;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;

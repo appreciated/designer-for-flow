@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.view;
+package com.github.appreciated.designer.application.view;
 
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

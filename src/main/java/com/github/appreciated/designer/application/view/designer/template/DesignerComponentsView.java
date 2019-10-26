@@ -1,9 +1,9 @@
-package com.github.appreciated.designer.view.designer;
+package com.github.appreciated.designer.application.view.designer.template;
 
+import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.service.ComponentService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.BaseView;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.dnd.DragSource;

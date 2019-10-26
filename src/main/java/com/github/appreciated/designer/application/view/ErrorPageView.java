@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.view;
+package com.github.appreciated.designer.application.view;
 
 import com.github.appreciated.designer.service.ExceptionService;
 import com.vaadin.flow.component.UI;
@@ -18,9 +18,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 @Route("bugreport")
-public class ErrorPage extends VerticalLayout {
+public class ErrorPageView extends VerticalLayout {
 
-    public ErrorPage(@Autowired ExceptionService exceptionService) {
+    public ErrorPageView(@Autowired ExceptionService exceptionService) {
         getElement().executeJs("for (let item of document.getElementsByTagName(\"vaadin-dialog\")) { item.opened = false; }");
 
         Icon bug = VaadinIcon.BUG.create();

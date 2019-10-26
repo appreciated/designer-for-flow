@@ -1,8 +1,8 @@
-package com.github.appreciated.designer.view.designer;
+package com.github.appreciated.designer.application.view.designer;
 
+import com.github.appreciated.designer.application.view.designer.template.DesignView;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.designer.template.DesignView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 

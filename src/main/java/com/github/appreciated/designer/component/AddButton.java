@@ -7,8 +7,12 @@ import com.vaadin.flow.component.icon.Icon;
 
 public class AddButton extends Button {
 
+    public AddButton(Icon icon) {
+        this(icon, null);
+    }
+
     public AddButton(Icon icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
-        super(icon, clickListener);
+        super(icon);
         getStyle()
                 .set("position", "absolute")
                 .set("transition", "all 0.3s ease")
@@ -20,6 +24,9 @@ public class AddButton extends Button {
                 .set("bottom", "85px");
         setWidth("50px");
         setHeight("50px");
+        if (clickListener != null) {
+            addClickListener(clickListener);
+        }
     }
 
     public void setBottom(String bottom) {

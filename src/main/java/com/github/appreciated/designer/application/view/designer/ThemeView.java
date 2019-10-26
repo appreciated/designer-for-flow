@@ -1,13 +1,13 @@
-package com.github.appreciated.designer.view.designer;
+package com.github.appreciated.designer.application.view.designer;
 
+import com.github.appreciated.designer.application.view.BaseView;
+import com.github.appreciated.designer.application.view.designer.theme.ColorStyleView;
+import com.github.appreciated.designer.application.view.designer.theme.OtherStyleView;
+import com.github.appreciated.designer.application.view.designer.theme.SizeAndSpaceStyleView;
+import com.github.appreciated.designer.application.view.designer.theme.TypographyStyleView;
 import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.view.BaseView;
-import com.github.appreciated.designer.view.designer.theme.ColorStyleView;
-import com.github.appreciated.designer.view.designer.theme.OtherStyleView;
-import com.github.appreciated.designer.view.designer.theme.SizeAndSpaceStyleView;
-import com.github.appreciated.designer.view.designer.theme.TypographyStyleView;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;

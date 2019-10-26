@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.view.designer.theme;
+package com.github.appreciated.designer.application.view.designer.theme;
 
 import com.github.appreciated.designer.component.designer.TextFieldEditorDetails;
 import com.github.appreciated.designer.model.LumoVariables;
