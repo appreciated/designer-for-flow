@@ -19,6 +19,7 @@ import com.github.appreciated.designer.service.ProjectRepository;
 import com.github.appreciated.layout.FlexibleGridLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -42,6 +43,7 @@ import java.util.Map;
 
 
 @Route("")
+@StyleSheet("./styles/theme.css")
 @Push(transport = Transport.LONG_POLLING)
 @Configurable
 public class ProjectSelectionView extends VerticalLayout {
@@ -98,6 +100,7 @@ public class ProjectSelectionView extends VerticalLayout {
                 event -> openProject(projectPath), item
         );
         card.getStyle().set("margin", "5px");
+        card.setBackground("var(--lumo-primary-contrast-color)");
         return card;
     }
 

@@ -15,20 +15,19 @@ class DesignerComponentWrapper extends PolymerElement {
                 pointer-events: none;
             }
             #wrapper::after {
-                border: 0px solid var(--lumo-primary-color-50pct);
+                border: 0px solid rgba(255,255,255,0);
                 content: "";
                 opacity: 0;
                 position: absolute;
                 width: 100%;
                 height: 100%;
-                border-radius: var(--lumo-border-radius);
-                transition: border 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-                box-shadow: var(--design-focus-shadow);
+                transition: border 0.3s ease;
                 pointer-events: none;
             }
             #wrapper.focus::after {
                 opacity: 1;
-                box-shadow: var(--design-focus-shadow);
+                box-sizing: border-box;
+                border: 1px dashed var(--lumo-primary-color);
             }
         </style>
         <div id="wrapper" style="position: relative;display: flex;">

@@ -24,7 +24,7 @@ public class ComponentService {
         String pkg = "com.vaadin.flow.component";
         String tagAnnotation = pkg + ".Tag";
         ScanResult scanResult = new ClassGraph().enableAllInfo()             // Scan classes, methods, fields, annotations
-                .whitelistPackages(pkg)      // Scan com.xyz and subpackages (omit to scan all packages)
+                .acceptPackages(pkg)      // Scan com.xyz and subpackages (omit to scan all packages)
                 .scan();                  // Start the scan
 
         ClassInfoList classesFound = scanResult.getClassesWithAnnotation(tagAnnotation);

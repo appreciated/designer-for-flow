@@ -4,7 +4,7 @@
 }
 
 .focus {
-    border: 1px solid var(--lumo-primary-color-50pct);
+    border: 1px dashed var(--lumo-primary-color);
     background: #f9f9f9 !important;
 }
 

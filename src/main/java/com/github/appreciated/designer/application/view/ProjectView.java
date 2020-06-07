@@ -3,9 +3,9 @@ package com.github.appreciated.designer.application.view;
 import com.github.appreciated.designer.component.AddButton;
 import com.github.appreciated.designer.component.IconButton;
 import com.github.appreciated.designer.component.ironpages.IronPages;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
@@ -14,6 +14,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+
+import java.util.function.Consumer;
 
 @StyleSheet("frontend://styles/styles.css")
 public class ProjectView extends VerticalLayout {
@@ -25,6 +27,7 @@ public class ProjectView extends VerticalLayout {
 
     public ProjectView() {
         tabs = new Tabs();
+        tabs.setHeight("60px");
         dial = new AddButton(VaadinIcon.PLUS.create());
         dial.setBottom("30px");
         Image logo = new Image("./frontend/styles/images/logo-floating-low.png", "logo");
@@ -34,14 +37,22 @@ public class ProjectView extends VerticalLayout {
         label.getStyle()
                 .set("white-space", "nowrap")
                 .set("line-height", "56px");
-        appBar.add(logo, label, tabs);
+        Button button = new Button(VaadinIcon.ANGLE_LEFT.create());
+        button.getStyle().set("font-size", "25px").set("margin-right", "-20px");
+        button.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        button.addClickListener(event -> UI.getCurrent().navigate(ProjectSelectionView.class));
+        appBar.add(button, logo, label, tabs);
+        appBar.setAlignItems(Alignment.CENTER);
         appBar.getStyle()
                 .set("box-shadow", "var(--lumo-box-shadow-s)")
-                .set("z-index", "1");
+                .set("z-index", "1")
+                .set("background", "var(--lumo-primary-contrast-color)");
         appBar.setWidthFull();
         tabs.getStyle().set("--lumo-size-s", "var(--lumo-size-xl)");
+        getStyle().set("overflow", "hidden");
         add(appBar);
         content = new IronPages();
+        content.getElement().getStyle().set("overflow", "hidden");
         content.setSizeFull();
         add(content);
         tabs.setWidthFull();
@@ -52,15 +63,14 @@ public class ProjectView extends VerticalLayout {
         setSizeFull();
     }
 
-    public Tab addTab(String name, ComponentEventListener<ClickEvent<Button>> clickListener) {
+    public Tab addTab(String name, Consumer<Tab> clickListener) {
         if (name != null) {
             Tab tab = new Tab();
             tab.add(new Label(name),
-                    new IconButton(VaadinIcon.CLOSE_SMALL.create(), clickListener)
+                    new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> clickListener.accept(tab))
             );
             tabs.add(tab);
             tabs.setSelectedTab(tab);
-            return tab;
         }
         return null;
     }

@@ -47,6 +47,7 @@ public class DesignerComponentsView extends BaseView {
             AccordionPanel accordionPanel = new AccordionPanel();
             accordionPanel.setSummaryText(key);
             VerticalLayout wrapper = new VerticalLayout();
+            wrapper.setPadding(false);
             accordionPanel.addContent(wrapper);
             componentsCategories.put(key, wrapper);
             accordion.add(accordionPanel);

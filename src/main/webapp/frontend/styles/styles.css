@@ -1,15 +1,8 @@
-.droptarget {
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-}
-
-.dragover {
-    border: 1px solid var(--lumo-primary-color-50pct);
-    background: #eaeaea !important;
+.v-drag-over-target {
+    background: var(--lumo-primary-color-10pct);
 }
 
 html {
-    --lumo-base-color: #fafafa;
     --design-background: var(--lumo-base-color);
     --design-grid-color-1: var(--lumo-contrast-10pct);
     --design-grid-color-2: var(--lumo-contrast-5pct);
@@ -30,9 +23,8 @@ html {
 }
 
 .design-view > * {
-    box-shadow: var(--lumo-box-shadow-s);
     color: var(--lumo-body-text-color);
-    background-color: var(--lumo-base-color);
+    background-color: var(--lumo-primary-contrast-color);
 }
 
 .design-view > * {
@@ -48,4 +40,21 @@ html {
     min-height: 100px;
     box-shadow: var(--lumo-box-shadow-l);
     border-radius: var(--lumo-border-radius);
+}
+
+vaadin-horizontal-layout > .v-drag-over-target {
+    border-left: 3px solid var(--lumo-primary-text-color);
+    background: none !important;
+}
+
+vaadin-vertical-layout > .v-drag-over-target {
+    border-top: 3px solid var(--lumo-primary-text-color);
+    background: none !important;
+}
+
+.drop-target-div {
+    border: 1px dashed var(--lumo-primary-color);
+    width: 100%;
+    min-width: 30px;
+    height: 30px;
 }
