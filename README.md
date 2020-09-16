@@ -3,7 +3,9 @@
   <h1>Designer for Flow</h1>
 </p>    
 
-This is a Application which allows the user to create and edit existing Java Classes which use the Vaadin Platform.    
+This is a Application which allows to create and edit Views dependening on the Vaadin Platform.
+
+Currently only Java Classes are supported.    
 
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
