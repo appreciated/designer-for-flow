@@ -41,7 +41,7 @@ public class ComponentService {
                                     (Class<? extends Component>) Class.forName(classInfo.getName()))
                     );
                 } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

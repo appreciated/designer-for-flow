@@ -26,14 +26,12 @@ public class PreconditionDialog extends Dialog {
     private final HasPreconditions preconditions;
     private final H2 header;
     private ComponentService componentService;
-    private final Consumer onFulfileld;
     private final Binder<Map<String, Object>> binder;
     private final FormLayout form;
 
-    public PreconditionDialog(HasPreconditions preconditions, Consumer onFullfilled) {
+    public PreconditionDialog(HasPreconditions preconditions, Consumer onFulfilled) {
         this.preconditions = preconditions;
         this.componentService = new ComponentService();
-        this.onFulfileld = onFullfilled;
         header = new H2("Please enter the following data");
         binder = new Binder<>();
         form = new FormLayout();
@@ -42,20 +40,22 @@ public class PreconditionDialog extends Dialog {
                     .entrySet()
                     .stream()
                     .filter(entry -> !preconditions.getPreconditions().containsKey(entry.getKey()))
-                    .forEach(this::addFullfillment);
+                    .forEach(this::addFulfillment);
         } else {
             preconditions.getPreconditionNames()
                     .entrySet()
-                    .forEach(this::addFullfillment);
+                    .forEach(this::addFulfillment);
         }
         binder.setBean(preconditions.getPreconditions());
 
         Button select = new Button("Select", event -> {
             if (binder.isValid()) {
-                onFullfilled.accept(null);
+                onFulfilled.accept(null);
                 close();
             }
         });
+        binder.addStatusChangeListener(statusChangeEvent -> select.setEnabled(statusChangeEvent.getBinder().isValid()));
+
         select.setThemeName(ButtonVariant.LUMO_PRIMARY.getVariantName());
         HorizontalLayout buttons = new HorizontalLayout(select);
         buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
@@ -65,7 +65,7 @@ public class PreconditionDialog extends Dialog {
         add(layout);
     }
 
-    private void addFullfillment(Map.Entry<String, Class> entry) {
+    private void addFulfillment(Map.Entry<String, Class> entry) {
         if (entry.getValue() == String.class) {
             TextField field = new TextField();
             field.setLabel(entry.getKey());
