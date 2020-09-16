@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 
+import javax.validation.constraints.NotNull;
 import java.util.function.Consumer;
 
 @StyleSheet("frontend://styles/styles.css")
@@ -63,16 +64,17 @@ public class ProjectView extends VerticalLayout {
         setSizeFull();
     }
 
-    public Tab addTab(String name, Consumer<Tab> clickListener) {
-        if (name != null) {
-            Tab tab = new Tab();
-            tab.add(new Label(name),
-                    new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> clickListener.accept(tab))
-            );
-            tabs.add(tab);
-            tabs.setSelectedTab(tab);
-        }
-        return null;
+    public Tab createTab(@NotNull String name, Consumer<Tab> clickListener) {
+        Tab tab = new Tab();
+        tab.add(new Label(name),
+                new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> clickListener.accept(tab))
+        );
+        return tab;
+    }
+
+    public void addTab(Tab tab) {
+        tabs.add(tab);
+        tabs.setSelectedTab(tab);
     }
 
     public Tabs getTabs() {

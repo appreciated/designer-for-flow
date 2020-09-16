@@ -3,22 +3,21 @@ package com.github.appreciated.designer;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
 import com.github.appreciated.designer.template.java.generator.DesignerComponentTreeJavaGenerator;
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class Shortcuts {
-    @Autowired
-    ProjectService service;
-    private Component currentFocus;
 
-    public Shortcuts(UI ui, ProjectService service, EventService eventService) {
+    public static void register(UI ui, ProjectService service, EventService eventService) {
         ui.addShortcutListener(shortcutEvent -> {
-            if (currentFocus != null) {
-                currentFocus.getParent().get().getParent().ifPresent(parent -> {
+            if (service.getCurrentProjectFileModel().getCurrentFocus() != null) {
+                service.getCurrentProjectFileModel().getCurrentFocus().getParent().get().getParent().ifPresent(parent -> {
                     if (parent instanceof HasComponents) {
-                        ((HasComponents) parent).remove(currentFocus.getParent().get());
-                        eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFile().getComponent());
+                        ((HasComponents) parent).remove(service.getCurrentProjectFileModel().getCurrentFocus().getParent().get());
+                        eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFileModel().getInformation().getComponent());
                     } else {
                         Notification.show("Parent is not of type HasComponents");
                     }
@@ -36,20 +35,20 @@ public class Shortcuts {
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_Y, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
-            DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFile());
+            DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFileModel().getInformation());
             compiler.save();
             Notification.show("Design was saved!");
         }, Key.KEY_S, KeyModifier.CONTROL);
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
             System.out.println("StructureChanged!");
-            if (service.getCurrentProjectFile() != null) {
-                DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFile());
+            if (service.getCurrentProjectFileModel() != null) {
+                DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFileModel().getInformation());
                 compiler.save();
             }
         });
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
             System.out.println("FocusedEvent!");
-            currentFocus = elementFocusedEvent.getFocus();
+            service.getCurrentProjectFileModel().setCurrentFocus(elementFocusedEvent.getFocus());
         });
     }
 }

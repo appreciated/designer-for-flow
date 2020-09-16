@@ -35,7 +35,7 @@ public class DesignerComponent {
         try {
             return new DesignerComponentWrapper(className.getDeclaredConstructor().newInstance());
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }

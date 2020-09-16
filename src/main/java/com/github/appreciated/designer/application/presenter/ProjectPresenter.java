@@ -2,6 +2,7 @@ package com.github.appreciated.designer.application.presenter;
 
 import com.github.appreciated.designer.Shortcuts;
 import com.github.appreciated.designer.application.model.ProjectModel;
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.presenter.file.ProjectFilePresenter;
 import com.github.appreciated.designer.application.view.ErrorPageView;
 import com.github.appreciated.designer.application.view.ProjectView;
@@ -15,12 +16,14 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.shared.ui.Transport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
     private String projectPath;
     private EventService eventService;
     private ProjectService projectService;
+    private Map<Tab, ProjectFileModel> fileMap = new HashMap<>();
 
     public ProjectPresenter(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         UI.getCurrent().getSession().setErrorHandler(event -> {
@@ -40,12 +44,14 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
                 event.getThrowable().printStackTrace();
             }
             exceptionService.setError(event.getThrowable());
+            event.getThrowable().printStackTrace();
             UI.getCurrent().navigate(ErrorPageView.class);
         });
         this.eventService = eventService;
         this.projectService = projectService;
 
         getContent().getTabs().addSelectedChangeListener(selectedChangeEvent -> {
+            projectService.setCurrentProjectFileModel(fileMap.get(selectedChangeEvent.getSelectedTab()));
             getContent().getContent().setSelected(getContent().getTabs().getSelectedIndex());
         });
 
@@ -57,18 +63,21 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
 
     public void addTab(File file) {
         DesignCompilerInformation info = projectService.create(file);
-        ProjectFilePresenter presenter = new ProjectFilePresenter(info, eventService);
-        getContent().addTab(info.getDesign().getName(), tab -> {
+        ProjectFileModel model = new ProjectFileModel(info, eventService);
+        ProjectFilePresenter presenter = new ProjectFilePresenter(model);
+        Tab fileTab = getContent().createTab(info.getDesign().getName(), tab -> {
             getContent().getContent().remove(presenter);
             getContent().getTabs().remove(tab);
         });
+        fileMap.put(fileTab, model);
+        getContent().addTab(fileTab);
         getContent().getContent().add(presenter);
     }
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        new Shortcuts(attachEvent.getUI(), projectService, eventService);
+        Shortcuts.register(attachEvent.getUI(), projectService, eventService);
         if (projectService.getConfig().getDeveloperMode()) {
             File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\view\\TestDesign.java");
             if (defaultFile.exists()) {

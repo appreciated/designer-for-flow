@@ -98,7 +98,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         dragSource.addDragEndListener(event -> setHasComponentsFillerVisible(false));
     }
 
-    private void setHasComponentsFillerVisible(boolean isVisible) {
+    private synchronized void setHasComponentsFillerVisible(boolean isVisible) {
         if (isVisible) {
             addHasComponentsFiller(designerRoot);
         } else {
@@ -109,7 +109,9 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     private void addHasComponentsFiller(DesignerComponentWrapper designerComponentWrapper) {
         if (designerComponentWrapper.getActualComponent() instanceof HasOrderedComponents) {
             designerComponentWrapper.getActualComponent().getChildren().collect(Collectors.toList()).forEach(component -> {
-                addHasComponentsFiller((DesignerComponentWrapper) component);
+                if (component instanceof DesignerComponentWrapper) {
+                    addHasComponentsFiller((DesignerComponentWrapper) component);
+                }
             });
             ((HasOrderedComponents<?>) designerComponentWrapper.getActualComponent()).add(getDropTargetDiv());
         }

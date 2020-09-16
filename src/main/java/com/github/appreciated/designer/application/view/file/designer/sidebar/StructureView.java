@@ -72,8 +72,11 @@ public class StructureView extends BaseView {
                         component.getParent().ifPresent(parent -> {
                             if (parent instanceof DesignerComponentWrapper) {
                                 parent.getParent().ifPresent(actualParent -> {
-                                    dragged.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
-                                    dragged.forEach(draggedComponent -> ((HasComponents) component).add(draggedComponent.getParent().get()));
+                                    if (dragged != null) {
+                                        dragged.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
+                                        dragged.forEach(draggedComponent -> ((HasComponents) component).add(draggedComponent.getParent().get()));
+                                        dragged = null;
+                                    }
                                 });
                             } else {
                                 System.err.println(parent.getClass().getName() + " not supported!");

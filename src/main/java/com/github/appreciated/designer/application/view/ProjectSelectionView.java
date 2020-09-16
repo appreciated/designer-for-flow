@@ -81,6 +81,7 @@ public class ProjectSelectionView extends VerticalLayout {
                 event.getThrowable().printStackTrace();
             }
             exceptionService.setError(event.getThrowable());
+            event.getThrowable().printStackTrace();
             UI.getCurrent().navigate(ErrorPageView.class);
         });
     }

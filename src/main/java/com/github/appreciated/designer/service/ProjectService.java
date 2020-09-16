@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.service;
 
 import com.github.appreciated.designer.AppConfig;
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.integrationtest.parser.DesignerComponentTreeParser;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.model.project.Project;
@@ -19,7 +20,7 @@ public class ProjectService {
 
     private AppConfig config;
     private Project project;
-    private DesignCompilerInformation currentProjectFile;
+    private ProjectFileModel currentProjectFileModel;
 
     public ProjectService(@Autowired AppConfig config) {
         this.config = config;
@@ -69,11 +70,11 @@ public class ProjectService {
         project.getTemplates().remove(info);
     }
 
-    public DesignCompilerInformation getCurrentProjectFile() {
-        return currentProjectFile;
+    public ProjectFileModel getCurrentProjectFileModel() {
+        return currentProjectFileModel;
     }
 
-    public void setCurrentProjectFile(DesignCompilerInformation currentProjectFile) {
-        this.currentProjectFile = currentProjectFile;
+    public void setCurrentProjectFileModel(ProjectFileModel currentProjectFileModel) {
+        this.currentProjectFileModel = currentProjectFileModel;
     }
 }
