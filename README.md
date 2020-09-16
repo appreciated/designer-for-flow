@@ -1,11 +1,11 @@
-<p align="center"><img src="https://github.com/appreciated/designer-for-flow/blob/master/logo-floating-low.png">
+<p align="center"><img src="https://github.com/appreciated/designer-for-flow/blob/master/src/main/webapp/frontend/styles/images/logo-floating-low.png">
 <br>
   <h1>Designer for Flow</h1>
 </p>    
 
-This is a Application which allows to create and edit Views dependening on the Vaadin Platform.
+This is a WYSIWYG-Editor that allows to create and edit Views dependening on the Vaadin Platform.
 
-Currently the following output and input formats being supported are:
+Currently the following input and output formats being supported:
 - Java Classes    
 
 # Executing
@@ -26,4 +26,4 @@ After executing the ready to use electron application can be found under `target
 
 # License
 
-This Project is licensed under the GNU Lesser General Public License v3.0
+This Project is licensed under the GNU General Public License v3.0
