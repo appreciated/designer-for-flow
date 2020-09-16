@@ -7,8 +7,8 @@ import com.github.appreciated.designer.application.view.file.ProjectFileView;
 import com.github.appreciated.mvp.Presenter;
 
 public class ProjectFilePresenter extends Presenter<ProjectFileModel, ProjectFileView> {
-    public ProjectFilePresenter(ProjectFileModel model) {
-        super(model);
+    public ProjectFilePresenter(ProjectFileModel projectFileModel) {
+        super(projectFileModel);
         DesignerWrapperPresenter designerView = new DesignerWrapperPresenter(getModel());
         getContent().getComponentsAndTemplate().setSplitterPosition(25);
         getContent().getComponentsAndTemplate().addToSecondary(designerView);

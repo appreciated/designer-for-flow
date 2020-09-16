@@ -11,6 +11,8 @@ import com.vaadin.flow.component.tabs.Tabs;
 public class SideBarView extends VerticalLayout {
     private final Tabs tabs;
     private final IronPages content;
+    private final Tab editorTab;
+    private final Tab themeTab;
 
     private SplitLayout propertiesAndStructure = new SplitLayout();
 
@@ -19,8 +21,8 @@ public class SideBarView extends VerticalLayout {
         propertiesAndStructure.setSizeFull();
 
         tabs = new Tabs();
-        Tab editorTab = new Tab(VaadinIcon.EDIT.create(), new Label("Editor"));
-        Tab themeTab = new Tab(VaadinIcon.PAINTBRUSH.create(), new Label("Theme"));
+        editorTab = new Tab(VaadinIcon.EDIT.create(), new Label("Editor"));
+        themeTab = new Tab(VaadinIcon.PAINTBRUSH.create(), new Label("Theme"));
         tabs.add(editorTab, themeTab);
         add(tabs);
 
@@ -35,6 +37,18 @@ public class SideBarView extends VerticalLayout {
         setMargin(false);
         setPadding(false);
         setSpacing(false);
+    }
+
+    public Tabs getTabs() {
+        return tabs;
+    }
+
+    public Tab getEditorTab() {
+        return editorTab;
+    }
+
+    public Tab getThemeTab() {
+        return themeTab;
     }
 
     public SplitLayout getPropertiesAndStructure() {

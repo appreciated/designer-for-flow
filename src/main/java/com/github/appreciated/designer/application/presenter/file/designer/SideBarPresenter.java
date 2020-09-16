@@ -16,5 +16,11 @@ public class SideBarPresenter extends Presenter<ProjectFileModel, SideBarView> {
         getContent().getPropertiesAndStructure().addToSecondary(structureView);
         ThemeView themeView = new ThemeView(projectFileModel);
         getContent().getContent().add(themeView);
+
+        projectFileModel.getEventService().getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
+            if (getContent().getTabs().getSelectedTab() != getContent().getEditorTab()) {
+                getContent().getTabs().setSelectedTab(getContent().getEditorTab());
+            }
+        });
     }
 }

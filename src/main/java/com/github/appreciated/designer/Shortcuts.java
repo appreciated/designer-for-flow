@@ -47,15 +47,17 @@ public class Shortcuts {
             }
         }, Key.KEY_S, KeyModifier.CONTROL);
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
-            System.out.println("StructureChanged!");
             if (service.getCurrentProjectFileModel() != null) {
+                System.out.println("StructureChanged!");
                 DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFileModel().getInformation());
                 compiler.save();
             }
         });
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
-            System.out.println("FocusedEvent!");
-            service.getCurrentProjectFileModel().setCurrentFocus(elementFocusedEvent.getFocus());
+            if (service.getCurrentProjectFileModel() != null) {
+                System.out.println("FocusedEvent!");
+                service.getCurrentProjectFileModel().setCurrentFocus(elementFocusedEvent.getFocus());
+            }
         });
     }
 
