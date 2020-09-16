@@ -5,7 +5,7 @@
     <groupId>com.github.appreciated</groupId>
     <artifactId>designer-for-flow</artifactId>
     <name>Designer for Flow</name>
-    <version>0.7.0-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -385,7 +385,6 @@
                                     </url>
                                     <outputDirectory>${project.build.directory}/openjdk-jre/windows/</outputDirectory>
                                     <outputFileName>jre_windows.zip</outputFileName>
-                                    <skipCache>true</skipCache>
                                 </configuration>
                             </execution>
                             <execution>
@@ -396,11 +395,10 @@
                                 </goals>
                                 <configuration>
                                     <url>
-                                        https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_linux_hotspot_8u265b01.tar.gz
+                                        https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_mac_hotspot_8u265b01.tar.gz
                                     </url>
                                     <outputDirectory>${project.build.directory}/openjdk-jre/mac-os/</outputDirectory>
                                     <outputFileName>jre_mac.tar.gz</outputFileName>
-                                    <skipCache>true</skipCache>
                                 </configuration>
                             </execution>
                         </executions>
