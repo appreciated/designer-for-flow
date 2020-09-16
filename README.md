@@ -5,7 +5,7 @@
 
 This is a WYSIWYG-Editor that allows to create and edit Views dependening on the Vaadin Platform.
 
-Currently the following output and input formats being supported are:
+Currently the following input and output formats being supported are:
 - Java Classes    
 
 # Executing
