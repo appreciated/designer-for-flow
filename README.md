@@ -5,7 +5,8 @@
 
 This is a Application which allows to create and edit Views dependening on the Vaadin Platform.
 
-Currently only Java Classes are supported.    
+Currently the following output and input formats being supported are:
+- Java Classes    
 
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
