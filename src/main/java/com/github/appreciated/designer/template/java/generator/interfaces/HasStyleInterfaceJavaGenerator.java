@@ -6,7 +6,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasStyle;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class HasStyleInterfaceJavaGenerator implements VaadinComponentJavaGenera
 
     @Override
     public boolean canParse(Component propertyParent) {
-        return propertyParent instanceof HasSize;
+        return propertyParent instanceof HasStyle;
     }
 
     @Override
