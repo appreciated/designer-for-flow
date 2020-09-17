@@ -1,5 +1,9 @@
 package com.github.appreciated.designer.service;
 
+import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDragEventListener;
+import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDragEventPublisher;
+import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDropEventListener;
+import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDropEventPublisher;
 import com.github.appreciated.designer.events.designer.focus.ElementFocusedEventListener;
 import com.github.appreciated.designer.events.designer.focus.ElementFocusedEventPublisher;
 import com.github.appreciated.designer.events.designer.structure.StructureChangedEventListener;
@@ -20,19 +24,32 @@ public class EventService {
     private final ElementFocusedEventListener focusedEventListener;
     private final StructureChangedEventListener structureChangedEventListener;
     private final ThemeChangedEventListener themeChangedEventListener;
+    private final DesignerComponentDropEventListener designerComponentDropListener;
+    private final DesignerComponentDropEventPublisher designerComponentDropEventPublisher;
+    private final DesignerComponentDragEventListener designerComponentDragListener;
+    private final DesignerComponentDragEventPublisher designerComponentDragEventPublisher;
 
     public EventService(@Autowired ElementFocusedEventPublisher focusedEventPublisher,
-                        @Autowired StructureChangedEventPublisher structureChangedEventPublisher,
-                        @Autowired ThemeChangedEventPublisher themeChangedEventPublisher,
                         @Autowired ElementFocusedEventListener focusedEventListener,
+                        @Autowired StructureChangedEventPublisher structureChangedEventPublisher,
                         @Autowired StructureChangedEventListener structureChangedEventListener,
-                        @Autowired ThemeChangedEventListener themeChangedEventListener) {
+                        @Autowired ThemeChangedEventPublisher themeChangedEventPublisher,
+                        @Autowired ThemeChangedEventListener themeChangedEventListener,
+                        @Autowired DesignerComponentDropEventListener designerComponentDropListener,
+                        @Autowired DesignerComponentDropEventPublisher designerComponentDropEventPublisher,
+                        @Autowired DesignerComponentDragEventListener designerComponentDragListener,
+                        @Autowired DesignerComponentDragEventPublisher designerComponentDragEventPublisher
+    ) {
         this.focusedEventPublisher = focusedEventPublisher;
         this.structureChangedEventPublisher = structureChangedEventPublisher;
         this.themeChangedEventPublisher = themeChangedEventPublisher;
         this.focusedEventListener = focusedEventListener;
         this.structureChangedEventListener = structureChangedEventListener;
         this.themeChangedEventListener = themeChangedEventListener;
+        this.designerComponentDropListener = designerComponentDropListener;
+        this.designerComponentDropEventPublisher = designerComponentDropEventPublisher;
+        this.designerComponentDragListener = designerComponentDragListener;
+        this.designerComponentDragEventPublisher = designerComponentDragEventPublisher;
     }
 
     public ThemeChangedEventListener getThemeChangedEventListener() {
@@ -59,8 +76,19 @@ public class EventService {
         return structureChangedEventListener;
     }
 
-    public void setStructureChangedEventListener(StructureChangedEventListener structureChangedEventListener) {
-
+    public DesignerComponentDropEventListener getDesignerComponentDropListener() {
+        return designerComponentDropListener;
     }
 
+    public DesignerComponentDropEventPublisher getDesignerComponentDropEventPublisher() {
+        return designerComponentDropEventPublisher;
+    }
+
+    public DesignerComponentDragEventListener getDesignerComponentDragListener() {
+        return designerComponentDragListener;
+    }
+
+    public DesignerComponentDragEventPublisher getDesignerComponentDragEventPublisher() {
+        return designerComponentDragEventPublisher;
+    }
 }

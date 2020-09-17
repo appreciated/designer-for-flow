@@ -2,6 +2,7 @@ package com.github.appreciated.designer.application.view.file.designer.template;
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
+import com.github.appreciated.designer.component.DesignerComponent;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.service.ComponentService;
 import com.google.common.collect.Lists;
@@ -14,26 +15,29 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class DesignerComponentsView extends BaseView {
-	private static final long serialVersionUID = 3391173526041012926L;
-	
-	private final TextField search;
+    private static final long serialVersionUID = 3391173526041012926L;
+
+    private final TextField search;
     private final Accordion accordion;
-    
-	private final Map<String, VerticalLayout> componentsCategories;
-	private final Map<String, List<DesignerComponentLabel>> components;
+
+    private final Map<String, VerticalLayout> componentsCategories;
+    private final Map<String, List<DesignerComponentLabel>> components;
+    private ProjectFileModel projectFileModel;
 
 
     public DesignerComponentsView(final ProjectFileModel projectFileModel) {
         super("Components");
-        
+        this.projectFileModel = projectFileModel;
+
         componentsCategories = Maps.newHashMap();
         components = Maps.newHashMap();
-        
+
         accordion = new Accordion();
-        
+
         ComponentService service = new ComponentService();
         search = new TextField();
         search.setPlaceholder("Search ...");
@@ -45,17 +49,7 @@ public class DesignerComponentsView extends BaseView {
         add(search);
         components.put("Vaadin Components", Lists.newArrayList());
         components.put("HTML Components", Lists.newArrayList());
-        service.getAllComponents().forEach(component -> {
-            DesignerComponentLabel label = new DesignerComponentLabel(component);
-            DragSource<DesignerComponentLabel> source = DragSource.create(label);
-            source.addDragStartListener(e -> projectFileModel.addCurrentDragItems(e.getComponent()));
-            source.addDragEndListener(e -> projectFileModel.removeCurrentDragItems(e.getComponent()));
-            if (component.getTagName().startsWith("<vaadin")) {
-                components.get("Vaadin Components").add(label);
-            } else {
-                components.get("HTML Components").add(label);
-            }
-        });
+        service.getAllComponents().forEach(this::initDragAndDrop);
         components.keySet().forEach(key -> {
             AccordionPanel accordionPanel = new AccordionPanel();
             accordionPanel.setSummaryText(key);
@@ -75,5 +69,23 @@ public class DesignerComponentsView extends BaseView {
         components.forEach((key, value) -> value.stream()
                 .filter(designerComponentLabel -> name == null || designerComponentLabel.getName().toLowerCase().contains(name.toLowerCase()))
                 .forEach(designerComponentLabel -> componentsCategories.get(key).add(designerComponentLabel)));
+    }
+
+    private void initDragAndDrop(DesignerComponent component) {
+        DesignerComponentLabel label = new DesignerComponentLabel(component);
+        DragSource<DesignerComponentLabel> source = DragSource.create(label);
+        source.addDragStartListener(e -> {
+            projectFileModel.setCurrentDragItem(e.getComponent());
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(e.getComponent(), true);
+        });
+        source.addDragEndListener(e -> {
+            projectFileModel.removeCurrentDragItem();
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(e.getComponent(), false);
+        });
+        if (component.getTagName().startsWith("<vaadin")) {
+            components.get("Vaadin Components").add(label);
+        } else {
+            components.get("HTML Components").add(label);
+        }
     }
 }

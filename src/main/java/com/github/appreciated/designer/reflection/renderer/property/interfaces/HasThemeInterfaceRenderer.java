@@ -8,12 +8,15 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.progressbar.ProgressBarVariant;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.*;
+import com.vaadin.flow.component.treegrid.TreeGrid;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -34,6 +37,8 @@ public class HasThemeInterfaceRenderer extends AbstractPropertyRenderer<HasTheme
         map.put(RadioButtonGroup.class, Arrays.stream(RadioGroupVariant.values()).map(RadioGroupVariant::getVariantName).toArray(String[]::new));
         map.put(CheckboxGroup.class, Arrays.stream(CheckboxGroupVariant.values()).map(CheckboxGroupVariant::getVariantName).toArray(String[]::new));
         map.put(ProgressBar.class, Arrays.stream(ProgressBarVariant.values()).map(ProgressBarVariant::getVariantName).toArray(String[]::new));
+        map.put(Grid.class, Arrays.stream(GridVariant.values()).map(GridVariant::getVariantName).toArray(String[]::new));
+        map.put(TreeGrid.class, Arrays.stream(GridVariant.values()).map(GridVariant::getVariantName).toArray(String[]::new));
         /*
           TODO {@link com.vaadin.flow.component.select.Select}
          */

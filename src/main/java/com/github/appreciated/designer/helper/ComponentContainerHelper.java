@@ -1,10 +1,9 @@
 package com.github.appreciated.designer.helper;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.accordion.Accordion;
-import com.vaadin.flow.component.accordion.AccordionPanel;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -12,11 +11,28 @@ import java.util.stream.Stream;
 public class ComponentContainerHelper {
 
     public static boolean isComponentContainer(Component component) {
-        return component instanceof HasComponents || component instanceof Accordion || component instanceof AccordionPanel;
+        Class classInstance = component.getClass();
+        for (Method method : classInstance.getMethods()) {
+            if (method.getName().equals("add") || method.getName().equals("addContent")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void addComponent(Component parent, Component child) {
-        parent.getElement().appendChild(child.getElement());
+        Class classInstance = parent.getClass();
+        for (Method method : classInstance.getMethods()) {
+            if (method.getName().equals("add")) {
+                try {
+                    method.invoke(parent, new Object[]{new Component[]{child}});
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
+        }
+        throw new IllegalStateException("Could not find add Method for Class: " + parent.getClass().getSimpleName());
     }
 
     public static void removeChild(Component parent, Component child) {

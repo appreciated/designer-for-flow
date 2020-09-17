@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.events.designer.file;
+package com.github.appreciated.designer.events.designer.dnd;
 
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.context.ApplicationListener;
@@ -10,15 +10,15 @@ import java.util.function.Consumer;
 
 @Component
 @UIScope
-public class FileChangedEventListener implements ApplicationListener<FileChangedEvent> {
-    private List<Consumer<FileChangedEvent>> consumerList = new ArrayList<>();
+public class DesignerComponentDragEventListener implements ApplicationListener<DesignerComponentDragEvent> {
+    private List<Consumer<DesignerComponentDragEvent>> consumerList = new ArrayList<>();
 
     @Override
-    public void onApplicationEvent(FileChangedEvent event) {
+    public void onApplicationEvent(DesignerComponentDragEvent event) {
         consumerList.forEach(elementFocusedEventConsumer -> elementFocusedEventConsumer.accept(event));
     }
 
-    public void addEventConsumer(Consumer<FileChangedEvent> eventConsumer) {
+    public void addEventConsumer(Consumer<DesignerComponentDragEvent> eventConsumer) {
         this.consumerList.add(eventConsumer);
     }
 }

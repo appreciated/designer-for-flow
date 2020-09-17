@@ -1,11 +1,13 @@
 package com.github.appreciated.designer.events.designer.theme;
 
 import com.github.appreciated.designer.model.CssVariable;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
+@UIScope
 public class ThemeChangedEventPublisher {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;

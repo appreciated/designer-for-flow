@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.events.designer.structure;
+package com.github.appreciated.designer.events.designer.dnd;
 
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @UIScope
-public class StructureChangedEventPublisher {
+public class DesignerComponentDragEventPublisher {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void publish(com.vaadin.flow.component.Component component) {
-        applicationEventPublisher.publishEvent(new StructureChangedEvent(this, component));
+    public void publish(com.vaadin.flow.component.Component draggedComponent, boolean hasStarted) {
+        applicationEventPublisher.publishEvent(new DesignerComponentDragEvent(this, draggedComponent, hasStarted));
     }
 }

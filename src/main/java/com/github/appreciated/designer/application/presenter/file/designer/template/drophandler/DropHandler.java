@@ -2,7 +2,6 @@ package com.github.appreciated.designer.application.presenter.file.designer.temp
 
 import com.github.appreciated.designer.application.presenter.file.designer.template.DesignerPresenter;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.dnd.DropEvent;
 import lombok.Data;
 
 @Data
@@ -14,7 +13,7 @@ public abstract class DropHandler {
         this.presenter = presenter;
     }
 
-    public abstract boolean canHandleDropEvent(DropEvent<Component> event);
+    public abstract boolean canHandleDropEvent(Component draggedComponent, Component targetComponent);
 
-    public abstract void handleDropEvent(DropEvent<Component> event);
+    public abstract void handleDropEvent(Component draggedComponent, Component targetComponent);
 }

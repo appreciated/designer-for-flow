@@ -1,5 +1,6 @@
 package com.github.appreciated.designer.events.designer.theme;
 
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Component
+@UIScope
 public class ThemeChangedEventListener implements ApplicationListener<ThemeChangedEvent> {
     private List<Consumer<ThemeChangedEvent>> consumerList = new ArrayList<>();
 

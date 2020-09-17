@@ -2,10 +2,10 @@ package com.github.appreciated.designer.application.presenter.file.designer.temp
 
 import com.github.appreciated.designer.application.presenter.file.designer.template.DesignerPresenter;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.component.DropTargetDiv;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.dnd.DropEvent;
 
 import static com.github.appreciated.designer.helper.ComponentContainerHelper.addComponent;
 import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
@@ -17,25 +17,25 @@ public class DesignerComponentLabelDropHandler extends DropHandler {
     }
 
     @Override
-    public boolean canHandleDropEvent(DropEvent<Component> event) {
-        return event.getDragSourceComponent().isPresent() && event.getDragSourceComponent().get() instanceof DesignerComponentLabel;
+    public boolean canHandleDropEvent(Component draggedComponent, Component targetComponent) {
+        return draggedComponent instanceof DesignerComponentLabel;
     }
 
     @Override
-    public void handleDropEvent(DropEvent<Component> event) {
-        event.getDragSourceComponent().ifPresent(component -> {
-            Component transformedComponent = getPresenter().transformDesignerComponentLabel(component);
-            // Anyways the element will be added to the drop source.
-            if (event.getComponent() instanceof DesignerComponentWrapper) {
-                event.getComponent().getParent().ifPresent(component1 -> {
-                    if (isComponentContainer(component1)) {
-                        ComponentContainerHelper.addComponentAtIndex(component1, ComponentContainerHelper.indexOf(component1, event.getComponent()), transformedComponent);
-                    }
-                });
-            } else if (isComponentContainer(event.getComponent())) {
-                addComponent(event.getComponent(), transformedComponent);
-                transformedComponent.getElement().executeJs("focus()");
-            }
-        });
+    public void handleDropEvent(Component draggedComponent, Component targetComponent) {
+
+        Component transformedComponent = getPresenter().transformDesignerComponentLabel(draggedComponent);
+        // Anyways the element will be added to the drop source.
+        if (targetComponent instanceof DesignerComponentWrapper || targetComponent instanceof DropTargetDiv) {
+            targetComponent.getParent().ifPresent(component1 -> {
+                if (isComponentContainer(component1)) {
+                    ComponentContainerHelper.addComponentAtIndex(component1, ComponentContainerHelper.indexOf(component1, targetComponent), transformedComponent);
+                }
+            });
+        } else if (isComponentContainer(targetComponent)) {
+            addComponent(targetComponent, transformedComponent);
+            transformedComponent.getElement().executeJs("focus()");
+        }
+
     }
 }

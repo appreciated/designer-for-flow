@@ -1,7 +1,6 @@
 package com.github.appreciated.designer.application.view;
 
 import com.github.appreciated.designer.service.ExceptionService;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -10,21 +9,20 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import java.awt.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
-@Route("bugreport")
 @StyleSheet("./styles/theme.css")
-public class ErrorPageView extends VerticalLayout {
+public class ErrorView extends VerticalLayout {
 
-    public ErrorPageView(@Autowired ExceptionService exceptionService) {
-        getElement().executeJs("for (let item of document.getElementsByTagName(\"vaadin-dialog\")) { item.opened = false; }");
-
+    public ErrorView(ExceptionService exceptionService) {
         Icon bug = VaadinIcon.BUG.create();
         bug.setSize("75px");
 
@@ -45,7 +43,15 @@ public class ErrorPageView extends VerticalLayout {
                 try {
                     String stackTrace = URLEncoder.encode(sw.toString(), "UTF-8");
                     String title = URLEncoder.encode(exceptionService.getError().getClass().getSimpleName(), "UTF-8");
-                    UI.getCurrent().getPage().executeJs("window.open(\"https://github.com/appreciated/designer-for-flow/issues/new?labels=bug&title=" + title + "&body=" + (stackTrace.length() < 400 ? stackTrace : stackTrace.substring(0, 400)) + "\")");
+
+                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                        try {
+                            Desktop.getDesktop().browse(new URI("https://github.com/appreciated/designer-for-flow/issues/new?labels=bug&title=" + title + "&body=" + (stackTrace.length() < 400 ? stackTrace : stackTrace.substring(0, 400)) + "\\"));
+                        } catch (IOException | URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -53,18 +59,13 @@ public class ErrorPageView extends VerticalLayout {
                 Notification.show("Nothing here to report");
             }
         });
-        VerticalLayout wrapper = new VerticalLayout(bug, message, send);
-        wrapper.getElement().setAttribute("theme", wrapper.getElement().getAttribute("theme").replace("spacing", "spacing-xl"));
-        wrapper.setAlignItems(Alignment.CENTER);
-        wrapper.setJustifyContentMode(JustifyContentMode.CENTER);
-        wrapper.setSizeUndefined();
-        wrapper.getStyle()
-                .set("background", "var(--lumo-error-color-10pct)")
-                .set("border-radius", "var(--lumo-border-radius)")
-                .set("box-shadow", "var(--lumo-box-shadow-m)");
-        wrapper.setWidth("300px");
-        wrapper.setHeight("360px");
-        add(wrapper);
+        add(bug, message, send);
+        getElement().setAttribute("theme", getElement().getAttribute("theme").replace("spacing", "spacing-xl"));
+        setAlignItems(Alignment.CENTER);
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        setSizeUndefined();
+        setWidth("300px");
+        setHeight("360px");
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSizeFull();

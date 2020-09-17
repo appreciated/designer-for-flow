@@ -1,14 +1,5 @@
 package com.github.appreciated.designer.application.view;
 
-import java.io.File;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.github.appreciated.card.RippleClickableCard;
 import com.github.appreciated.card.label.PrimaryLabelComponent;
 import com.github.appreciated.card.label.SecondaryLabelComponent;
@@ -20,6 +11,7 @@ import com.github.appreciated.css.grid.sizes.Repeat;
 import com.github.appreciated.designer.AppConfig;
 import com.github.appreciated.designer.application.presenter.ProjectPresenter;
 import com.github.appreciated.designer.component.AddButton;
+import com.github.appreciated.designer.dialog.ErrorViewDialog;
 import com.github.appreciated.designer.dialog.OpenProjectDialog;
 import com.github.appreciated.designer.model.ProjectPath;
 import com.github.appreciated.designer.model.project.ProjectTypes;
@@ -27,10 +19,11 @@ import com.github.appreciated.designer.service.ExceptionService;
 import com.github.appreciated.designer.service.ProjectRepository;
 import com.github.appreciated.layout.FlexibleGridLayout;
 import com.google.common.collect.Maps;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.StyleSheet;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -42,6 +35,14 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.ui.Transport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+import java.io.File;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 @Route("")
@@ -49,21 +50,23 @@ import com.vaadin.flow.shared.ui.Transport;
 @Push(transport = Transport.LONG_POLLING)
 @Configurable
 public class ProjectSelectionView extends VerticalLayout {
-	private static final long serialVersionUID = -1279840235826097701L;
+    private static final long serialVersionUID = -1279840235826097701L;
 
-	// Layout
-	private final FlexibleGridLayout layout;
-	
-	// Data
+    // Layout
+    private final FlexibleGridLayout layout;
+
+    // Data
     private final ExceptionService exceptionService;
-	private final ProjectRepository repository;
+    private final ProjectRepository repository;
+    private AppConfig config;
 
     public ProjectSelectionView(@Autowired ProjectRepository repository, @Autowired ExceptionService exceptionService, @Autowired AppConfig config) {
-    	super();
+        super();
 
         this.exceptionService = exceptionService;
         this.repository = repository;
-        
+        this.config = config;
+
         layout = new FlexibleGridLayout()
                 .withColumns(Repeat.RepeatMode.AUTO_FILL, new MinMax(new Length("320px"), new Flex(1)))
                 .withPadding(true)
@@ -86,20 +89,12 @@ public class ProjectSelectionView extends VerticalLayout {
         });
         button.setBottom("30px");
         add(button);
-        UI.getCurrent().getSession().setErrorHandler(event -> {
-            if (config.getDeveloperMode()) {
-                event.getThrowable().printStackTrace();
-            }
-            exceptionService.setError(event.getThrowable());
-            event.getThrowable().printStackTrace();
-            UI.getCurrent().navigate(ErrorPageView.class);
-        });
     }
 
     private Component getCard(final ProjectPath projectPath) {
-    	final Icon img = VaadinIcon.FOLDER.create();
+        final Icon img = VaadinIcon.FOLDER.create();
 
-    	final VerticalLayout item = new VerticalLayout(
+        final VerticalLayout item = new VerticalLayout(
                 new HorizontalLayout(img, new PrimaryLabelComponent(projectPath.getName())),
                 new SecondaryLabelComponent(projectPath.getPath())
         );
@@ -110,24 +105,24 @@ public class ProjectSelectionView extends VerticalLayout {
         final RippleClickableCard card = new RippleClickableCard(event -> openProject(projectPath), item);
         card.getStyle().set("margin", "5px");
         card.setBackground("var(--lumo-primary-contrast-color)");
-        
+
         final ContextMenu contextMenu = new ContextMenu(card);
-        
+
         contextMenu.addItem("Open", e -> openProject(projectPath));
         contextMenu.addItem("Remove", e -> {
-        	repository.delete(projectPath);
-        	layout.remove(card);
+            repository.delete(projectPath);
+            layout.remove(card);
         });
-        
+
         return card;
     }
 
     private void addProject(final File directory) {
         final ProjectTypes types = new ProjectTypes(directory);
-        
+
         if (types.hasFittingProjectType()) {
             final ProjectPath projectPath = repository.save(new ProjectPath(directory.getPath()));
-            
+
             openProject(projectPath);
         } else {
             Notification.show("This project seems to be missing file!");
@@ -136,14 +131,30 @@ public class ProjectSelectionView extends VerticalLayout {
 
     private void openProject(final ProjectPath directory) {
         getUI().flatMap(ui -> ui.getRouter()
-        		.getRegistry()
+                .getRegistry()
                 .getTargetUrl(ProjectPresenter.class))
-		        .ifPresent(urlPath -> {
-			            urlPath = urlPath.replace("{String}", "");
-			            final Map<String, List<String>> map = Maps.newHashMap();
-			            map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath())));
-			            // using UI#navigate causes many Components to not be drawn incorrectly
-			            getUI().get().getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
-		        });
+                .ifPresent(urlPath -> {
+                    urlPath = urlPath.replace("{String}", "");
+                    final Map<String, List<String>> map = Maps.newHashMap();
+                    map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath())));
+                    // using UI#navigate causes many Components to not be drawn incorrectly
+                    getUI().get().getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
+                });
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        attachEvent.getUI().getSession().setErrorHandler(event -> {
+            if (config.getDeveloperMode()) {
+                event.getThrowable().printStackTrace();
+            }
+            exceptionService.setError(event.getThrowable());
+            event.getThrowable().printStackTrace();
+
+            attachEvent.getUI().access(() -> {
+                new Dialog(new ErrorViewDialog(exceptionService)).open();
+            });
+        });
     }
 }

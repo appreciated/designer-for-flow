@@ -4,9 +4,9 @@ import com.github.appreciated.designer.Shortcuts;
 import com.github.appreciated.designer.application.model.ProjectModel;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.presenter.file.ProjectFilePresenter;
-import com.github.appreciated.designer.application.view.ErrorPageView;
 import com.github.appreciated.designer.application.view.ProjectView;
 import com.github.appreciated.designer.dialog.AddNewDesignTabDialog;
+import com.github.appreciated.designer.dialog.ErrorViewDialog;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ExceptionService;
@@ -39,13 +39,14 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
     private Map<Tab, ProjectFileModel> fileMap = new HashMap<>();
 
     public ProjectPresenter(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
-        UI.getCurrent().getSession().setErrorHandler(event -> {
+        UI ui = UI.getCurrent();
+        ui.getSession().setErrorHandler(event -> {
             if (projectService.getConfig().getDeveloperMode()) {
                 event.getThrowable().printStackTrace();
             }
             exceptionService.setError(event.getThrowable());
             event.getThrowable().printStackTrace();
-            UI.getCurrent().navigate(ErrorPageView.class);
+            ui.access(() -> new ErrorViewDialog(exceptionService).open());
         });
         this.eventService = eventService;
         this.projectService = projectService;

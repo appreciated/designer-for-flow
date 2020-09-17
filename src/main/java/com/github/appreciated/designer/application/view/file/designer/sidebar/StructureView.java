@@ -13,7 +13,7 @@ import com.vaadin.flow.component.treegrid.TreeGrid;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,95 +27,51 @@ public class StructureView extends BaseView {
     public StructureView(final ProjectFileModel projectFileModel) {
         super("Structure");
 
-        grid = new TreeGrid<Component>();
+        grid = new TreeGrid<>();
         grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER);
         grid.addHierarchyColumn(component -> component.getClass().getSimpleName());
         grid.setSizeFull();
         grid.setRowsDraggable(true);
         grid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
         grid.setDragFilter(component -> component != projectFileModel.getInformation().getComponent());
-        grid.addDragStartListener(componentGridDragStartEvent -> projectFileModel.addCurrentDragItems(componentGridDragStartEvent.getDraggedItems()));
-
+        grid.addDragStartListener(dragStartEvent -> {
+            Component draggedItem = dragStartEvent.getDraggedItems().stream().findFirst().get().getParent().get();
+            projectFileModel.setCurrentDragItem(draggedItem);
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(draggedItem, true);
+        });
+        grid.addDragEndListener(event -> {
+            projectFileModel.removeCurrentDragItem();
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(null, false);
+        });
         //  Actual Parent Layout
         //      |
         //  DesignerComponentWrapper
         //      |
         //  Component
 
-        grid.addDropListener(componentGridDropEvent -> {
-            final GridDropLocation name = componentGridDropEvent.getDropLocation();
-
-            if (projectFileModel.isCurrentDragAvailable() && name != null && componentGridDropEvent.getDropTargetItem().isPresent()) {
-                final Set<Component> currentDragItems = projectFileModel.getAndCloneCurrentDragCollection();
-                final Component component = componentGridDropEvent.getDropTargetItem().get();
-
-                if (!currentDragItems.contains(component) || (currentDragItems.contains(component) && currentDragItems.size() > 1)) {
-                    if (ComponentContainerHelper.isComponentContainer(component)) {
-                        if (currentDragItems.contains(component)) {
-                            currentDragItems.remove(component);
-                            projectFileModel.removeCurrentDragItems(component);
-                        }
-                    	
-                    	/*
-                    	if (event.getComponent() instanceof DesignerComponentWrapper) {
-                            Component actualComponent = ((DesignerComponentWrapper) event.getComponent()).getActualComponent();
-                            Component dragSourceComponent = event.getDragSourceComponent().get();
-                            if (dragSourceComponent instanceof DesignerComponentLabel) {
-                                dragSourceComponent = transformDesignerComponentLabel(dragSourceComponent);
-                            }
-                            if (actualComponent instanceof HasOrderedComponents) {
-                                ((HasOrderedComponents<?>) actualComponent).add(dragSourceComponent);
-                            }
-                            notifyStructureListeners();
-                        }
-                    	*/
-
-                        for (Component item : currentDragItems) {
-                            System.out.println(item.getParent().get());
-                            System.out.println(item.getParent().get().getParent().get());
-                        }
-
-                        switch (name) {
-                            case BELOW:
-                            case ABOVE:
-                                component.getParent().ifPresent(parent -> {
-                                    if (parent instanceof DesignerComponentWrapper) {
-                                        parent.getParent().ifPresent(actualParent -> {
-                                            currentDragItems.forEach(draggedComponent -> ComponentContainerHelper.removeChild(draggedComponent.getParent().get().getParent().get(), draggedComponent.getParent().get()));
-                                            currentDragItems.forEach(draggedComponent -> ComponentContainerHelper.addComponentAtIndex(actualParent,
-                                                    actualParent.getElement().indexOfChild(parent.getElement()) + (name == GridDropLocation.BELOW ? 1 : 0),
-                                                    draggedComponent.getParent().get()
-                                            ));
-                                            projectFileModel.removeCurrentDragItems(currentDragItems);
-                                        });
-                                    } else {
-                                        log.error(parent.getClass().getName() + " not supported!");
-                                    }
-                                });
-                                break;
-                            case ON_TOP:
-                                component.getParent().ifPresent(parent -> {
-                                    if (parent instanceof DesignerComponentWrapper) {
-                                        parent.getParent().ifPresent(actualParent -> {
-                                            currentDragItems.forEach(draggedComponent -> ComponentContainerHelper.removeChild(draggedComponent.getParent().get().getParent().get(), draggedComponent.getParent().get()));
-                                            currentDragItems.forEach(draggedComponent -> ComponentContainerHelper.addComponent(component, draggedComponent.getParent().get()));
-                                            projectFileModel.removeCurrentDragItems(currentDragItems);
-                                        });
-                                    } else {
-                                        log.error(parent.getClass().getName() + " not supported!");
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    } else {
-                        Notification.show("Elements cannot be dropped on items that do not extend HasComponents");
-                    }
+        grid.addDropListener(dropEvent -> {
+            final GridDropLocation name = dropEvent.getDropLocation();
+            if (dropEvent.getDropTargetItem().isPresent() && projectFileModel.getCurrentDragItem() != dropEvent.getDropTargetItem().get()) {
+                final Component dropLocation = dropEvent.getDropTargetItem().get();
+                switch (name) {
+                    case BELOW:
+                    case ABOVE:
+                        projectFileModel.getEventService()
+                                .getDesignerComponentDropEventPublisher()
+                                .publish(projectFileModel.getCurrentDragItem(), dropLocation.getParent().get());
+                        break;
+                    case ON_TOP:
+                        List<Component> containedChildren = dropLocation.getChildren().collect(Collectors.toList());
+                        projectFileModel.getEventService()
+                                .getDesignerComponentDropEventPublisher()
+                                .publish(projectFileModel.getCurrentDragItem(), containedChildren.get(containedChildren.size() - 1));
+                        break;
+                    default:
+                        break;
                 }
+            } else {
+                Notification.show("Elements cannot be dropped on themself");
             }
-
-            updateStructure(projectFileModel.getInformation().getComponent());
         });
         grid.addItemClickListener(event -> projectFileModel.getEventService().getFocusedEventPublisher().publish(event.getItem()));
         add(grid);

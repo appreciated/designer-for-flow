@@ -96,28 +96,34 @@ public class DesignerComponentTreeJavaGenerator {
     private void addChildren(Expression expression, Component component) {
         Component actualComponent = component instanceof DesignerComponentWrapper ? ((DesignerComponentWrapper) component).getActualComponent() : component;
         if (actualComponent instanceof HasComponents) {
-            addChildrenHasComponents(expression, component, "add");
+            addChildrenHasComponents(expression, component, "add", true);
         } else if (actualComponent instanceof AccordionPanel) {
-            addChildrenHasComponents(expression, component, "addContent");
+            addChildrenHasComponents(expression, component, "addContent", false);
         } else if (actualComponent instanceof Accordion) {
-            addChildrenHasComponents(expression, component, "add");
+            addChildrenHasComponents(expression, component, "add", false);
         } else {
             throw new IllegalStateException("The following component class is currently not supported: " + component.getClass().getSimpleName());
         }
     }
 
-    private void addChildrenHasComponents(Expression expression, Component component, String method) {
+    private void addChildrenHasComponents(Expression expression, Component component, String method, boolean addAllAtOnce) {
         Collection<Expression> fields = unwrapComponent(component).getChildren()
                 .map(this::addComponent)
                 .map(newField -> new NameExpr(newField.getVariables().get(0).getName()))
                 .collect(Collectors.toList());
-
-        constructor.getBody().addAndGetStatement(
-                new MethodCallExpr(
-                        expression,
-                        method,
-                        new NodeList<>(fields)
-                ));
+        if (addAllAtOnce) {
+            constructor.getBody().addAndGetStatement(
+                    new MethodCallExpr(
+                            expression,
+                            method,
+                            new NodeList<>(fields)
+                    )
+            );
+        } else {
+            fields.forEach(field -> constructor.getBody().addAndGetStatement(
+                    new MethodCallExpr(expression, method, new NodeList<>(field))
+            ));
+        }
     }
 
     private Component unwrapComponent(Component component) {
