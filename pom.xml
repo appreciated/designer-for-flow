@@ -17,6 +17,14 @@
         <!-- Dependencies -->
         <vaadin.version>14.3.5</vaadin.version>
         <vaadin.bowerMode>false</vaadin.bowerMode>
+
+		<!-- Apache -->
+		<apache2.commons.io.version>2.7</apache2.commons.io.version><!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<apache2.commons.net.version>3.6</apache2.commons.net.version><!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+		<apache2.commons.collections4.version>4.4</apache2.commons.collections4.version><!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4  -->
+		
+		<!-- Google -->
+		<google.guava.version>29.0-jre</google.guava.version><!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
     </properties>
 
     <parent>
@@ -67,6 +75,7 @@
     </dependencyManagement>
 
     <dependencies>
+    	<!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <!-- Replace artifactId with vaadin-core to use only free components -->
@@ -110,12 +119,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -162,12 +172,14 @@
             <artifactId>mvp-flow</artifactId>
             <version>1.0.0</version>
         </dependency>
+        
         <!-- Java Parsing library -->
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>3.16.1</version>
         </dependency>
+        
         <!-- Jar Scanner library -->
         <dependency>
             <groupId>io.github.classgraph</groupId>
@@ -179,6 +191,45 @@
             <artifactId>cssparser</artifactId>
             <version>0.9.27</version>
         </dependency>
+			
+		<!-- Apache -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${apache2.commons.io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>${apache2.commons.net.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${apache2.commons.collections4.version}</version>
+		</dependency>
+			
+		<!-- Google -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${google.guava.version}</version>
+		</dependency>
+        
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		
         <!-- Testing -->
         <!-- Testing and Selenide Dependencies -->
         <dependency>

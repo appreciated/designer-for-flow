@@ -1,25 +1,32 @@
 package com.github.appreciated.designer.application.view.file;
 
+import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.file.designer.template.DesignerComponentsView;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 
+import lombok.Getter;
+
+@Getter
 public class ProjectFileView extends SplitLayout {
-    private SplitLayout componentsAndTemplate = new SplitLayout();
+	private static final long serialVersionUID = -456649093070497236L;
+	
+	private final SplitLayout componentsAndTemplate;
 
     public ProjectFileView() {
-
-        DesignerComponentsView designerComponentView = new DesignerComponentsView();
+    	super();
+        
+    	componentsAndTemplate = new SplitLayout();
         componentsAndTemplate.setOrientation(SplitLayout.Orientation.HORIZONTAL);
         componentsAndTemplate.setSizeFull();
-        componentsAndTemplate.addToPrimary(designerComponentView);
+        
         setOrientation(SplitLayout.Orientation.HORIZONTAL);
-        setSizeFull();
         setSplitterPosition(80);
         setSizeFull();
     }
-
-    public SplitLayout getComponentsAndTemplate() {
-        return componentsAndTemplate;
+    
+    public void loadContent(final ProjectFileModel projectFileModel) {
+    	DesignerComponentsView designerComponentView = new DesignerComponentsView(projectFileModel);
+        
+        componentsAndTemplate.addToPrimary(designerComponentView);
     }
-
 }

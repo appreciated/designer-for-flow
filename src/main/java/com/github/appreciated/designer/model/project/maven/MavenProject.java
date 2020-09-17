@@ -1,14 +1,22 @@
 package com.github.appreciated.designer.model.project.maven;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import org.apache.logging.log4j.util.Strings;
+
 import com.github.appreciated.designer.exception.MissingProjectFileException;
 import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.model.project.ProjectInformation;
 import com.github.appreciated.designer.model.project.ProjectType;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.stream.Stream;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class MavenProject extends Project {
 
     private String defaultSourcePath = "src" + File.separator + "main" + File.separator + "java";
@@ -32,6 +40,7 @@ public class MavenProject extends Project {
         }
         File defaultThemeFile = new File(getProjectRoot().getPath() + File.separator + defaultThemePath + File.separator + defaultThemeFileName);
         if (defaultThemeFile.exists()) {
+        	setThemeFile(defaultThemeFile);
             return defaultThemeFile;
         } else {
             throw new MissingProjectFileException("There was no theme file found under \"" + defaultThemeFile.getPath() + "\"");
@@ -80,6 +89,29 @@ public class MavenProject extends Project {
     public boolean hasThemeFile() {
         return (themeFile != null || new File(getProjectRoot().getPath() + File.separator + defaultThemePath + File.separator + defaultThemeFileName).exists());
     }
+
+	@Override
+	public boolean createThemeFile() {
+		File defaultThemeFile = new File(getProjectRoot().getPath() + File.separator + defaultThemePath + File.separator + defaultThemeFileName);
+		
+        if (!defaultThemeFile.exists()) {
+        	try {
+        		if (defaultThemeFile.createNewFile()) {
+        			final BufferedWriter writer = new BufferedWriter(new FileWriter(defaultThemeFile));
+        			writer.append(Strings.EMPTY);
+        			writer.close();
+        			setThemeFile(defaultThemeFile);
+        			return true;
+        		} else {
+    				log.error("Failed to create theme file on: " + defaultThemeFile.getPath());
+        		}
+			} catch (IOException e) {
+				log.error("Failed to create theme file on: " + defaultThemeFile.getPath(), e);
+			}
+        }
+        
+		return false;
+	}
 
     @Override
     public Stream<ProjectInformation> getMissingProjectInformation() {

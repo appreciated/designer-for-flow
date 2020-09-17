@@ -7,12 +7,17 @@ import com.github.appreciated.designer.application.view.file.ProjectFileView;
 import com.github.appreciated.mvp.Presenter;
 
 public class ProjectFilePresenter extends Presenter<ProjectFileModel, ProjectFileView> {
-    public ProjectFilePresenter(ProjectFileModel projectFileModel) {
+	private static final long serialVersionUID = -4840763198905869268L;
+
+	public ProjectFilePresenter(final ProjectFileModel projectFileModel) {
         super(projectFileModel);
+        
         DesignerWrapperPresenter designerView = new DesignerWrapperPresenter(getModel());
         getContent().getComponentsAndTemplate().setSplitterPosition(25);
         getContent().getComponentsAndTemplate().addToSecondary(designerView);
         getContent().addToPrimary(getContent().getComponentsAndTemplate());
         getContent().addToSecondary(new SideBarPresenter(getModel()));
+        
+        getContent().loadContent(getModel());
     }
 }
