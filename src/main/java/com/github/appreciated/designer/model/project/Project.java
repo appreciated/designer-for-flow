@@ -22,6 +22,8 @@ public abstract class Project {
     }
 
     abstract public boolean hasThemeFile();
+    
+    abstract public boolean createThemeFile();
 
     abstract public File getThemeFile();
 

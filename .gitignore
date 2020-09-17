@@ -6,3 +6,11 @@
 /database/db.mv.db
 webpack.config.js
 webpack.generated.js
+
+# Compiled class file
+*.class
+
+# Eclipse
+/.settings
+.classpath
+.project

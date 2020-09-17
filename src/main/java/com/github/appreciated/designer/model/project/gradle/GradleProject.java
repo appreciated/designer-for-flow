@@ -67,4 +67,9 @@ public class GradleProject extends Project {
     public void setThemeFile(File themeFile) {
 
     }
+
+	@Override
+	public boolean createThemeFile() {
+		return false;
+	}
 }

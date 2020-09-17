@@ -1,47 +1,44 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.HasOrderedComponents;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class StructureView extends BaseView {
+	private static final long serialVersionUID = -878124261779595119L;
 
-    private final TreeGrid<Component> grid;
-    private final UI ui;
-    private List<Component> dragged;
+	// Data
+	private final TreeGrid<Component> grid;
 
-
-    public StructureView(ProjectFileModel projectFileModel) {
+    public StructureView(final ProjectFileModel projectFileModel) {
         super("Structure");
-        ui = UI.getCurrent();
-        grid = new TreeGrid<>();
-        grid.setThemeName("compact");
-        grid.setThemeName("no-border");
+        
+        grid = new TreeGrid<Component>();
+        grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER);
         grid.addHierarchyColumn(component -> component.getClass().getSimpleName());
         grid.setSizeFull();
         grid.setRowsDraggable(true);
         grid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
         grid.setDragFilter(component -> component != projectFileModel.getInformation().getComponent());
-        grid.addItemClickListener(event -> {
-            event.getItem().getParent().ifPresent(component -> {
-
-            });
-        });
-
-        grid.addDragStartListener(componentGridDragStartEvent -> dragged = componentGridDragStartEvent.getDraggedItems());
-
+        grid.addDragStartListener(componentGridDragStartEvent -> projectFileModel.addCurrentDragItems(componentGridDragStartEvent.getDraggedItems()));
+        
         //  Actual Parent Layout
         //      |
         //  DesignerComponentWrapper
@@ -49,44 +46,78 @@ public class StructureView extends BaseView {
         //  Component
 
         grid.addDropListener(componentGridDropEvent -> {
-            GridDropLocation name = componentGridDropEvent.getDropLocation();
-            if (name == GridDropLocation.BELOW || name == GridDropLocation.ABOVE) {
-                componentGridDropEvent.getDropTargetItem().ifPresent(component -> {
-                    component.getParent().ifPresent(parent -> {
-                        if (parent instanceof DesignerComponentWrapper) {
-                            parent.getParent().ifPresent(actualParent -> {
-                                dragged.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
-                                dragged.forEach(draggedComponent -> ((HasComponents) actualParent).addComponentAtIndex(
-                                        actualParent.getElement().indexOfChild(parent.getElement()) + (name == GridDropLocation.BELOW ? 1 : 0),
-                                        draggedComponent.getParent().get()
-                                ));
-                            });
-                        } else {
-                            System.err.println(parent.getClass().getName() + " not supported!");
-                        }
-                    });
-                });
-            } else if (name == GridDropLocation.ON_TOP) {
-                componentGridDropEvent.getDropTargetItem().ifPresent(component -> {
-                    if (component instanceof HasComponents) {
-                        component.getParent().ifPresent(parent -> {
-                            if (parent instanceof DesignerComponentWrapper) {
-                                parent.getParent().ifPresent(actualParent -> {
-                                    if (dragged != null) {
-                                        dragged.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
-                                        dragged.forEach(draggedComponent -> ((HasComponents) component).add(draggedComponent.getParent().get()));
-                                        dragged = null;
-                                    }
-                                });
-                            } else {
-                                System.err.println(parent.getClass().getName() + " not supported!");
+        	final GridDropLocation name = componentGridDropEvent.getDropLocation();
+            
+            if (projectFileModel.isCurrentDragAvailable() && name != null && componentGridDropEvent.getDropTargetItem().isPresent()) {
+            	final Set<Component> currentDragItems = projectFileModel.getAndCloneCurrentDragCollection();
+            	final Component component = componentGridDropEvent.getDropTargetItem().get();
+            	
+            	if (!currentDragItems.contains(component) || (currentDragItems.contains(component) && currentDragItems.size() > 1)) {
+            		if (component instanceof HasComponents) {
+                    	if (currentDragItems.contains(component)) {
+                    		currentDragItems.remove(component);
+                    		projectFileModel.removeCurrentDragItems(component);
+                    	}
+                    	
+                    	/*
+                    	if (event.getComponent() instanceof DesignerComponentWrapper) {
+                            Component actualComponent = ((DesignerComponentWrapper) event.getComponent()).getActualComponent();
+                            Component dragSourceComponent = event.getDragSourceComponent().get();
+                            if (dragSourceComponent instanceof DesignerComponentLabel) {
+                                dragSourceComponent = transformDesignerComponentLabel(dragSourceComponent);
                             }
-                        });
-                    } else {
+                            if (actualComponent instanceof HasOrderedComponents) {
+                                ((HasOrderedComponents<?>) actualComponent).add(dragSourceComponent);
+                            }
+                            notifyStructureListeners();
+                        }
+                    	*/
+                    	
+                    	for (Component item : currentDragItems) {
+                        	System.out.println(item.getParent().get());
+                        	System.out.println(item.getParent().get().getParent().get());
+						}
+                    	
+			            switch (name) {
+							case BELOW:
+							case ABOVE:
+			                    component.getParent().ifPresent(parent -> {
+			                        if (parent instanceof DesignerComponentWrapper) {
+			                            parent.getParent().ifPresent(actualParent -> {
+			                            	currentDragItems.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
+			                            	currentDragItems.forEach(draggedComponent -> ((HasComponents) actualParent).addComponentAtIndex(
+			                                        actualParent.getElement().indexOfChild(parent.getElement()) + (name == GridDropLocation.BELOW ? 1 : 0),
+			                                        draggedComponent.getParent().get()
+			                                ));
+		                                	projectFileModel.removeCurrentDragItems(currentDragItems);
+			                            });
+			                        } else {
+			                        	log.error(parent.getClass().getName() + " not supported!");
+			                        }
+			                    });
+								break;
+							case ON_TOP:
+		                        component.getParent().ifPresent(parent -> {
+		                            if (parent instanceof DesignerComponentWrapper) {
+		                                parent.getParent().ifPresent(actualParent -> {
+		                                	currentDragItems.forEach(draggedComponent -> ((HasComponents) draggedComponent.getParent().get().getParent().get()).remove(draggedComponent.getParent().get()));
+		                                	currentDragItems.forEach(draggedComponent -> ((HasComponents) component).add(draggedComponent.getParent().get()));
+		                                	projectFileModel.removeCurrentDragItems(currentDragItems);
+		                                });
+		                            } else {
+		                                log.error(parent.getClass().getName() + " not supported!");
+		                            }
+		                        });
+								break;
+							default:
+								break;
+			            }
+					} else {
                         Notification.show("Elements cannot be dropped on items that do not extend HasComponents");
-                    }
-                });
+					}
+            	}
             }
+            
             updateStructure(projectFileModel.getInformation().getComponent());
         });
         grid.addItemClickListener(event -> projectFileModel.getEventService().getFocusedEventPublisher().publish(event.getItem()));
@@ -98,16 +129,16 @@ public class StructureView extends BaseView {
             }
         });
         projectFileModel.getEventService().getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
-            getUI().ifPresent(ui1 -> ui1.access(() -> {
+        	uiAccess(() -> {
                 grid.select(elementFocusedEvent.getFocus());
-            }));
+            });
         });
         updateStructure(projectFileModel.getInformation().getComponent());
     }
 
     private void updateStructure(Component designRootComponent) {
         if (designRootComponent != null) {
-            ui.access(() -> {
+        	uiAccess(() -> {
                 grid.setItems(Collections.singletonList(unpack(designRootComponent)), component -> {
                     if (component instanceof HasComponents) {
                         return unpack(component.getChildren()).collect(Collectors.toList());
