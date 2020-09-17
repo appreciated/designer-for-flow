@@ -21,8 +21,13 @@ public class HasSizeInterfaceJavaGenerator implements VaadinComponentJavaGenerat
 
     @Override
     public boolean requiresParsing(HasSize propertyParent) {
-        HasSize parent = ((HasSize) ((Component) propertyParent).getParent().get());
-        return parent.getWidth() != null || parent.getHeight() != null;
+        Component parent = ((Component) propertyParent).getParent().get();
+        if (parent instanceof HasSize) {
+            HasSize hasSizeParent = ((HasSize) parent);
+            return hasSizeParent.getWidth() != null || hasSizeParent.getHeight() != null;
+        } else {
+            return false;
+        }
     }
 
     @Override

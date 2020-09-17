@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.template.java.generator;
 
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.template.java.generator.interfaces.VaadinComponentJavaGeneratorCollection;
 import com.github.javaparser.ast.CompilationUnit;
@@ -13,6 +14,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.utils.SourceRoot;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.accordion.AccordionPanel;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,7 +76,7 @@ public class DesignerComponentTreeJavaGenerator {
         field.createSetter();
         // add a none parameterised initialization (a AssignExpr) to the constructor
         addFieldProperties(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
-        if (actualComponent instanceof HasComponents && actualComponent.getChildren().count() > 0) {
+        if (ComponentContainerHelper.isComponentContainer(actualComponent) && ComponentContainerHelper.getChildren(actualComponent).count() > 0) {
             addChildren(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
         }
         return field;
@@ -84,14 +87,26 @@ public class DesignerComponentTreeJavaGenerator {
         compilerCollection.stream()
                 .filter(parser -> parser.canParse(actualComponent) && parser.requiresParsing(actualComponent))
                 .map(parser -> (Stream<Expression>) parser.parse(compilationUnit, actualComponent, field))
-                .forEach(expressionStream -> expressionStream.forEach(
-                        expression -> {
-                            constructor.getBody().addAndGetStatement(expression);
-                        }));
+                .forEach(expressionStream ->
+                        expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))
+                );
     }
 
 
     private void addChildren(Expression expression, Component component) {
+        Component actualComponent = component instanceof DesignerComponentWrapper ? ((DesignerComponentWrapper) component).getActualComponent() : component;
+        if (actualComponent instanceof HasComponents) {
+            addChildrenHasComponents(expression, component, "add");
+        } else if (actualComponent instanceof AccordionPanel) {
+            addChildrenHasComponents(expression, component, "addContent");
+        } else if (actualComponent instanceof Accordion) {
+            addChildrenHasComponents(expression, component, "add");
+        } else {
+            throw new IllegalStateException("The following component class is currently not supported: " + component.getClass().getSimpleName());
+        }
+    }
+
+    private void addChildrenHasComponents(Expression expression, Component component, String method) {
         Collection<Expression> fields = unwrapComponent(component).getChildren()
                 .map(this::addComponent)
                 .map(newField -> new NameExpr(newField.getVariables().get(0).getName()))
@@ -100,7 +115,7 @@ public class DesignerComponentTreeJavaGenerator {
         constructor.getBody().addAndGetStatement(
                 new MethodCallExpr(
                         expression,
-                        "add",
+                        method,
                         new NodeList<>(fields)
                 ));
     }

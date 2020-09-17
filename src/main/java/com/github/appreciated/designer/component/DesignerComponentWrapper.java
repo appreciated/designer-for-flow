@@ -1,7 +1,9 @@
 package com.github.appreciated.designer.component;
 
-import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.EventHandler;
@@ -10,6 +12,8 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 import java.util.function.Consumer;
+
+import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
 
 @Tag("designer-component-wrapper")
 @JsModule("./src/designer-component-wrapper.js")
@@ -25,7 +29,7 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     public DesignerComponentWrapper(Component component) {
         this.actualComponent = component;
         getElement().appendChild(component.getElement());
-        if (!(component instanceof HasComponents) && !isContentEditable(actualComponent)) {
+        if (!isComponentContainer(component)) {
             slot.getElement().getClassList().add("no-pointer-events");
         }
         if (actualComponent instanceof HasSize) {
@@ -37,13 +41,6 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
             }
             ((HasSize) actualComponent).setSizeUndefined();
         }
-        if (isContentEditable(actualComponent)) {
-            actualComponent.getElement().setAttribute("contenteditable", "true");
-        }
-    }
-
-    public boolean isContentEditable(Component component) {
-        return component instanceof HasText && !(component instanceof Button);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.integrationtest.parser;
+package com.github.appreciated.designer.template.java.parser;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;

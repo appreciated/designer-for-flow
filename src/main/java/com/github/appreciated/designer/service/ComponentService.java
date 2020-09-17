@@ -3,6 +3,7 @@ package com.github.appreciated.designer.service;
 
 import com.github.appreciated.designer.component.DesignerComponent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.details.Details;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
@@ -47,7 +48,9 @@ public class ComponentService {
                 e.printStackTrace();
             }
         });
+        ArrayList<Class> unwantedClasses = new ArrayList<>();
+        unwantedClasses.add(Details.class);
         componentList.sort(Comparator.comparing(DesignerComponent::getTagName));
-        return componentList.stream();
+        return componentList.stream().filter(designerComponent -> !unwantedClasses.contains(designerComponent.getClass()));
     }
 }

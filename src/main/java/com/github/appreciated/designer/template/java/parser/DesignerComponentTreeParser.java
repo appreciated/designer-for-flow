@@ -1,7 +1,8 @@
-package com.github.appreciated.designer.integrationtest.parser;
+package com.github.appreciated.designer.template.java.parser;
 
 
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.service.ProjectService;
 import com.github.javaparser.ParseException;
@@ -9,11 +10,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
 
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.github.appreciated.designer.helper.ComponentContainerHelper.addComponent;
+import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
 
 public class DesignerComponentTreeParser {
 
@@ -31,10 +34,10 @@ public class DesignerComponentTreeParser {
     }
 
     public static Component wrap(Component component) {
-        if (component instanceof HasComponents) {
-            List<Component> children = component.getChildren().collect(Collectors.toList());
-            ((HasComponents) component).removeAll();
-            children.forEach(child -> ((HasComponents) component).add(wrap(child)));
+        if (isComponentContainer(component)) {
+            List<Component> children = ComponentContainerHelper.getChildren(component).collect(Collectors.toList());
+            ComponentContainerHelper.removeAll(component);
+            children.forEach(child -> addComponent(component, wrap(child)));
             return new DesignerComponentWrapper(component);
         }
         return new DesignerComponentWrapper(component);

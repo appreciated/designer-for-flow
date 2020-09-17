@@ -1,12 +1,14 @@
-package com.github.appreciated.designer.integrationtest.parser;
+package com.github.appreciated.designer.template.java.parser;
 
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.vaadin.converter.FileStreamResource;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.html.Image;
 
 import java.io.File;
+
+import static com.github.appreciated.designer.helper.ComponentContainerHelper.getChildren;
+import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
 
 public class DesignerComponentNormalizer {
     private DesignCompilerInformation compilerInformation;
@@ -22,8 +24,8 @@ public class DesignerComponentNormalizer {
 
     public void iterate(Component component) {
         processComponent(component);
-        if (component instanceof HasComponents) {
-            component.getChildren().forEach(this::iterate);
+        if (isComponentContainer(component)) {
+            getChildren(component).forEach(this::iterate);
         }
     }
 
