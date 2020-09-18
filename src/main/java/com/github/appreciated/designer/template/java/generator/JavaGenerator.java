@@ -17,22 +17,26 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 
+import javax.annotation.Generated;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DesignerComponentTreeJavaGenerator {
+public class JavaGenerator {
     private final CompilationUnit compilationUnit;
-    private final ClassOrInterfaceDeclaration componentClass;
     private final ConstructorDeclaration constructor;
     private final SourceRoot sourceRoot;
     private final DesignCompilerInformation designCompilerInformation;
     int i = 0;
+    private ClassOrInterfaceDeclaration componentClass;
     private VaadinComponentJavaGeneratorCollection compilerCollection;
 
-    public DesignerComponentTreeJavaGenerator(DesignCompilerInformation designCompilerInformation) {
+    public JavaGenerator(DesignCompilerInformation designCompilerInformation) {
         compilerCollection = new VaadinComponentJavaGeneratorCollection(designCompilerInformation);
         this.designCompilerInformation = designCompilerInformation;
         Component component = designCompilerInformation.getComponent();
@@ -52,6 +56,14 @@ public class DesignerComponentTreeJavaGenerator {
             compilationUnit.setPackageDeclaration(packageName);
             sourceRoot.add(compilationUnit);
             componentClass = compilationUnit.addClass(file.getName().substring(0, file.getName().length() - 5));
+            compilationUnit.addImport(Generated.class);
+            componentClass = componentClass.addAnnotation(new NormalAnnotationExpr(new Name("Generated"),
+                    new NodeList<>(
+                            new MemberValuePair("value", new StringLiteralExpr("com.github.appreciated.designer.template.java.generator.JavaGenerator")),
+                            new MemberValuePair("comments", new StringLiteralExpr("This is generated code, do not modify")),
+                            new MemberValuePair("date", new StringLiteralExpr(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)))
+                    )
+            ));
             constructor = componentClass.addConstructor(Modifier.Keyword.PUBLIC);
             componentClass.addExtendedType(unwrapComponent(component).getClass());
             addChildren(new ThisExpr(), component);

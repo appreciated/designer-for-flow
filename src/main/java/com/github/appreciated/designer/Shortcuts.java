@@ -2,7 +2,7 @@ package com.github.appreciated.designer;
 
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.service.ProjectService;
-import com.github.appreciated.designer.template.java.generator.DesignerComponentTreeJavaGenerator;
+import com.github.appreciated.designer.template.java.generator.JavaGenerator;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.UI;
@@ -42,7 +42,7 @@ public class Shortcuts {
         ui.addShortcutListener(shortcutEvent -> {
             if (isNoDialogOpen(ui)) {
                 if (service.getCurrentProjectFileModel() != null) {
-                    DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFileModel().getInformation());
+                    JavaGenerator compiler = new JavaGenerator(service.getCurrentProjectFileModel().getInformation());
                     compiler.save();
                     Notification.show("Design was saved!");
                 }
@@ -51,7 +51,7 @@ public class Shortcuts {
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
             if (service.getCurrentProjectFileModel() != null) {
                 System.out.println("StructureChanged!");
-                DesignerComponentTreeJavaGenerator compiler = new DesignerComponentTreeJavaGenerator(service.getCurrentProjectFileModel().getInformation());
+                JavaGenerator compiler = new JavaGenerator(service.getCurrentProjectFileModel().getInformation());
                 compiler.save();
             }
         });
