@@ -42,7 +42,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
     }
 
     public CreateOrOpenDesignTabDialog(final File parentFile, final Consumer<File> fileConsumer, final boolean init) {
-        super(parentFile, fileConsumer, false);
+        super(parentFile, fileConsumer, false, false);
 
         contextMenu = createContextMenu();
 

@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 public class OpenProjectDialog extends FileChooserDialog {
 
     public OpenProjectDialog(Consumer<File> fileConsumer) {
-        super(new File(System.getProperty("user.home")), fileConsumer);
+        super(Arrays.stream(File.listRoots()).findFirst().get(), fileConsumer, true, true);
         getGrid().setPageSize(100);
         getHeader().setText(getTranslation("select.a.project.folder"));
     }
