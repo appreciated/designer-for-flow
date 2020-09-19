@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.application.view;
 
 import com.github.appreciated.designer.service.ExceptionService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -34,24 +35,49 @@ public class ErrorView extends VerticalLayout {
             if (exceptionService.getError() != null) {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
-                pw.println("### Designer Template");
+                pw.println("### Designer bug report Template");
                 pw.println("If you think the issue could be related to your template files please consider providing it to make it easier to reproduce your issue. ");
                 pw.println("### Stacktrace");
                 pw.println("```");
                 exceptionService.getError().printStackTrace(pw);
-                pw.println("```");
                 try {
-                    String stackTrace = URLEncoder.encode(sw.toString(), "UTF-8");
-                    String title = URLEncoder.encode(exceptionService.getError().getClass().getSimpleName(), "UTF-8");
+                    String issueTemplate = URLEncoder.encode(sw.toString(), "UTF-8");
+                    String title = URLEncoder.encode(exceptionService.getError().getClass().getSimpleName() + ": " + exceptionService.getError().getMessage(), "UTF-8");
+                    String body = (issueTemplate.length() < 2500 ? issueTemplate : issueTemplate.substring(0, 2500)) + URLEncoder.encode("...\n", "UTF-8") + URLEncoder.encode("```", "UTF-8");
+                    String url = "https://github.com/appreciated/designer-for-flow/issues/new?labels=bug&title=" + title + "&body=" + body;
 
-                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    String os = System.getProperty("os.name").toLowerCase();
+
+                    if (os.indexOf("win") >= 0) {
+                        Runtime rt = Runtime.getRuntime();
                         try {
-                            Desktop.getDesktop().browse(new URI("https://github.com/appreciated/designer-for-flow/issues/new?labels=bug&title=" + title + "&body=" + (stackTrace.length() < 400 ? stackTrace : stackTrace.substring(0, 400)) + "\\"));
+                            rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (os.indexOf("mac") >= 0) {
+                        Runtime rt = Runtime.getRuntime();
+                        try {
+                            rt.exec("open " + url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
+                        Runtime runtime = Runtime.getRuntime();
+                        try {
+                            runtime.exec("xdg-open " + url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                        try {
+                            Desktop.getDesktop().browse(new URI(url));
                         } catch (IOException | URISyntaxException e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        UI.getCurrent().getPage().executeJs("window.open(\"" + url + "\")");
                     }
-
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -64,13 +90,9 @@ public class ErrorView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSizeUndefined();
-        setWidth("300px");
-        setHeight("360px");
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSizeFull();
-        getElement().getStyle()
-                .set("background", "var(--lumo-error-color-10pct)");
     }
 
 }

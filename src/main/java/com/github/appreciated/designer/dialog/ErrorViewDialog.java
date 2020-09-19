@@ -9,5 +9,6 @@ public class ErrorViewDialog extends Dialog {
         add(new ErrorView(exceptionService));
         setCloseOnEsc(true);
         setCloseOnOutsideClick(true);
+        setWidth("330px");
     }
 }
