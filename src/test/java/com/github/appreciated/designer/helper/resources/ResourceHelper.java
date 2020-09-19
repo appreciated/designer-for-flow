@@ -1,7 +1,8 @@
 package com.github.appreciated.designer.helper.resources;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -24,8 +25,8 @@ public class ResourceHelper {
 
     @Test
     public void checkTestProjectsExistence() {
-        Assert.assertTrue(new File(getPlainTestProject()).exists());
-        Assert.assertTrue(new File(getSpringBootTestProject()).exists());
+        Assertions.assertTrue(new File(getPlainTestProject()).exists());
+        Assertions.assertTrue(new File(getSpringBootTestProject()).exists());
     }
 }
 

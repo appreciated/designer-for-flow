@@ -2,8 +2,8 @@ package com.github.appreciated.designer.integrationtest;
 
 import com.codeborne.selenide.WebDriverRunner;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -18,7 +18,7 @@ public class IntegrationTestBase {
     public static WebDriver driver;
     public static int SLEEP = 400;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
         List<String> versions = WebDriverManager.chromedriver().getVersions().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
         for (String version : versions) {
@@ -36,7 +36,7 @@ public class IntegrationTestBase {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void teardown() {
         if (driver != null) {
             driver.quit();

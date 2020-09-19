@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.integrationtest.parser;
 
 import com.github.appreciated.designer.integrationtest.IntegrationTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ComponentTreeParserIntegrationTest extends IntegrationTestBase {
 

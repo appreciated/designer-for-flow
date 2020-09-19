@@ -4,8 +4,8 @@ import com.github.appreciated.designer.helper.resources.ResourceHelper;
 import com.github.appreciated.designer.io.TempFile;
 import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.model.LumoVariables;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +20,14 @@ public class ThemeCompilerTest {
         theme.parseCss(file);
 
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
-        Assert.assertFalse(styles.containsKey(LumoVariables.BASE_COLOR));
+        Assertions.assertFalse(styles.containsKey(LumoVariables.BASE_COLOR));
         styles.put(LumoVariables.BASE_COLOR, new CssVariable(LumoVariables.BASE_COLOR, "#f9f9f9"));
         theme.save(file);
 
         theme = new Theme();
         theme.parseCss(file);
         styles = theme.getStyles();
-        Assert.assertEquals("#f9f9f9", styles.get(LumoVariables.BASE_COLOR).getValue());
+        Assertions.assertEquals("#f9f9f9", styles.get(LumoVariables.BASE_COLOR).getValue());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class ThemeCompilerTest {
 
         // Read
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
-        Assert.assertEquals("#fafafa", styles.get(LumoVariables.BASE_COLOR).getValue());
+        Assertions.assertEquals("#fafafa", styles.get(LumoVariables.BASE_COLOR).getValue());
         //write
         styles.put(LumoVariables.BASE_COLOR, new CssVariable(LumoVariables.BASE_COLOR, "#ffffff"));
         theme.save(file);
@@ -47,6 +47,6 @@ public class ThemeCompilerTest {
         theme.parseCss(file);
         // Read
         styles = theme.getStyles();
-        Assert.assertEquals("#ffffff", styles.get(LumoVariables.BASE_COLOR).getValue());
+        Assertions.assertEquals("#ffffff", styles.get(LumoVariables.BASE_COLOR).getValue());
     }
 }

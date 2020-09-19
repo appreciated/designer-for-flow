@@ -4,8 +4,8 @@ import com.github.appreciated.designer.helper.resources.ResourceHelper;
 import com.github.appreciated.designer.io.TempFile;
 import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.model.LumoVariables;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ThemeParserTest {
         theme.parseCss(file);
 
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
-        Assert.assertEquals("#fafafa", styles.get(LumoVariables.BASE_COLOR).getValue());
+        Assertions.assertEquals("#fafafa", styles.get(LumoVariables.BASE_COLOR).getValue());
     }
 
     @Test
@@ -30,6 +30,6 @@ public class ThemeParserTest {
         theme.parseCss(file);
 
         HashMap<LumoVariables, CssVariable> styles = theme.getStyles();
-        Assert.assertFalse(styles.containsKey(LumoVariables.BASE_COLOR));
+        Assertions.assertFalse(styles.containsKey(LumoVariables.BASE_COLOR));
     }
 }

@@ -2,12 +2,18 @@ package com.github.appreciated.designer.integrationtest.parser;
 
 import com.github.appreciated.designer.integrationtest.IntegrationTestBase;
 import com.vaadin.flow.component.Component;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.text.ParseException;
 
 public class ComponentTreeCompilerIntegrationTest extends IntegrationTestBase {
+
+    public static void main(String[] args) {
+
+        // System.out.println(f.getPath());
+        // System.out.println(f.getPath());
+    }
 
     @Test
     public void testComponentTreeCompiler() throws ParseException, ClassNotFoundException {
@@ -45,12 +51,6 @@ public class ComponentTreeCompilerIntegrationTest extends IntegrationTestBase {
         DesignCompilerInformation info = parser.getDesignCompilerInformation();
         return info.getComponent();*/
         return null;
-    }
-
-    public static void main(String[] args) {
-
-        // System.out.println(f.getPath());
-        // System.out.println(f.getPath());
     }
 
 
