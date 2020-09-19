@@ -5,7 +5,7 @@ import com.github.appreciated.designer.application.model.ProjectModel;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.presenter.file.ProjectFilePresenter;
 import com.github.appreciated.designer.application.view.ProjectView;
-import com.github.appreciated.designer.dialog.AddNewDesignTabDialog;
+import com.github.appreciated.designer.dialog.CreateOrOpenDesignTabDialog;
 import com.github.appreciated.designer.dialog.ErrorViewDialog;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.service.EventService;
@@ -32,7 +32,7 @@ import java.util.Map;
 @Push(transport = Transport.LONG_POLLING)
 public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> implements HasUrlParameter<String> {
 
-    private AddNewDesignTabDialog files;
+    private CreateOrOpenDesignTabDialog files;
     private String projectPath;
     private EventService eventService;
     private ProjectService projectService;
@@ -57,7 +57,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         });
 
         getContent().getDial().addClickListener(event -> {
-            files = new AddNewDesignTabDialog(projectService.getProject().getSourceFolder(), this::addTab);
+            files = new CreateOrOpenDesignTabDialog(projectService.getProject().getSourceFolder(), this::addTab);
             files.open();
         });
     }

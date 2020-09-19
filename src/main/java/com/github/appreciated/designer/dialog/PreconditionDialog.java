@@ -32,7 +32,7 @@ public class PreconditionDialog extends Dialog {
     public PreconditionDialog(HasPreconditions preconditions, Consumer onFulfilled) {
         this.preconditions = preconditions;
         this.componentService = new ComponentService();
-        header = new H2("Please enter the following data");
+        header = new H2(getTranslation("please.enter.the.following.data"));
         binder = new Binder<>();
         form = new FormLayout();
         if (preconditions.getPreconditions() != null) {
@@ -48,7 +48,7 @@ public class PreconditionDialog extends Dialog {
         }
         binder.setBean(preconditions.getPreconditions());
 
-        Button select = new Button("Select", event -> {
+        Button select = new Button(getTranslation("select"), event -> {
             if (binder.isValid()) {
                 onFulfilled.accept(null);
                 close();
@@ -75,7 +75,7 @@ public class PreconditionDialog extends Dialog {
                         if (SourceVersion.isIdentifier(s) && !SourceVersion.isKeyword(s)) {
                             return ValidationResult.ok();
                         } else {
-                            return ValidationResult.error("Please enter a valid Java ClassName");
+                            return ValidationResult.error(getTranslation("please.enter.a.valid.java.classname"));
                         }
                     })
                     .bind((ValueProvider<Map<String, Object>, String>) map -> (String) map.get(entry.getKey()),

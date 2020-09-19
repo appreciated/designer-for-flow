@@ -1,7 +1,10 @@
 package com.github.appreciated.designer.dialog;
 
 
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import java.io.File;
 import java.util.Arrays;
@@ -12,7 +15,7 @@ public class OpenProjectDialog extends FileChooserDialog {
     public OpenProjectDialog(Consumer<File> fileConsumer) {
         super(new File(System.getProperty("user.home")), fileConsumer);
         getGrid().setPageSize(100);
-        getHeader().setText("Select a Project Folder");
+        getHeader().setText(getTranslation("select.a.project.folder"));
     }
 
     @Override
@@ -26,17 +29,20 @@ public class OpenProjectDialog extends FileChooserDialog {
         }
     }
 
-    protected void onSelect() {
-        getGrid().getSelectedItems().stream().findFirst().ifPresent(file -> {
-            if (file.isDirectory()) {
-                close();
-                getFileConsumer().accept(file);
-            } else {
-                Notification.show("Please select a Folder");
-            }
-        });
-        if (getGrid().getSelectedItems().isEmpty()) {
-            Notification.show("Please select a Folder");
+    protected Component getRowComponentForFile(File file) {
+        HorizontalLayout layout = new HorizontalLayout();
+        if (file.isDirectory() && file.list() != null && Arrays.asList(file.list()).contains("pom.xml")) {
+            layout.add(VaadinIcon.VAADIN_H.create());
+        } else if (file.isDirectory()) {
+            layout.add(VaadinIcon.FOLDER.create());
+        } else {
+            layout.add(VaadinIcon.FILE.create());
         }
+        layout.add(new Span(file.getName()));
+        return layout;
+    }
+
+    protected void update(final File selectedFile) {
+        getSelect().setEnabled(selectedFile != null && selectedFile.isDirectory() && selectedFile.list() != null && Arrays.asList(selectedFile.list()).contains("pom.xml"));
     }
 }
