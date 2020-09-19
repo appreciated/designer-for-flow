@@ -21,7 +21,8 @@ import com.github.appreciated.layout.FlexibleGridLayout;
 import com.google.common.collect.Maps;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
@@ -94,9 +95,19 @@ public class ProjectSelectionView extends VerticalLayout {
     private Component getCard(final ProjectPath projectPath) {
         final Icon img = VaadinIcon.FOLDER.create();
 
+        Button button = new Button(VaadinIcon.CLOSE.create());
+        button.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY);
+
+        button.getStyle()
+                .set("position", "absolute")
+                .set("right", "5px")
+                .set("top", "-8px")
+                .set("color", "black");
+
         final VerticalLayout item = new VerticalLayout(
                 new HorizontalLayout(img, new PrimaryLabelComponent(projectPath.getName())),
-                new SecondaryLabelComponent(projectPath.getPath())
+                new SecondaryLabelComponent(projectPath.getPath()),
+                button
         );
         item.getElement().setAttribute("style", item.getElement().getAttribute("style") + ";padding:25px");
 
@@ -106,12 +117,12 @@ public class ProjectSelectionView extends VerticalLayout {
         card.getStyle().set("margin", "5px");
         card.setBackground("var(--lumo-primary-contrast-color)");
 
-        final ContextMenu contextMenu = new ContextMenu(card);
-
-        contextMenu.addItem(getTranslation("open"), e -> openProject(projectPath));
-        contextMenu.addItem(getTranslation("remove"), e -> {
+        button.addClickListener(event -> {
             repository.delete(projectPath);
             layout.remove(card);
+            if (repository.findAll().size() == 0) {
+                add(new Label(getTranslation("get.started.by.adding.a.project")));
+            }
         });
 
         return card;
