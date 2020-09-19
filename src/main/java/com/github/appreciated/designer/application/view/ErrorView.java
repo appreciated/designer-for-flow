@@ -26,9 +26,9 @@ public class ErrorView extends VerticalLayout {
         Icon bug = VaadinIcon.BUG.create();
         bug.setSize("75px");
 
-        Label message = new Label("Unfortunately an error occurred. Please help fixing this issue by reporting it!");
+        Label message = new Label(getTranslation("unfortunately.an.error.occurred.please.help.fixing.this.issue.by.reporting.it"));
         message.getStyle().set("text-align", "center");
-        Button send = new Button("Create bugreport");
+        Button send = new Button(getTranslation("create.bugreport"));
         send.addThemeVariants(ButtonVariant.LUMO_ERROR);
         send.addClickListener(event -> {
             if (exceptionService.getError() != null) {
@@ -56,7 +56,7 @@ public class ErrorView extends VerticalLayout {
                     e.printStackTrace();
                 }
             } else {
-                Notification.show("Nothing here to report");
+                Notification.show(getTranslation("nothing.here.to.report"));
             }
         });
         add(bug, message, send);

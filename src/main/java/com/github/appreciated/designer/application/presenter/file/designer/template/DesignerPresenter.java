@@ -126,7 +126,6 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private synchronized void setHasComponentsFillerVisible(boolean isVisible) {
-        System.out.println("setHasComponentsFillerVisible: " + isVisible);
         if (isVisible) {
             addHasComponentsFiller(designerRoot);
         } else {

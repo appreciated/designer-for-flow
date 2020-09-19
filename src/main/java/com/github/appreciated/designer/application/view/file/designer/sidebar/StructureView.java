@@ -25,7 +25,7 @@ public class StructureView extends BaseView {
     private final TreeGrid<Component> grid;
 
     public StructureView(final ProjectFileModel projectFileModel) {
-        super("Structure");
+        super("structure");
 
         grid = new TreeGrid<>();
         grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER);
@@ -70,13 +70,12 @@ public class StructureView extends BaseView {
                         break;
                 }
             } else {
-                Notification.show("Elements cannot be dropped on themself");
+                Notification.show(getTranslation("elements.cannot.be.dropped.on.themself"));
             }
         });
         grid.addItemClickListener(event -> projectFileModel.getEventService().getFocusedEventPublisher().publish(event.getItem()));
         add(grid);
         projectFileModel.getEventService().getStructureChangedEventListener().addEventConsumer(event -> {
-            System.out.println("StructureChangedEvent");
             if (event.getComponent() == projectFileModel.getInformation().getComponent()) {
                 updateStructure(event.getComponent());
             }

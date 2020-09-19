@@ -24,7 +24,7 @@ public class StyleEditorDetails extends HasValueEditorDetails<StyleEditorDetails
     private Style style;
 
     public StyleEditorDetails(Style style) {
-        super("Styles", new VerticalLayout(), true);
+        super("styles", new VerticalLayout(), true);
         this.style = style;
         updateRenderedStyles();
         setOnAddListener(aBoolean -> {

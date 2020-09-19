@@ -22,7 +22,7 @@ public class ThemeView extends BaseView {
     private final ProjectFileModel projectFileModel;
     
     public ThemeView(final ProjectFileModel projectFileModel) {
-        super("Theme");
+        super("theme");
         
         this.projectFileModel = projectFileModel;
         
@@ -36,11 +36,11 @@ public class ThemeView extends BaseView {
             SizeAndSpaceStyleView sizeAndSpaceStyleView = new SizeAndSpaceStyleView(projectFileModel, projectFileModel.getEventService());
             OtherStyleView otherStyleView = new OtherStyleView(projectFileModel, projectFileModel.getEventService());
 
-            Tab colorTab = new Tab(VaadinIcon.PALETE.create(), new Label("Color"));
-            Tab typographyTab = new Tab(VaadinIcon.FONT.create(), new Label("Typography"));
-            Tab sizeTab = new Tab(VaadinIcon.BACKSPACE.create(), new Label("Size & Space"));
-            Tab otherTab = new Tab(VaadinIcon.EDIT.create(), new Label("Other"));
-            
+            Tab colorTab = new Tab(VaadinIcon.PALETE.create(), new Label(getTranslation("color")));
+            Tab typographyTab = new Tab(VaadinIcon.FONT.create(), new Label(getTranslation("typography")));
+            Tab sizeTab = new Tab(VaadinIcon.BACKSPACE.create(), new Label(getTranslation("size.space")));
+            Tab otherTab = new Tab(VaadinIcon.EDIT.create(), new Label(getTranslation("other")));
+
             tabs = new Tabs();
             tabs.add(colorTab, typographyTab, sizeTab, otherTab);
             add(tabs);
@@ -52,17 +52,17 @@ public class ThemeView extends BaseView {
             tabs.addSelectedChangeListener(selectedChangeEvent -> content.setSelected(tabs.getSelectedIndex()));
             tabs.setSelectedTab(colorTab);
         } else {
-        	setAlignItems(Alignment.CENTER);
-            add(new Label("There was no theme file found!"));
-            
-            final Button createButton = new Button("Create", VaadinIcon.PLUS.create(), e -> {
-            	if (projectFileModel.getInformation().getProject().createThemeFile()) {
-            		projectFileModel.getInformation().setProject(projectFileModel.getInformation().getProject());
-            		removeAll();
-            		init();
-            	} else {
-            		e.getSource().setEnabled(false);
-            	}
+            setAlignItems(Alignment.CENTER);
+            add(new Label(getTranslation("there.was.no.theme.file.found")));
+
+            final Button createButton = new Button(getTranslation("create"), VaadinIcon.PLUS.create(), e -> {
+                if (projectFileModel.getInformation().getProject().createThemeFile()) {
+                    projectFileModel.getInformation().setProject(projectFileModel.getInformation().getProject());
+                    removeAll();
+                    init();
+                } else {
+                    e.getSource().setEnabled(false);
+                }
             });
             
             createButton.setDisableOnClick(true);

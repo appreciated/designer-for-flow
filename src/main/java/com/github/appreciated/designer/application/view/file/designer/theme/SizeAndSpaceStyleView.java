@@ -11,14 +11,14 @@ public class SizeAndSpaceStyleView extends VerticalLayout {
     public SizeAndSpaceStyleView(ProjectFileModel projectFileModel, EventService eventService) {
         Theme theme = projectFileModel.getInformation().getTheme();
 
-        TextFieldEditorDetails fontSize = new TextFieldEditorDetails("Unit Size", eventService, false);
+        TextFieldEditorDetails fontSize = new TextFieldEditorDetails(getTranslation("unit.size"), eventService, false);
         fontSize.withFormField(LumoVariables.SIZE_XL, theme)
                 .withFormField(LumoVariables.SIZE_L, theme)
                 .withFormField(LumoVariables.SIZE_M, theme)
                 .withFormField(LumoVariables.SIZE_S, theme)
                 .withFormField(LumoVariables.SIZE_XS, theme);
 
-        TextFieldEditorDetails lineHeight = new TextFieldEditorDetails("Space", eventService, false);
+        TextFieldEditorDetails lineHeight = new TextFieldEditorDetails(getTranslation("space"), eventService, false);
         lineHeight.withFormField(LumoVariables.SPACE_XL, theme)
                 .withFormField(LumoVariables.SPACE_L, theme)
                 .withFormField(LumoVariables.SPACE_M, theme)

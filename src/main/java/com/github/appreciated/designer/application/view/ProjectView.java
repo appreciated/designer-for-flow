@@ -34,7 +34,7 @@ public class ProjectView extends VerticalLayout {
         Image logo = new Image("./frontend/styles/images/logo-floating-low.png", "logo");
         logo.getStyle().set("padding", "4px");
         logo.setHeight("48px");
-        Label label = new Label("Designer for Flow");
+        Label label = new Label(getTranslation("designer.for.flow"));
         label.getStyle()
                 .set("white-space", "nowrap")
                 .set("line-height", "56px");

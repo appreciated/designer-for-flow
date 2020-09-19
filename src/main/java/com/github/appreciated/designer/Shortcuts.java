@@ -23,14 +23,17 @@ public class Shortcuts {
                             removeChild(parent, service.getCurrentProjectFileModel().getCurrentFocus().getParent().get());
                             eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFileModel().getInformation().getComponent());
                         } else {
-                            Notification.show("Parent is not of type HasComponents");
+                            Notification.show(ui.getTranslation(ui.getTranslation("parent.is.no.component.container")));
                         }
                     });
                 } else {
-                    Notification.show("No Component has currently focus");
+                    Notification.show(ui.getTranslation("no.component.has.currently.focus"));
                 }
             }
         }, Key.DELETE);
+        ui.addShortcutListener(shortcutEvent -> {
+            throw new RuntimeException("This is only a test Exception");
+        }, Key.KEY_E, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_C, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
@@ -44,20 +47,18 @@ public class Shortcuts {
                 if (service.getCurrentProjectFileModel() != null) {
                     JavaGenerator compiler = new JavaGenerator(service.getCurrentProjectFileModel().getInformation());
                     compiler.save();
-                    Notification.show("Design was saved!");
+                    Notification.show(ui.getTranslation("design.was.saved"));
                 }
             }
         }, Key.KEY_S, KeyModifier.CONTROL);
         eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
             if (service.getCurrentProjectFileModel() != null) {
-                System.out.println("StructureChanged!");
                 JavaGenerator compiler = new JavaGenerator(service.getCurrentProjectFileModel().getInformation());
                 compiler.save();
             }
         });
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
             if (service.getCurrentProjectFileModel() != null) {
-                System.out.println("FocusedEvent!");
                 service.getCurrentProjectFileModel().setCurrentFocus(elementFocusedEvent.getFocus());
             }
         });

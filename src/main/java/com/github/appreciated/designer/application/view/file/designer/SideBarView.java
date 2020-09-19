@@ -21,8 +21,8 @@ public class SideBarView extends VerticalLayout {
         propertiesAndStructure.setSizeFull();
 
         tabs = new Tabs();
-        editorTab = new Tab(VaadinIcon.EDIT.create(), new Label("Editor"));
-        themeTab = new Tab(VaadinIcon.PAINTBRUSH.create(), new Label("Theme"));
+        editorTab = new Tab(VaadinIcon.EDIT.create(), new Label(getTranslation("editor")));
+        themeTab = new Tab(VaadinIcon.PAINTBRUSH.create(), new Label(getTranslation("theme")));
         tabs.add(editorTab, themeTab);
         add(tabs);
 

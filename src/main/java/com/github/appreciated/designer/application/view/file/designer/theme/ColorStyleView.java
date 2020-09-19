@@ -11,34 +11,34 @@ public class ColorStyleView extends VerticalLayout {
     public ColorStyleView(ProjectFileModel projectFileModel, EventService eventService) {
         Theme theme = projectFileModel.getInformation().getTheme();
 
-        ColorPickerEditorDetails primary = new ColorPickerEditorDetails("Primary", eventService, false);
+        ColorPickerEditorDetails primary = new ColorPickerEditorDetails(getTranslation("primary"), eventService, false);
         primary.withFormField(LumoVariables.PRIMARY_COLOR, theme)
                 .withFormField(LumoVariables.PRIMARY_CONTRAST_COLOR, theme)
                 .withFormField(LumoVariables.PRIMARY_TEXT_COLOR, theme);
 
-        ColorPickerEditorDetails basic = new ColorPickerEditorDetails("Basic", eventService, false);
+        ColorPickerEditorDetails basic = new ColorPickerEditorDetails(getTranslation("basic"), eventService, false);
         basic.withFormField(LumoVariables.BASE_COLOR, theme)
                 .withFormField(LumoVariables.SHADE, theme)
                 .withFormField(LumoVariables.TINT, theme);
 
-        ColorPickerEditorDetails error = new ColorPickerEditorDetails("Error", eventService, false);
+        ColorPickerEditorDetails error = new ColorPickerEditorDetails(getTranslation("error"), eventService, false);
         error.withFormField(LumoVariables.ERROR_COLOR, theme)
                 .withFormField(LumoVariables.ERROR_CONTRAST_COLOR, theme)
                 .withFormField(LumoVariables.ERROR_TEXT_COLOR, theme);
 
-        ColorPickerEditorDetails success = new ColorPickerEditorDetails("Success", eventService, false);
+        ColorPickerEditorDetails success = new ColorPickerEditorDetails(getTranslation("success"), eventService, false);
         success.withFormField(LumoVariables.SUCCESS_COLOR, theme)
                 .withFormField(LumoVariables.SUCCESS_CONTRAST_COLOR, theme)
                 .withFormField(LumoVariables.SUCCESS_TEXT_COLOR, theme);
 
-        ColorPickerEditorDetails text = new ColorPickerEditorDetails("Text", eventService, false);
+        ColorPickerEditorDetails text = new ColorPickerEditorDetails(getTranslation("text"), eventService, false);
         text.withFormField(LumoVariables.HEADER_TEXT_COLOR, theme)
                 .withFormField(LumoVariables.BODY_TEXT_COLOR, theme)
                 .withFormField(LumoVariables.SECONDARY_TEXT_COLOR, theme)
                 .withFormField(LumoVariables.TERTIARY_TEXT_COLOR, theme)
                 .withFormField(LumoVariables.DISABLED_TEXT_COLOR, theme);
 
-        ColorPickerEditorDetails shade = new ColorPickerEditorDetails("Shade", eventService, false);
+        ColorPickerEditorDetails shade = new ColorPickerEditorDetails(getTranslation("shade"), eventService, false);
         shade.withFormField(LumoVariables.SHADE_90PCT, theme)
                 .withFormField(LumoVariables.SHADE_80PCT, theme)
                 .withFormField(LumoVariables.SHADE_70PCT, theme)
@@ -50,7 +50,7 @@ public class ColorStyleView extends VerticalLayout {
                 .withFormField(LumoVariables.SHADE_10PCT, theme)
                 .withFormField(LumoVariables.SHADE_5PCT, theme);
 
-        ColorPickerEditorDetails tint = new ColorPickerEditorDetails("Tint", eventService, false);
+        ColorPickerEditorDetails tint = new ColorPickerEditorDetails(getTranslation("tint"), eventService, false);
         tint.withFormField(LumoVariables.TINT_90PCT, theme)
                 .withFormField(LumoVariables.TINT_80PCT, theme)
                 .withFormField(LumoVariables.TINT_70PCT, theme)

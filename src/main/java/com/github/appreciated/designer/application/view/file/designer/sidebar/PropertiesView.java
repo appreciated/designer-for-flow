@@ -29,7 +29,7 @@ public class PropertiesView extends BaseView {
     private final Renderers renderers;
 
     public PropertiesView(ProjectFileModel projectFileModel) {
-        super("Properties");
+        super("properties");
         properties = new VerticalLayout();
         properties.setSizeFull();
         properties.setPadding(false);

@@ -74,13 +74,13 @@ public class ProjectSelectionView extends VerticalLayout {
                 .withAutoFlow(GridLayoutComponent.AutoFlow.ROW_DENSE)
                 .withOverflow(GridLayoutComponent.Overflow.AUTO);
         layout.setWidth("100%");
-        add(new H2("Recent Projects"));
+        add(new H2(getTranslation("recent.projects")));
         setSizeFull();
         setMargin(false);
         setPadding(true);
         add(layout);
         if (repository.findAll().size() == 0) {
-            add(new Label("Get started by adding a project"));
+            add(new Label(getTranslation("get.started.by.adding.a.project")));
         } else {
             repository.findAll().forEach(projectPath -> layout.add(getCard(projectPath)));
         }
@@ -108,8 +108,8 @@ public class ProjectSelectionView extends VerticalLayout {
 
         final ContextMenu contextMenu = new ContextMenu(card);
 
-        contextMenu.addItem("Open", e -> openProject(projectPath));
-        contextMenu.addItem("Remove", e -> {
+        contextMenu.addItem(getTranslation("open"), e -> openProject(projectPath));
+        contextMenu.addItem(getTranslation("remove"), e -> {
             repository.delete(projectPath);
             layout.remove(card);
         });
@@ -125,7 +125,7 @@ public class ProjectSelectionView extends VerticalLayout {
 
             openProject(projectPath);
         } else {
-            Notification.show("This project seems to be missing file!");
+            Notification.show(getTranslation("this.project.seems.to.be.missing.files"));
         }
     }
 

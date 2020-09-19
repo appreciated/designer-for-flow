@@ -14,13 +14,13 @@ public class BaseView extends VerticalLayout {
     	this(null);
     }
 	
-    public BaseView(String name) {
-    	super();
-    	
-    	if (name != null) {
-            add(new H3(name));
-    	}
-    	
+    public BaseView(String i18nName) {
+        super();
+
+        if (i18nName != null) {
+            add(new H3(getTranslation(i18nName)));
+        }
+
         setSizeFull();
         setMargin(false);
         setPadding(true);

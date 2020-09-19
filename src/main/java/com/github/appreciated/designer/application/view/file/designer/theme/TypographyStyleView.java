@@ -11,7 +11,7 @@ public class TypographyStyleView extends VerticalLayout {
     public TypographyStyleView(ProjectFileModel projectFileModel, EventService eventService) {
         Theme theme = projectFileModel.getInformation().getTheme();
 
-        TextFieldEditorDetails fontSize = new TextFieldEditorDetails("Font Size", eventService, false);
+        TextFieldEditorDetails fontSize = new TextFieldEditorDetails(getTranslation("font.size"), eventService, false);
         fontSize.withFormField(LumoVariables.FONT_SIZE_XXXL, theme)
                 .withFormField(LumoVariables.FONT_SIZE_XXL, theme)
                 .withFormField(LumoVariables.FONT_SIZE_XL, theme)
@@ -21,7 +21,7 @@ public class TypographyStyleView extends VerticalLayout {
                 .withFormField(LumoVariables.FONT_SIZE_XS, theme)
                 .withFormField(LumoVariables.FONT_SIZE_XXS, theme);
 
-        TextFieldEditorDetails lineHeight = new TextFieldEditorDetails("Line Height", eventService, false);
+        TextFieldEditorDetails lineHeight = new TextFieldEditorDetails(getTranslation("line.height"), eventService, false);
         lineHeight.withFormField(LumoVariables.LINE_HEIGHT_M, theme)
                 .withFormField(LumoVariables.LINE_HEIGHT_S, theme)
                 .withFormField(LumoVariables.LINE_HEIGHT_XS, theme);

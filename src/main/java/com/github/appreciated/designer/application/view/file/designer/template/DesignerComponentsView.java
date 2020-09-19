@@ -30,7 +30,7 @@ public class DesignerComponentsView extends BaseView {
 
 
     public DesignerComponentsView(final ProjectFileModel projectFileModel) {
-        super("Components");
+        super("components");
         this.projectFileModel = projectFileModel;
 
         componentsCategories = Maps.newHashMap();
@@ -40,15 +40,15 @@ public class DesignerComponentsView extends BaseView {
 
         ComponentService service = new ComponentService();
         search = new TextField();
-        search.setPlaceholder("Search ...");
+        search.setPlaceholder(getTranslation("search"));
         search.setWidthFull();
         search.setValueChangeMode(ValueChangeMode.EAGER);
         search.setPrefixComponent(VaadinIcon.SEARCH.create());
         search.setClearButtonVisible(true);
         search.addValueChangeListener(event -> initAccordions(event.getValue()));
         add(search);
-        components.put("Vaadin Components", Lists.newArrayList());
-        components.put("HTML Components", Lists.newArrayList());
+        components.put(getTranslation("vaadin.components"), Lists.newArrayList());
+        components.put(getTranslation("html.components"), Lists.newArrayList());
         service.getAllComponents().forEach(this::initDragAndDrop);
         components.keySet().forEach(key -> {
             AccordionPanel accordionPanel = new AccordionPanel();
@@ -83,9 +83,9 @@ public class DesignerComponentsView extends BaseView {
             projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(e.getComponent(), false);
         });
         if (component.getTagName().startsWith("<vaadin")) {
-            components.get("Vaadin Components").add(label);
+            components.get(getTranslation("vaadin.components")).add(label);
         } else {
-            components.get("HTML Components").add(label);
+            components.get(getTranslation("html.components")).add(label);
         }
     }
 }
