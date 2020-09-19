@@ -1,5 +1,7 @@
 package com.github.appreciated.designer.template.java.parser;
 
+import com.github.appreciated.designer.model.CompilationMetainformation;
+import com.github.appreciated.designer.model.project.Project;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -23,10 +25,14 @@ public class ComponentTreeParser {
     Map<String, Component> fieldMap = new HashMap<>();
 
     private CompilationUnit compilationUnit;
+    private Project project;
     private String className;
 
-    public ComponentTreeParser(CompilationUnit compilationUnit) throws ParseException, ClassNotFoundException {
+    private Map<Component, CompilationMetainformation> compilationMetaInformation = new HashMap<>();
+
+    public ComponentTreeParser(CompilationUnit compilationUnit, Project project) throws ParseException, ClassNotFoundException {
         this.compilationUnit = compilationUnit;
+        this.project = project;
         if (compilationUnit.getPrimaryType().isPresent()) {
             TypeDeclaration<?> definition = compilationUnit.getPrimaryType().get();
             if (definition instanceof ClassOrInterfaceDeclaration) {
@@ -47,29 +53,31 @@ public class ComponentTreeParser {
         }
     }
 
-    public void invokeMethodOnComponent(MethodCallExpr expression, Component component, String method) throws ClassNotFoundException {
+    public Object invokeMethodOnComponent(MethodCallExpr expression, Component component) throws ClassNotFoundException {
         List<Object> list = new ArrayList<>();
         for (Expression expression1 : expression.getArguments()) {
-            Object o = resolveParameter(expression1);
+            Object o = resolveParameter(expression1, component);
             list.add(o);
         }
         Object[] args = list.toArray();
 
         Method[] foundMethods = Arrays.stream(component.getClass().getMethods())
-                .filter(method1 -> method1.getName().equals(method))
+                .filter(method1 -> method1.getName().equals(expression.getNameAsString()))
                 .filter(method1 -> method1.getParameterCount() == args.length || method1.isVarArgs())
                 .toArray(Method[]::new);
 
         boolean found = false;
         ArrayList<Throwable> errors = new ArrayList<>();
+        Object result = null;
         for (Method foundMethod : foundMethods) {
             try {
                 if (args.length == 1 && !foundMethod.isVarArgs()) {
-                    foundMethod.invoke(component, args[0]);
+                    result = foundMethod.invoke(component, args[0]);
+                    found = true;
                 } else {
-                    foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(Component[]::new)});
+                    result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(Component[]::new)});
+                    found = true;
                 }
-                found = true;
             } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
                 // These are only relevant if no fitting method was found so we save them for later
                 errors.add(e);
@@ -77,19 +85,31 @@ public class ComponentTreeParser {
         }
         if (!found) {
             errors.forEach(throwable -> throwable.printStackTrace());
-            throw new UnsupportedOperationException("No fitting Method found for:\"" + method + "\"");
+            throw new UnsupportedOperationException("No fitting Method found for:\"" + expression.getNameAsString() + "\"");
         }
+        return result;
     }
 
-    Object resolveParameter(Expression arg) throws ClassNotFoundException {
+    Object resolveParameter(Expression arg, Component component) throws ClassNotFoundException {
         if (arg instanceof StringLiteralExpr) {
             return ((StringLiteralExpr) arg).asString();
+        } else if (arg instanceof BooleanLiteralExpr) {
+            return ((BooleanLiteralExpr) arg).getValue();
         } else if (arg instanceof NameExpr) {
             return fieldMap.get(((NameExpr) arg).getNameAsString());
         } else if (arg instanceof FieldAccessExpr) {
             return resolveFieldAccess((FieldAccessExpr) arg);
+        } else if (arg instanceof MethodCallExpr) {
+            if (((MethodCallExpr) arg).getNameAsString().equals("getTranslation")) {
+                StringLiteralExpr argumentExpression = (StringLiteralExpr) ((MethodCallExpr) arg).getArguments().getFirst().get();
+                CompilationMetainformation info = new CompilationMetainformation();
+                info.setPropertyReplacement("text", argumentExpression.asString());
+                compilationMetaInformation.put(component, info);
+                return project.getTranslationForKey(argumentExpression.getValue());
+            }
+            return invokeMethodOnComponent((MethodCallExpr) arg, rootComponent);
         } else {
-            throw new UnsupportedOperationException("StringLiteralExpr and NameExpr are supported");
+            throw new UnsupportedOperationException(arg.getClass().getSimpleName() + " is not supported");
         }
     }
 
@@ -154,10 +174,7 @@ public class ComponentTreeParser {
             if (expression instanceof MethodCallExpr) {
                 MethodCallExpr methodCallExpr = (MethodCallExpr) expression;
                 Component relatedComponent = resolveComponent(methodCallExpr);
-                String method = methodCallExpr.getNameAsString();
-                invokeMethodOnComponent(methodCallExpr, relatedComponent, method);
-                //} else if (expression instanceof VariableDeclarationExpr) {
-                //    expression.g
+                invokeMethodOnComponent(methodCallExpr, relatedComponent);
             } else {
                 throw new UnsupportedOperationException("Currently only MethodCallExpr are supported");
             }
@@ -184,5 +201,9 @@ public class ComponentTreeParser {
 
     public String getClassName() {
         return className;
+    }
+
+    public Map<Component, CompilationMetainformation> getCompilationMetaInformation() {
+        return compilationMetaInformation;
     }
 }

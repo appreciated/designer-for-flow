@@ -24,6 +24,8 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,7 +34,7 @@ public class JavaGenerator {
     private final ConstructorDeclaration constructor;
     private final SourceRoot sourceRoot;
     private final DesignCompilerInformation designCompilerInformation;
-    int i = 0;
+    private final Map<String, Integer> counters = new HashMap<>();
     private ClassOrInterfaceDeclaration componentClass;
     private VaadinComponentJavaGeneratorCollection compilerCollection;
 
@@ -83,7 +85,7 @@ public class JavaGenerator {
         // create a field for the new component
         ObjectCreationExpr creation = new ObjectCreationExpr();
         creation.setType(actualComponent.getClass());
-        FieldDeclaration field = componentClass.addFieldWithInitializer(actualComponent.getClass(), "component" + i++, creation);
+        FieldDeclaration field = componentClass.addFieldWithInitializer(actualComponent.getClass(), getGeneratedFieldName(actualComponent) + getCounterForComponent(actualComponent), creation);
         field.createGetter();
         field.createSetter();
         // add a none parameterised initialization (a AssignExpr) to the constructor
@@ -92,6 +94,21 @@ public class JavaGenerator {
             addChildren(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
         }
         return field;
+    }
+
+    String getGeneratedFieldName(Component actualComponent) {
+        String name = actualComponent.getClass().getSimpleName();
+        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
+    }
+
+    private int getCounterForComponent(Component simpleName) {
+        String name = simpleName.getClass().getSimpleName();
+        if (counters.containsKey(name)) {
+            counters.put(name, counters.get(name) + 1);
+        } else {
+            counters.put(name, 1);
+        }
+        return counters.get(name);
     }
 
     private void addFieldProperties(Expression field, Component component) {
@@ -119,7 +136,7 @@ public class JavaGenerator {
     }
 
     private void addChildrenHasComponents(Expression expression, Component component, String method, boolean addAllAtOnce) {
-        Collection<Expression> fields = unwrapComponent(component).getChildren()
+        Collection<Expression> fields = ComponentContainerHelper.getChildren(unwrapComponent(component))
                 .map(this::addComponent)
                 .map(newField -> new NameExpr(newField.getVariables().get(0).getName()))
                 .collect(Collectors.toList());

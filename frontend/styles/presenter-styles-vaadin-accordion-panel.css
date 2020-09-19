@@ -1,0 +1,5 @@
+[part="content"] {
+    display: block;
+    max-height: unset !important;
+    overflow: visible;
+}

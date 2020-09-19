@@ -4,12 +4,12 @@ import com.github.appreciated.designer.model.DesignCompilerInformation;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public abstract class Project {
     private File projectRoot;
     private ArrayList<DesignCompilerInformation> templates = new ArrayList<>();
-    private File projectFolder;
 
     public Project(File projectFolder) {
         this.projectRoot = projectFolder;
@@ -22,7 +22,7 @@ public abstract class Project {
     }
 
     abstract public boolean hasThemeFile();
-    
+
     abstract public boolean createThemeFile();
 
     abstract public File getThemeFile();
@@ -47,4 +47,13 @@ public abstract class Project {
 
     public abstract void setSourceFolder(File folder);
 
+    public abstract File getResourceFolder();
+
+    public abstract void setResourceFolder(File folder);
+
+    public abstract boolean hasTranslations();
+
+    public abstract ResourceBundle getTranslationsBundle();
+
+    public abstract String getTranslationForKey(String key);
 }

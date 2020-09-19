@@ -1,25 +1,25 @@
 package com.github.appreciated.designer.events.designer.dnd;
 
-import com.vaadin.flow.component.Component;
+import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import org.springframework.context.ApplicationEvent;
 
 public class DesignerComponentDragEvent extends ApplicationEvent {
 
-    private Component draggedComponent;
+    private DesignerComponentWrapper draggedComponent;
     private boolean isStarted;
 
     public DesignerComponentDragEvent(Object source) {
         super(source);
     }
 
-    public DesignerComponentDragEvent(Object source, Component draggedComponent, boolean isStarted) {
+    public DesignerComponentDragEvent(Object source, DesignerComponentWrapper draggedComponent, boolean isStarted) {
         super(source);
         this.draggedComponent = draggedComponent;
         this.isStarted = isStarted;
     }
 
 
-    public Component getDraggedComponent() {
+    public DesignerComponentWrapper getDraggedComponent() {
         return draggedComponent;
     }
 

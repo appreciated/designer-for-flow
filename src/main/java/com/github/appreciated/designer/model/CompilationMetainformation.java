@@ -17,5 +17,4 @@ public class CompilationMetainformation {
     public void setPropertyReplacement(String property, Object replacement) {
         propertyReplacement.put(property, replacement);
     }
-
 }

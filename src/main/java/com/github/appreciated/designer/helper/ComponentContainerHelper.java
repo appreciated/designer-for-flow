@@ -1,11 +1,16 @@
 package com.github.appreciated.designer.helper;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.accordion.AccordionPanel;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ComponentContainerHelper {
@@ -14,7 +19,9 @@ public class ComponentContainerHelper {
         Class classInstance = component.getClass();
         for (Method method : classInstance.getMethods()) {
             if (method.getName().equals("add") || method.getName().equals("addContent")) {
-                return true;
+                if (method.getParameterCount() == 1) {
+                    return true;
+                }
             }
         }
         return false;
@@ -23,13 +30,26 @@ public class ComponentContainerHelper {
     public static void addComponent(Component parent, Component child) {
         Class classInstance = parent.getClass();
         for (Method method : classInstance.getMethods()) {
-            if (method.getName().equals("add")) {
-                try {
-                    method.invoke(parent, new Object[]{new Component[]{child}});
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+            if (method.getName().equals("add") || method.getName().equals("addContent")) {
+                if (method.getParameterCount() == 1) {
+                    try {
+                        Parameter parameter = method.getParameters()[0];
+                        if (parameter.getType() != String.class) {
+                            Class<?> type = parameter.getType();
+                            if (type.getComponentType() == null) {
+                                method.invoke(parent, new Object[]{child});
+                            } else {
+                                Class<?> componentType = type.getComponentType();
+                                Object[] array = (Object[]) Array.newInstance(componentType, 1);
+                                array[0] = child;
+                                method.invoke(parent, new Object[]{array});
+                            }
+                            return;
+                        }
+                    } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
+                        e.printStackTrace();
+                    }
                 }
-                return;
             }
         }
         throw new IllegalStateException("Could not find add Method for Class: " + parent.getClass().getSimpleName());
@@ -74,7 +94,12 @@ public class ComponentContainerHelper {
     }
 
     public static Stream<Component> getChildren(Component parent) {
-        return parent.getChildren();
+        if (parent instanceof AccordionPanel) {
+            List<Component> content = ((AccordionPanel) parent).getContent().collect(Collectors.toList());
+            return content.stream();
+        } else {
+            return parent.getChildren();
+        }
     }
 
     public static void removeAll(Component component) {

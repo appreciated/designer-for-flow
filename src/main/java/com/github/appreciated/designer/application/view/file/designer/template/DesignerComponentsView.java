@@ -3,6 +3,7 @@ package com.github.appreciated.designer.application.view.file.designer.template;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.DesignerComponent;
+import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.service.ComponentService;
 import com.google.common.collect.Lists;
@@ -74,13 +75,15 @@ public class DesignerComponentsView extends BaseView {
     private void initDragAndDrop(DesignerComponent component) {
         DesignerComponentLabel label = new DesignerComponentLabel(component);
         DragSource<DesignerComponentLabel> source = DragSource.create(label);
+
+        DesignerComponentWrapper designerComponentWrapper = label.getDesignerComponent().generateComponent();
         source.addDragStartListener(e -> {
-            projectFileModel.setCurrentDragItem(e.getComponent());
-            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(e.getComponent(), true);
+            projectFileModel.setCurrentDragItem(designerComponentWrapper);
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(designerComponentWrapper, true);
         });
         source.addDragEndListener(e -> {
             projectFileModel.removeCurrentDragItem();
-            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(e.getComponent(), false);
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(designerComponentWrapper, false);
         });
         if (component.getTagName().startsWith("<vaadin")) {
             components.get(getTranslation("vaadin.components")).add(label);

@@ -4,10 +4,8 @@ import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.template.java.generator.ComponentInformation;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.Component;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Configurable;
 
 import java.io.File;
@@ -18,7 +16,7 @@ import java.util.Map;
 @Configurable
 @NoArgsConstructor
 public class DesignCompilerInformation {
-	
+
     private Project project;
     private File design;
     private Component component;
@@ -30,17 +28,28 @@ public class DesignCompilerInformation {
 
     public void setProject(Project project) {
         this.project = project;
-        
+
         if (project.hasThemeFile()) {
             this.theme = new Theme(project);
         }
     }
 
     public CompilationMetainformation getComponentMetainfo(Component component) {
-        if (!compilationMetaInformation.containsKey(component)) {
+        if (hasComponentMetainfo(component)) {
+            return compilationMetaInformation.get(component);
+        } else {
+            return null;
+        }
+    }
+
+    public CompilationMetainformation getOrCreateCompilationMetainformation(Component component) {
+        if (!hasComponentMetainfo(component)) {
             compilationMetaInformation.put(component, new CompilationMetainformation());
         }
-        
         return compilationMetaInformation.get(component);
+    }
+
+    public boolean hasComponentMetainfo(Component component) {
+        return compilationMetaInformation.containsKey(component);
     }
 }

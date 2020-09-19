@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class ElementFocusedEvent extends ApplicationEvent {
 
-    private final DesignerComponentWrapper parent;
+    private final Component parent;
     private Component focus;
 
     public ElementFocusedEvent(Object source, Component focus, DesignerComponentWrapper parent) {
@@ -18,14 +18,14 @@ public class ElementFocusedEvent extends ApplicationEvent {
     public ElementFocusedEvent(ElementFocusedEventPublisher elementFocusedEventPublisher, Component focus) {
         super(elementFocusedEventPublisher);
         this.focus = focus;
-        parent = (DesignerComponentWrapper) focus.getParent().orElse(null);
+        parent = focus.getParent().orElse(null);
     }
 
     public Component getFocus() {
         return focus;
     }
 
-    public DesignerComponentWrapper getParent() {
+    public Component getParent() {
         return parent;
     }
 }

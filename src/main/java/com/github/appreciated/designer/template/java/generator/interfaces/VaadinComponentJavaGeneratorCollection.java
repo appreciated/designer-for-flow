@@ -9,12 +9,14 @@ public class VaadinComponentJavaGeneratorCollection extends ArrayList<VaadinComp
 
     public VaadinComponentJavaGeneratorCollection(DesignCompilerInformation designCompilerInformation) {
         addAll(Arrays.asList(
-                new HasSizeInterfaceJavaGenerator(),
+                new HasSizeJavaGenerator(),
                 new ImageJavaGenerator(designCompilerInformation),
-                new HasTextInterfaceJavaGenerator(),
-                new HasStyleInterfaceJavaGenerator(),
-                new HasThemeInterfaceJavaGenerator(),
-                new FlexComponentJavaGenerator()
+                new HasTextJavaGenerator(designCompilerInformation),
+                new HasStyleJavaGenerator(),
+                new ThemableLayoutJavaGenerator(),
+                new HasThemeJavaGenerator(),
+                new FlexComponentJavaGenerator(),
+                new TextFieldJavaGenerator(designCompilerInformation)
         ));
     }
 }

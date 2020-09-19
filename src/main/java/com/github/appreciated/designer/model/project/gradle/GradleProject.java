@@ -5,6 +5,7 @@ import com.github.appreciated.designer.model.project.ProjectInformation;
 import com.github.appreciated.designer.model.project.ProjectType;
 
 import java.io.File;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class GradleProject extends Project {
@@ -64,12 +65,37 @@ public class GradleProject extends Project {
     }
 
     @Override
+    public File getResourceFolder() {
+        return null;
+    }
+
+    @Override
+    public void setResourceFolder(File folder) {
+
+    }
+
+    @Override
+    public boolean hasTranslations() {
+        return false;
+    }
+
+    @Override
+    public ResourceBundle getTranslationsBundle() {
+        return null;
+    }
+
+    @Override
+    public String getTranslationForKey(String key) {
+        return null;
+    }
+
+    @Override
     public void setThemeFile(File themeFile) {
 
     }
 
-	@Override
-	public boolean createThemeFile() {
-		return false;
-	}
+    @Override
+    public boolean createThemeFile() {
+        return false;
+    }
 }

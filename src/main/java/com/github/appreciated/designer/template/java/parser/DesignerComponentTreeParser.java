@@ -10,6 +10,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.accordion.AccordionPanel;
 
 import java.io.File;
 import java.util.List;
@@ -30,14 +31,20 @@ public class DesignerComponentTreeParser {
         this.projectService = projectService;
         SourceRoot sourceRoot = new SourceRoot(projectService.getProject().getProjectRoot().toPath());
         CompilationUnit compilationUnit = sourceRoot.parse(CodeGenerationUtils.packageToPath(file.getParent()), file.getName());
-        generator = new ComponentTreeParser(compilationUnit);
+        generator = new ComponentTreeParser(compilationUnit, projectService.getProject());
     }
 
     public static Component wrap(Component component) {
         if (isComponentContainer(component)) {
             List<Component> children = ComponentContainerHelper.getChildren(component).collect(Collectors.toList());
             ComponentContainerHelper.removeAll(component);
-            children.forEach(child -> addComponent(component, wrap(child)));
+            children.forEach(child -> {
+                if (child instanceof AccordionPanel) {
+                    addComponent(component, child);
+                } else {
+                    addComponent(component, wrap(child));
+                }
+            });
             return new DesignerComponentWrapper(component);
         }
         return new DesignerComponentWrapper(component);
@@ -51,6 +58,7 @@ public class DesignerComponentTreeParser {
         DesignerComponentNormalizer.normalize(parsedComponent, info);
         info.setComponent(wrap(parsedComponent));
         info.setClassName(generator.getClassName());
+        info.setCompilationMetaInformation(generator.getCompilationMetaInformation());
         return info;
     }
 

@@ -2,12 +2,12 @@ package com.github.appreciated.designer.application.view.file.designer.sidebar;
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.Renderers;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.HasStyleRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer;
 import com.github.appreciated.designer.component.ComponentPropertyParser;
 import com.github.appreciated.designer.component.designer.StyleEditorDetails;
-import com.github.appreciated.designer.reflection.renderer.RenderPair;
-import com.github.appreciated.designer.reflection.renderer.Renderers;
-import com.github.appreciated.designer.reflection.renderer.property.interfaces.HasStyleInterfaceRenderer;
-import com.github.appreciated.designer.reflection.renderer.type.AbstractPropertyRenderer;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
@@ -58,7 +58,7 @@ public class PropertiesView extends BaseView {
                         }
                 ));
 
-        HasStyleInterfaceRenderer renderer = new HasStyleInterfaceRenderer();
+        HasStyleRenderer renderer = new HasStyleRenderer();
         if (renderer.canRender(propertyParent)) {
             Stream<RenderPair> component = renderer.render((HasStyle) propertyParent);
             RenderPair pair = component.findFirst().get();

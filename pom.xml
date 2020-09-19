@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependencies -->
-        <vaadin.version>14.3.5</vaadin.version>
+        <vaadin.version>14.3.7</vaadin.version>
         <vaadin.bowerMode>false</vaadin.bowerMode>
 
 		<!-- Apache -->
@@ -241,22 +241,11 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/webapp</directory>
-            </resource>
-        </resources>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
             <plugin>

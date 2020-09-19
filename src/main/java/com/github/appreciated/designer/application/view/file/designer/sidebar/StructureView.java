@@ -35,7 +35,7 @@ public class StructureView extends BaseView {
         grid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
         grid.setDragFilter(component -> component != projectFileModel.getInformation().getComponent());
         grid.addDragStartListener(dragStartEvent -> {
-            Component draggedItem = dragStartEvent.getDraggedItems().stream().findFirst().get().getParent().get();
+            DesignerComponentWrapper draggedItem = (DesignerComponentWrapper) dragStartEvent.getDraggedItems().stream().findFirst().get().getParent().get();
             projectFileModel.setCurrentDragItem(draggedItem);
             projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(draggedItem, true);
         });
@@ -61,7 +61,7 @@ public class StructureView extends BaseView {
                                 .publish(projectFileModel.getCurrentDragItem(), dropLocation.getParent().get());
                         break;
                     case ON_TOP:
-                        List<Component> containedChildren = dropLocation.getChildren().collect(Collectors.toList());
+                        List<Component> containedChildren = ComponentContainerHelper.getChildren(dropLocation).collect(Collectors.toList());
                         projectFileModel.getEventService()
                                 .getDesignerComponentDropEventPublisher()
                                 .publish(projectFileModel.getCurrentDragItem(), containedChildren.get(containedChildren.size() - 1));
