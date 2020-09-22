@@ -36,7 +36,7 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
                     result -> {
                         component.setText(getProjectFileModel().getInformation().getProject().getTranslationForKey(result));
                         textField.setValue(result);
-                        textField.setReadOnly(false);
+                        textField.setReadOnly(true);
                     }).open();
         });
         HorizontalLayout buttons = new HorizontalLayout(clear, localizationButton);

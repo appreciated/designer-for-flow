@@ -41,6 +41,10 @@ public class LocalisationKeySelectionDialog extends Dialog {
             localisationKeys.addValueChangeListener(event -> {
                 save.setEnabled(event.getValue() != null);
             });
+            if (model.getInformation().hasComponentMetainfo(component) &&
+                    model.getInformation().getComponentMetainfo(component).hasPropertyReplacement("text")) {
+                localisationKeys.setValue((String) model.getInformation().getComponentMetainfo(component).getPropertyReplacement("text"));
+            }
             layout.add(localisationKeys);
             footer.add(save);
         } else {
