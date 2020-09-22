@@ -5,7 +5,7 @@
 
 This is a WYSIWYG-Editor that allows to create and edit Components for the Vaadin Platform.
 
-Currently the following input and output formats being supported:
+Currently the following input and output formats are supported:
 - Java Classes    
 
 # Executing
