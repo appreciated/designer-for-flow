@@ -3,6 +3,7 @@ package com.github.appreciated.designer.application.view;
 import com.github.appreciated.designer.component.AddButton;
 import com.github.appreciated.designer.component.IconButton;
 import com.github.appreciated.designer.component.ironpages.IronPages;
+import com.github.appreciated.designer.helper.UrlHelper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -42,7 +43,12 @@ public class ProjectView extends VerticalLayout {
         button.getStyle().set("font-size", "25px").set("margin-right", "-20px");
         button.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         button.addClickListener(event -> UI.getCurrent().navigate(ProjectSelectionView.class));
-        appBar.add(button, logo, label, tabs);
+        Button donate = new Button(getTranslation("donate"), VaadinIcon.HEART.create(), event -> UrlHelper.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RH84HC939XQHS"));
+        donate.getStyle()
+                .set("flex-shrink", "0")
+                .set("margin-right", "10px");
+        donate.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        appBar.add(button, logo, label, tabs, donate);
         appBar.setAlignItems(Alignment.CENTER);
         appBar.getStyle()
                 .set("box-shadow", "var(--lumo-box-shadow-s)")
