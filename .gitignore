@@ -14,3 +14,4 @@ webpack.generated.js
 /.settings
 .classpath
 .project
+/database/db.trace.db
