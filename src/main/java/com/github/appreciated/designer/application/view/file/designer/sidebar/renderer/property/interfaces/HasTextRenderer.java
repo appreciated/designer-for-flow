@@ -25,7 +25,7 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
     public Stream<RenderPair> render(HasText component) {
         TextField textField = new TextField();
         Button clear = new Button(VaadinIcon.CLOSE_SMALL.create(), event -> {
-            textField.setValue(null);
+            textField.setValue("");
             textField.setReadOnly(false);
         });
         clear.addThemeVariants(ButtonVariant.LUMO_TERTIARY);

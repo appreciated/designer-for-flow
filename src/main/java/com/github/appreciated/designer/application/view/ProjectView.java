@@ -18,7 +18,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import javax.validation.constraints.NotNull;
 import java.util.function.Consumer;
 
-@StyleSheet("frontend://styles/styles.css")
+@StyleSheet("./styles/styles.css")
 public class ProjectView extends VerticalLayout {
 
     private final Tabs tabs;
@@ -31,7 +31,7 @@ public class ProjectView extends VerticalLayout {
         tabs.setHeight("60px");
         dial = new AddButton(VaadinIcon.PLUS.create());
         dial.setBottom("30px");
-        Image logo = new Image("./frontend/styles/images/logo-floating-low.png", "logo");
+        Image logo = new Image("img/logo-floating-low.png", "logo");
         logo.getStyle().set("padding", "4px");
         logo.setHeight("48px");
         Label label = new Label(getTranslation("designer.for.flow"));
