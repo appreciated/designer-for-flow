@@ -143,7 +143,7 @@ public class MavenProject extends Project {
 
     @Override
     public String getTranslationForKey(String key) {
-        if (hasTranslations()) {
+        if (hasTranslations() && getTranslationsBundle().containsKey(key)) {
             return getTranslationsBundle().getString(key);
         }
         return null;
@@ -159,9 +159,8 @@ public class MavenProject extends Project {
     public ResourceBundle getTranslationsBundle() {
         if (hasTranslations()) {
             try {
-                File file = getResourceFolder();
-                URL[] urls = new URL[]{file.toURI().toURL()};
-                ClassLoader loader = new URLClassLoader(urls);
+                URL fileUrl = getResourceFolder().toURI().toURL();
+                ClassLoader loader = new URLClassLoader(new URL[]{fileUrl});
                 return ResourceBundle.getBundle("i18n", Locale.getDefault(), loader);
             } catch (MalformedURLException e) {
                 e.printStackTrace();

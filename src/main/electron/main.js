@@ -105,7 +105,7 @@ const spawnServerProcess = function () {
     var filename = getJavaFile();
     platform = process.platform;
     if (platform === 'win32') {
-        return require('child_process').spawn('jre/bin/java', ['-jar', filename, '--logging.file=flow-designer.log'], {
+        return require('child_process').spawn('jre/bin/java', ['-jar', '-Dvaadin.productionMode=true', filename, '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/'
         }).on('error', function (code, signal) {
             showStartUpErrorMessage();
@@ -122,7 +122,7 @@ const spawnServerProcess = function () {
             app.quit();
             return null;
         }
-        return require('child_process').spawn('jre/Contents/Home/bin/java', ['-jar', filename, '--logging.file=flow-designer.log'], {
+        return require('child_process').spawn('jre/Contents/Home/bin/java', ['-jar', '-Dvaadin.productionMode=true', filename, '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/'
         }).on('error', function (code, signal) {
             showStartUpErrorMessage();
