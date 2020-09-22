@@ -28,6 +28,7 @@ public class StructureView extends BaseView {
         super("structure");
 
         grid = new TreeGrid<>();
+        grid.setVerticalScrollingEnabled(true);
         grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER);
         grid.addHierarchyColumn(component -> component.getClass().getSimpleName());
         grid.setSizeFull();

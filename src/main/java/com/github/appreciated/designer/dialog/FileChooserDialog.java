@@ -151,6 +151,7 @@ public class FileChooserDialog extends Dialog {
 
     protected void initGrid(final File parent) {
         this.grid = new TreeGrid<>();
+        grid.setVerticalScrollingEnabled(true);
         refresh(parent);
         grid.addItemDoubleClickListener(this::processDoubleClickEvent);
         grid.addSelectionListener(e -> update(e.getFirstSelectedItem().orElse(null)));
