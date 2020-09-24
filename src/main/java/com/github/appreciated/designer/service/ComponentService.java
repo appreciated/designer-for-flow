@@ -8,6 +8,7 @@ import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -51,6 +52,7 @@ public class ComponentService {
                 Anchor.class,
                 Button.class,
                 Checkbox.class,
+                CheckboxGroup.class,
                 ComboBox.class,
                 ContextMenu.class,
                 DatePicker.class,
