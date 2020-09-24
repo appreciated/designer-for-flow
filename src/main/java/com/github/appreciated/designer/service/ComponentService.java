@@ -10,7 +10,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -54,7 +53,6 @@ public class ComponentService {
                 Checkbox.class,
                 ComboBox.class,
                 ContextMenu.class,
-                CustomField.class,
                 DatePicker.class,
                 DateTimePicker.class,
                 EmailField.class,
@@ -88,8 +86,13 @@ public class ComponentService {
 
         return list.stream().map(aClass -> {
             try {
-                return new DesignerComponent(aClass.getAnnotation(Tag.class).value(), aClass);
+                if (aClass.isAnnotationPresent(Tag.class)) {
+                    return new DesignerComponent(aClass.getAnnotation(Tag.class).value(), aClass);
+                } else {
+                    return new DesignerComponent(aClass.getSimpleName(), aClass);
+                }
             } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                System.err.println(aClass.getSimpleName());
                 e.printStackTrace();
             }
             return null;
