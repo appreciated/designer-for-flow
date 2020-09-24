@@ -6,7 +6,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.beans.PropertyDescriptor;
 
-public class StringPropertyRenderer extends AbstractPropertyRenderer {
+public class StringPropertyRenderer extends AbstractPropertyRenderer<String> {
     @Override
     public boolean canRender(Component propertyParent, String propertyName, PropertyDescriptor propertyDescriptor) {
         return propertyDescriptor.getPropertyType() == String.class;

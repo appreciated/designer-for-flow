@@ -7,7 +7,7 @@ import com.vaadin.flow.component.HasValue;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class AbstractPropertyRenderer {
+public abstract class AbstractPropertyRenderer<T> {
 
     private ProjectFileModel projectFileModel;
 
@@ -16,9 +16,9 @@ public abstract class AbstractPropertyRenderer {
     public abstract Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent);
 
 
-    public void applyValue(Component propertyParent, PropertyDescriptor propertyDescriptor, Object icon) {
+    public void applyValue(Component propertyParent, PropertyDescriptor propertyDescriptor, T object) {
         try {
-            propertyDescriptor.getWriteMethod().invoke(propertyParent, icon);
+            propertyDescriptor.getWriteMethod().invoke(propertyParent, object);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -30,11 +30,11 @@ public abstract class AbstractPropertyRenderer {
         }
     }
 
-    public void setProjectFileModel(ProjectFileModel projectFileModel) {
-        this.projectFileModel = projectFileModel;
-    }
-
     public ProjectFileModel getProjectFileModel() {
         return projectFileModel;
+    }
+
+    public void setProjectFileModel(ProjectFileModel projectFileModel) {
+        this.projectFileModel = projectFileModel;
     }
 }

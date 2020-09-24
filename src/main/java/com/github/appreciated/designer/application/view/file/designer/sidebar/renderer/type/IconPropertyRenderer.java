@@ -9,7 +9,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import java.beans.PropertyDescriptor;
 
-public class IconPropertyRenderer extends AbstractPropertyRenderer {
+public class IconPropertyRenderer extends AbstractPropertyRenderer<Component> {
 
     @Override
     public boolean canRender(Component propertyParent, String propertyName, PropertyDescriptor propertyDescriptor) {

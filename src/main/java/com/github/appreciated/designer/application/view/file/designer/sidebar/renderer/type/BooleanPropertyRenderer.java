@@ -6,10 +6,10 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
-public class BooleanPropertyRenderer extends AbstractPropertyRenderer {
+public class BooleanPropertyRenderer extends AbstractPropertyRenderer<Boolean> {
     @Override
     public boolean canRender(Component propertyParent, String propertyName, PropertyDescriptor propertyDescriptor) {
-        return propertyDescriptor.getPropertyType() == Boolean.class || propertyDescriptor.getPropertyType().getName().equals("boolean");
+        return propertyDescriptor.getPropertyType() == Boolean.class || propertyDescriptor.getPropertyType() == boolean.class;
     }
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {

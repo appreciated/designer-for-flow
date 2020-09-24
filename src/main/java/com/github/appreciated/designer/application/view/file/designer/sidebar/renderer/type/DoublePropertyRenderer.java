@@ -6,10 +6,10 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.beans.PropertyDescriptor;
 
-public class DoublePropertyRenderer extends AbstractPropertyRenderer {
+public class DoublePropertyRenderer extends AbstractPropertyRenderer<Double> {
     @Override
     public boolean canRender(Component propertyParent, String propertyName, PropertyDescriptor propertyDescriptor) {
-        return propertyDescriptor.getPropertyType() == Double.class || propertyDescriptor.getPropertyType().getName().equals("double");
+        return propertyDescriptor.getPropertyType() == Double.class || propertyDescriptor.getPropertyType() == double.class;
     }
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
