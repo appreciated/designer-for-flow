@@ -16,6 +16,7 @@ public class Renderers {
     private List<AbstractPropertyRenderer> propertyRenderer = new ArrayList<>();
 
     public Renderers(ProjectFileModel projectFileModel) {
+
         typeRenderer.addAll(Arrays.asList(
                 new StringPropertyRenderer(),
                 new BooleanPropertyRenderer(),
@@ -24,14 +25,18 @@ public class Renderers {
                 new IconPropertyRenderer()
         ));
         propertyRenderer.addAll(Arrays.asList(
+                new FlexComponentRenderer(),
                 new HasThemeRenderer(),
-                new ThemableLayoutRenderer(),
+                new HasItemsRenderer(),
                 new HasSizeRenderer(),
                 new HasTextRenderer(),
-                new FlexComponentRenderer(),
+                new ThemableLayoutRenderer()
+        ));
+        propertyRenderer.addAll(Arrays.asList(
                 new ComponentRenderer(),
                 new ImageRenderer()
-        ));
+                )
+        );
         typeRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
         propertyRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
     }
@@ -43,5 +48,4 @@ public class Renderers {
     public List<AbstractPropertyRenderer> getPropertyRenderers() {
         return propertyRenderer;
     }
-
 }
