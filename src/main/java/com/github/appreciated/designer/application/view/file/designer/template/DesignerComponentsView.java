@@ -8,9 +8,8 @@ import com.github.appreciated.designer.component.designer.DesignerComponentLabel
 import com.github.appreciated.designer.service.ComponentService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.vaadin.flow.component.accordion.Accordion;
-import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.dnd.DragSource;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -23,10 +22,9 @@ public class DesignerComponentsView extends BaseView {
     private static final long serialVersionUID = 3391173526041012926L;
 
     private final TextField search;
-    private final Accordion accordion;
-
     private final Map<String, VerticalLayout> componentsCategories;
     private final Map<String, List<DesignerComponentLabel>> components;
+    private final VerticalLayout componentsContainer;
     private ProjectFileModel projectFileModel;
 
 
@@ -37,8 +35,9 @@ public class DesignerComponentsView extends BaseView {
         componentsCategories = Maps.newHashMap();
         components = Maps.newHashMap();
 
-        accordion = new Accordion();
-
+        componentsContainer = new VerticalLayout();
+        componentsContainer.setPadding(false);
+        componentsContainer.setMargin(false);
         ComponentService service = new ComponentService();
         search = new TextField();
         search.setPlaceholder(getTranslation("search"));
@@ -52,17 +51,20 @@ public class DesignerComponentsView extends BaseView {
         components.put(getTranslation("html.components"), Lists.newArrayList());
         service.getAllComponents().forEach(this::initDragAndDrop);
         components.keySet().forEach(key -> {
-            AccordionPanel accordionPanel = new AccordionPanel();
-            accordionPanel.setSummaryText(key);
+            VerticalLayout accordionPanel = new VerticalLayout();
+            accordionPanel.setMargin(false);
+            accordionPanel.setPadding(false);
+            accordionPanel.add(new H3(key));
             VerticalLayout wrapper = new VerticalLayout();
+            wrapper.setMargin(false);
             wrapper.setPadding(false);
-            accordionPanel.addContent(wrapper);
+            accordionPanel.add(wrapper);
             componentsCategories.put(key, wrapper);
-            accordion.add(accordionPanel);
+            componentsContainer.add(accordionPanel);
         });
         initAccordions(null);
-        add(accordion);
-        accordion.setSizeFull();
+        add(componentsContainer);
+        componentsContainer.setSizeFull();
     }
 
     private void initAccordions(String name) {

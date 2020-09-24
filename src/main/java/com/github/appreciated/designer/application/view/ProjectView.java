@@ -43,7 +43,7 @@ public class ProjectView extends VerticalLayout {
         button.getStyle().set("font-size", "25px").set("margin-right", "-20px");
         button.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         button.addClickListener(event -> UI.getCurrent().navigate(ProjectSelectionView.class));
-        Button donate = new Button(getTranslation("donate"), VaadinIcon.HEART.create(), event -> UrlHelper.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RH84HC939XQHS"));
+        Button donate = new Button(getTranslation("donate"), VaadinIcon.COFFEE.create(), event -> UrlHelper.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RH84HC939XQHS"));
         donate.getStyle()
                 .set("flex-shrink", "0")
                 .set("margin-right", "10px");
