@@ -11,9 +11,6 @@ class DesignerComponentWrapper extends PolymerElement {
             ::slotted(*) {
                flex: 1 1;
             }
-            slot.no-pointer-events::slotted(*) {
-                pointer-events: none;
-            }
             #wrapper::after {
                 border: 0px solid rgba(255,255,255,0);
                 content: "";
@@ -23,6 +20,9 @@ class DesignerComponentWrapper extends PolymerElement {
                 height: 100%;
                 transition: border 0.3s ease;
                 pointer-events: none;
+            }
+            #wrapper.no-pointer-events::after {
+                pointer-events: all;
             }
             #wrapper.focus::after {
                 opacity: 1;

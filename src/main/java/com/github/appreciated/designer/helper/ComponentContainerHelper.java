@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.helper;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 
 import java.lang.reflect.Array;
@@ -16,11 +17,14 @@ import java.util.stream.Stream;
 public class ComponentContainerHelper {
 
     public static boolean isComponentContainer(Component component) {
+
         Class classInstance = component.getClass();
         for (Method method : classInstance.getMethods()) {
             if (method.getName().equals("add") || method.getName().equals("addContent")) {
                 if (method.getParameterCount() == 1) {
-                    return true;
+                    if (!(component instanceof HasText)) {
+                        return true;
+                    }
                 }
             }
         }

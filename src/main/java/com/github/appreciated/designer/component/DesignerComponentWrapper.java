@@ -22,15 +22,13 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     @Id("wrapper")
     Div wrapper;
     private Component actualComponent;
-    @Id("content")
-    private Slot slot;
     private Consumer consumer;
 
     public DesignerComponentWrapper(Component component) {
         this.actualComponent = component;
         getElement().appendChild(component.getElement());
         if (!isComponentContainer(component)) {
-            slot.getElement().getClassList().add("no-pointer-events");
+            wrapper.getElement().getClassList().add("no-pointer-events");
         }
         if (actualComponent instanceof HasSize) {
             if (((HasSize) actualComponent).getWidth() != null) {
@@ -86,10 +84,6 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     public void setHeightFull() {
         HasSize.super.setHeightFull();
         wrapper.setHeightFull();
-    }
-
-    public Slot getSlot() {
-        return slot;
     }
 
     public Component getActualComponent() {

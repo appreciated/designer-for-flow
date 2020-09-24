@@ -55,6 +55,7 @@ public class ComponentService {
                 ContextMenu.class,
                 DatePicker.class,
                 DateTimePicker.class,
+                Div.class,
                 EmailField.class,
                 FormLayout.class,
                 Grid.class,
