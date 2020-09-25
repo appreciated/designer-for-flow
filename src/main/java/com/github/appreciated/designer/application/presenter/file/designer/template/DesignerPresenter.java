@@ -25,6 +25,7 @@ import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.component.dnd.EffectAllowed;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -54,23 +55,20 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         DropTarget<Component> dropTarget = DropTarget.create(designerRoot);
         dropTarget.setDropEffect(DropEffect.MOVE);
         dropTarget.addDropListener(event -> {
-            if (event.getComponent() instanceof DesignerComponentWrapper) {
-                Component actualComponent = ((DesignerComponentWrapper) event.getComponent()).getActualComponent();
-                Component dragSourceComponent = event.getDragSourceComponent().get();
-                if (isComponentContainer(actualComponent)) {
-                    ComponentContainerHelper.addComponent(actualComponent, dragSourceComponent);
-                }
-                notifyStructureListeners();
-            }
+            List<Component> components = designerRoot.getActualComponent().getChildren().collect(Collectors.toList());
+
+            Component currentDragItem = projectFileModel.getCurrentDragItem() != null ? projectFileModel.getCurrentDragItem() : event.getDragSourceComponent().get();
+
+            handleDropEvent(currentDragItem, components.get(components.size() - 1));
         });
 
         ComponentContainerHelper.getChildren(designerRoot.getActualComponent()).forEach(this::initDragAndDropListeners);
 
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
-            if (elementFocusedEvent.getParent() instanceof DesignerComponentWrapper) {
-                focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getParent());
-            } else {
-
+            if (elementFocusedEvent.getFocus() instanceof DesignerComponentWrapper) {
+                focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getFocus());
+            } else if (elementFocusedEvent.getFocus().getParent().isPresent() && elementFocusedEvent.getFocus().getParent().get() instanceof DesignerComponentWrapper) {
+                focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getFocus().getParent().get());
             }
         });
         eventService.getThemeChangedEventListener().addEventConsumer(themeChangedEvent -> {
@@ -218,7 +216,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         }
     }
 
-    private void handleDropEvent(DesignerComponentWrapper draggedComponent, Component targetComponent) {
+    private void handleDropEvent(Component draggedComponent, Component targetComponent) {
         // If a DesignerComponentLabel is dropped onto the root it needs to be transformed into the actual representation
         if (!dropWasHandled(draggedComponent, targetComponent)) {
             draggedComponent.getParent().ifPresent(component -> {
@@ -234,16 +232,18 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
                 });
             }
         }
+        getModel().getEventService().getFocusedEventPublisher().publish(draggedComponent);
     }
 
-    private boolean dropWasHandled(DesignerComponentWrapper draggedComponent, Component targetComponent) {
-        Optional<DropHandler> handler = Arrays.stream(dropHandlers).filter(dropHandler1 -> dropHandler1.canHandleDropEvent(draggedComponent, targetComponent)).findFirst();
-        if (handler.isPresent()) {
-            handler.get().handleDropEvent(draggedComponent, targetComponent);
-            return true;
-        } else {
-            return false;
+    private boolean dropWasHandled(Component draggedComponent, Component targetComponent) {
+        if (draggedComponent instanceof DesignerComponentWrapper) {
+            Optional<DropHandler> handler = Arrays.stream(dropHandlers).filter(dropHandler1 -> dropHandler1.canHandleDropEvent((DesignerComponentWrapper) draggedComponent, targetComponent)).findFirst();
+            if (handler.isPresent()) {
+                handler.get().handleDropEvent((DesignerComponentWrapper) draggedComponent, targetComponent);
+                return true;
+            }
         }
+        return false;
     }
 
     private boolean dragTargetWasHandled(DesignerComponentWrapper draggedComponent, Component targetComponent) {
@@ -260,7 +260,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
 
     private void initDesignerComponentWrapper(DesignerComponentWrapper generatedComponent) {
         generatedComponent.setNonNestedClickListener(o -> {
-            notifyFocusListeners(generatedComponent.getActualComponent(), generatedComponent);
+            notifyFocusListeners(generatedComponent.getActualComponent());
         });
     }
 
@@ -272,8 +272,8 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         currentFocus = generatedComponent;
     }
 
-    private void notifyFocusListeners(Component actualComponent, DesignerComponentWrapper parent) {
-        getModel().getEventService().getFocusedEventPublisher().publish(actualComponent, parent);
+    private void notifyFocusListeners(Component actualComponent) {
+        getModel().getEventService().getFocusedEventPublisher().publish(actualComponent);
     }
 
 }

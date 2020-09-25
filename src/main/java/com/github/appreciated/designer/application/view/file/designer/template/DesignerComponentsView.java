@@ -80,7 +80,7 @@ public class DesignerComponentsView extends BaseView {
 
         DesignerComponentWrapper designerComponentWrapper = label.getDesignerComponent().generateComponent();
         designerComponentWrapper.setNonNestedClickListener(o -> {
-            projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper.getActualComponent(), designerComponentWrapper);
+            projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper);
         });
 
         source.addDragStartListener(e -> {
