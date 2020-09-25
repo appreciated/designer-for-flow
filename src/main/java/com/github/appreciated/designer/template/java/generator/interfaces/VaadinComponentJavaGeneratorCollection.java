@@ -16,7 +16,8 @@ public class VaadinComponentJavaGeneratorCollection extends ArrayList<VaadinComp
                 new ThemableLayoutJavaGenerator(),
                 new HasThemeJavaGenerator(),
                 new FlexComponentJavaGenerator(),
-                new TextFieldJavaGenerator(designCompilerInformation)
+                new TextFieldJavaGenerator(designCompilerInformation),
+                new HasItemsJavaGenerator(designCompilerInformation)
         ));
     }
 }

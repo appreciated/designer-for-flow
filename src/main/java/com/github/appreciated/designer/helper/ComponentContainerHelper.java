@@ -3,6 +3,7 @@ package com.github.appreciated.designer.helper;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.accordion.AccordionPanel;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -22,7 +23,7 @@ public class ComponentContainerHelper {
         for (Method method : classInstance.getMethods()) {
             if (method.getName().equals("add") || method.getName().equals("addContent")) {
                 if (method.getParameterCount() == 1) {
-                    if (!(component instanceof HasText)) {
+                    if (!(component instanceof HasText || component instanceof CheckboxGroup)) {
                         return true;
                     }
                 }

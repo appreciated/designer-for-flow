@@ -9,6 +9,7 @@ import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +39,15 @@ public class HasItemsRenderer extends AbstractPropertyRenderer<HasItems> {
             multiselectComboBox.setItems(updatedItems);
             multiselectComboBox.setValue(value);
         });
-        multiselectComboBox.addValueChangeListener(event -> propertyParent.setItems(event.getValue()));
+        if (getProjectFileModel().getInformation().hasComponentMetainfo((Component) propertyParent) && getProjectFileModel().getInformation().getComponentMetainfo((Component) propertyParent).hasPropertyReplacement("items")) {
+            multiselectComboBox.setItems((Set<String>) getProjectFileModel().getInformation().getComponentMetainfo((Component) propertyParent).getPropertyReplacement("items"));
+            multiselectComboBox.setValue((Set<String>) getProjectFileModel().getInformation().getComponentMetainfo((Component) propertyParent).getPropertyReplacement("items"));
+        }
+
+        multiselectComboBox.addValueChangeListener(event -> {
+            getProjectFileModel().getInformation().getOrCreateCompilationMetainformation((Component) propertyParent).setPropertyReplacement("items", event.getValue());
+            propertyParent.setItems(event.getValue());
+        });
         return Stream.of(new RenderPair("items", multiselectComboBox));
     }
 

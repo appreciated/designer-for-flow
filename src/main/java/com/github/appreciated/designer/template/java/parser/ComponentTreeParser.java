@@ -12,10 +12,12 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.data.binder.HasItems;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ComponentTreeParser {
@@ -75,7 +77,16 @@ public class ComponentTreeParser {
                     result = foundMethod.invoke(component, args[0]);
                     found = true;
                 } else {
-                    result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(Component[]::new)});
+                    if (args[0].getClass() == String.class) {
+                        result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(String[]::new)});
+                        if (component instanceof HasItems && foundMethod.getName().equals("setItems")) {
+                            CompilationMetainformation info = new CompilationMetainformation();
+                            info.setPropertyReplacement("items", Arrays.stream(Arrays.stream(args).toArray(String[]::new)).collect(Collectors.toSet()));
+                            compilationMetaInformation.put(component, info);
+                        }
+                    } else {
+                        result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(Component[]::new)});
+                    }
                     found = true;
                 }
             } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
