@@ -22,7 +22,9 @@ public class Renderers {
                 new BooleanPropertyRenderer(),
                 new IntegerPropertyRenderer(),
                 new DoublePropertyRenderer(),
-                new IconPropertyRenderer()
+                new IconPropertyRenderer(),
+                new LocalDateTimePropertyRenderer(),
+                new DurationPropertyRenderer()
         ));
         propertyRenderer.addAll(Arrays.asList(
                 new FlexComponentRenderer(),

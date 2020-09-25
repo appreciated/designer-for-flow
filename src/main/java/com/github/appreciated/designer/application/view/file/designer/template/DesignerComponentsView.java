@@ -79,6 +79,10 @@ public class DesignerComponentsView extends BaseView {
         DragSource<DesignerComponentLabel> source = DragSource.create(label);
 
         DesignerComponentWrapper designerComponentWrapper = label.getDesignerComponent().generateComponent();
+        designerComponentWrapper.setNonNestedClickListener(o -> {
+            projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper.getActualComponent(), designerComponentWrapper);
+        });
+
         source.addDragStartListener(e -> {
             projectFileModel.setCurrentDragItem(designerComponentWrapper);
             projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(designerComponentWrapper, true);
