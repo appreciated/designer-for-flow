@@ -1,7 +1,11 @@
 package com.github.appreciated.designer.theme.css.style;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ClassPathResource;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,21 +19,18 @@ public class CssStyles {
     private static CssStyles instance;
     Map<String, CssStyle> styles = new HashMap<>();
 
-    private CssStyles() throws IOException {
-        File file = new File(this.getClass().getClassLoader().getResource("msdn-css.ref").getFile());
-        List<String> lines = Files.readAllLines(file.toPath());
-        lines.forEach(s -> {
-            styles.put(s.substring(46), new CssStyle(s.substring(46), s));
-        });
+    private CssStyles() {
+        try {
+            IOUtils.readLines(new ClassPathResource("msdn-css.ref").getInputStream(), Charset.defaultCharset())
+                    .forEach(s -> styles.put(s.substring(46), new CssStyle(s.substring(46), s)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static CssStyles getInstance() {
         if (instance == null) {
-            try {
-                instance = new CssStyles();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            instance = new CssStyles();
         }
         return instance;
     }

@@ -5,7 +5,7 @@
     <groupId>com.github.appreciated</groupId>
     <artifactId>designer-for-flow</artifactId>
     <name>Designer for Flow</name>
-    <version>0.7.8-SNAPSHOT</version>
+    <version>0.7.9-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -161,11 +161,6 @@
             <groupId>com.github.appreciated</groupId>
             <artifactId>color-picker-field-flow</artifactId>
             <version>2.0.0.beta6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.gatanaso</groupId>
-            <artifactId>multiselect-combo-box-flow</artifactId>
-            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.github.appreciated</groupId>
@@ -374,7 +369,7 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v8.17.0</nodeVersion>
+                                    <nodeVersion>v12.18.4</nodeVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -614,6 +609,46 @@
                                         </resource>
                                     </resources>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- Production mode is activated using -Pproduction -->
+            <id>production-test</id>
+            <properties>
+                <vaadin.productionMode>true</vaadin.productionMode>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>flow-server-production-mode</artifactId>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <jvmArguments>-Dvaadin.productionMode</jvmArguments>
+                            <executable>true</executable>
+                            <outputDirectory>target/electron/java</outputDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-frontend</goal>
+                                </goals>
+                                <phase>compile</phase>
                             </execution>
                         </executions>
                     </plugin>

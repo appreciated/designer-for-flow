@@ -1,13 +1,13 @@
 {
   "name": "designer-for-flow",
-  "version": "0.6.5",
+  "version": "0.7.9",
   "main": "main.js",
   "license": "GPL-3.0",
   "description": "Electron wrapper for 'Designer for Flow'",
   "dependencies": {
-    "electron-packager": "^13.1.1",
-    "minimal-request-promise": "^1.4.0",
-    "tree-kill": "^1.1.0"
+    "electron-packager": "^15.1.0",
+    "minimal-request-promise": "^1.5.0",
+    "tree-kill": "^1.2.2"
   },
   "scripts": {
     "package": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml",
@@ -17,6 +17,6 @@
     "package-all": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=all"
   },
   "devDependencies": {
-    "electron": "^5.0.1"
+    "electron": "^10.1.2"
   }
 }
