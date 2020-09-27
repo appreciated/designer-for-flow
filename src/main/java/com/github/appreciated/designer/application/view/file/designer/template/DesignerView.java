@@ -64,13 +64,12 @@ public class DesignerView extends BaseView {
 
         designWrapper = new VerticalLayout();
         designWrapper.getElement().getClassList().add("design-view");
-        designWrapper.setWidth("50%");
-        designWrapper.setHeight("50%");
         designWrapper.add(designHolder);
         designWrapper.setMargin(false);
         designWrapper.setPadding(false);
         designWrapper.getStyle()
                 .set("resize", "both")
+                .set("flex-shrink", "0")
                 .set("overflow", "hidden");
 
         wrapperContainer = new HorizontalLayout(designWrapper);
