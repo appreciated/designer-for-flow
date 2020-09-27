@@ -52,7 +52,7 @@ public class FileChooserDialog extends Dialog {
 
         initGrid(parentFile);
 
-        select = new Button(getTranslation("select"), event -> onSelectSelected());
+        select = new Button(getTranslation("open"), event -> onSelectSelected());
         select.setThemeName(ButtonVariant.LUMO_PRIMARY.getVariantName());
         buttons = new HorizontalLayout(select);
         buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
@@ -126,6 +126,18 @@ public class FileChooserDialog extends Dialog {
             }
         };
         grid.setDataProvider(dataProvider);
+        if (parent.isDirectory()) {
+            String[] list = parent.list();
+            if (list.length > 0) {
+                File firstChild = new File(parent.getPath() + File.separator + list[0]);
+                if (firstChild.isDirectory()) {
+                    String[] firstChildList = firstChild.list();
+                    if (list.length == 1 && firstChildList.length == 1) {
+                        grid.expandRecursively(Stream.of(firstChild), singleDirectoriesRecursive(Arrays.asList(firstChild), -1));
+                    }
+                }
+            }
+        }
     }
 
     protected void update() {

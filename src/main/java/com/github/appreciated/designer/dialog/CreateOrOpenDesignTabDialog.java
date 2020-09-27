@@ -47,7 +47,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         contextMenu = createContextMenu();
 
         contextMenuAdd = contextMenu.addItem(getTranslation("create.new.class"), e -> onCreateSelected());
-        contextMenuSelect = contextMenu.addItem(getTranslation("select"), e -> onSelectSelected());
+        contextMenuSelect = contextMenu.addItem(getTranslation("open"), e -> onSelectSelected());
 
         addButton = new Button(getTranslation("add.new.design"), buttonClickEvent -> onCreateSelected());
         getButtons().addComponentAtIndex(0, addButton);
