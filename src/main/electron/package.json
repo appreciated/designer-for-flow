@@ -5,18 +5,18 @@
   "license": "GPL-3.0",
   "description": "Electron wrapper for 'Designer for Flow'",
   "dependencies": {
-    "electron-packager": "^15.1.0",
     "minimal-request-promise": "^1.5.0",
-    "tree-kill": "^1.2.2"
+    "get-port": "^5.1.1"
   },
   "scripts": {
-    "package": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml",
-    "package-windows": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=win32",
-    "package-linux": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=linux",
-    "package-mac": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=darwin",
-    "package-all": "electron-packager ./ --icon=icon.ico --ignore=README.md --ignore=.idea --ignore=src --ignore=pom.xml --platform=all"
+    "package": "electron-packager ./ --icon=icon.ico --ignore=node\\b",
+    "package-windows": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=win32",
+    "package-linux": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=linux",
+    "package-mac": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=darwin",
+    "package-all": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=all"
   },
   "devDependencies": {
+    "electron-packager": "^15.1.0",
     "electron": "^10.1.2"
   }
 }

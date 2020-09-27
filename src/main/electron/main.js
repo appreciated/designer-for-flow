@@ -1,16 +1,16 @@
 const {
-    app, session, protocol, BrowserWindow, Menu, globalShortcut, dialog
+    app, BrowserWindow, dialog
 } = require('electron');
-const remote = require('electron').remote;
+let i18n;
 const path = require('path');
 let mainWindow = null;
 let loading = null;
 let serverProcess = null;
+let allowClose = false;
 const gotTheLock = app.requestSingleInstanceLock();
-const port = 8080;
 const showDesigner = function (appUrl) {
     mainWindow = new BrowserWindow({
-        title: 'Flow Designer'
+        title: i18n.__('designer-for-flow')
         , show: false
         , width: 1200
         , height: 800
@@ -27,16 +27,19 @@ const showDesigner = function (appUrl) {
         app.quit();
     });
     mainWindow.on('close', function (e) {
-        if (serverProcess) {
-            var choice = require('electron').dialog.showMessageBox(this, {
+        if (serverProcess && !allowClose) {
+            dialog.showMessageBox(this, {
                 type: 'question'
-                , buttons: ['Yes', 'No']
-                , title: 'Confirm'
-                , message: 'Are you sure you want to quit?'
+                , buttons: [i18n.__('yes'), i18n.__('no')]
+                , title: i18n.__('confirm')
+                , message: i18n.__("are-you-sure-you-want-to-quit")
+            }).then(result => {
+                if (result.response === 0) {
+                    allowClose = true;
+                    app.quit();
+                }
             });
-            if (choice == 1) {
-                e.preventDefault();
-            }
+            e.preventDefault();
         }
     });
 };
@@ -75,60 +78,51 @@ const getJavaFile = function () {
     }
     return filename;
 };
-const isPortAvailable = function (callback) {
-    var server = require('net').createServer(function (socket) {
-        socket.write('Echo server\r\n');
-        socket.pipe(socket);
-    });
-    server.listen(port, '127.0.0.1');
-    server.on('error', function (e) {
-        callback(false);
-    });
-    server.on('listening', function (e) {
-        server.close();
-        callback(true);
-    });
-};
 const showStartUpErrorMessage = function () {
     setTimeout(function () {
         dialog.showMessageBox(null, {
             type: 'error'
-            , buttons: ['Ok']
-            , title: 'Java Runtime not available'
-            , message: '"Designer for Flow" is not able to start. There seem to be issues related to the shipped Open JDK.'
+            , buttons: [i18n.__('ok')]
+            , title: i18n.__("java-runtime-not-available")
+            , message: i18n.__("java-runtime-not-available-long")
         });
         app.quit();
     }, 200);
 }
-const spawnServerProcess = function () {
-    require('child_process').exec('chmod +X ' + app.getAppPath() + '/java/jre/Contents/Home/bin/' + 'java');
+const spawnServerProcess = function (port) {
     var filename = getJavaFile();
     platform = process.platform;
     if (platform === 'win32') {
-        return require('child_process').spawn('jre/bin/java', ['-jar', '-Dvaadin.productionMode=true', filename, '--logging.file=flow-designer.log'], {
+        return require('child_process').spawn('jre/bin/java', ['-jar', '-Dvaadin.productionMode=true', '-Dserver.port=' + port, filename, '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/'
         }).on('error', function (code, signal) {
             showStartUpErrorMessage();
         });
-    }
-    else if (platform === 'darwin') {
+    } else if (platform === 'darwin') {
+        require('child_process').exec('chmod +X ' + app.getAppPath() + '/java/jre/Contents/Home/bin/' + 'java');
         if (!app.getAppPath().startsWith("/Applications/")) {
             dialog.showMessageBox(null, {
                 type: 'error'
-                , buttons: ['Ok']
-                , title: 'Wrong directory'
-                , message: '"Designer for Flow" is not able to start. Please move the application folder to "Applications".'
+                , buttons: [i18n.__('ok')]
+                , title: i18n.__('wrong-directory')
+                , message: i18n.__('wrong-directory-long')
             });
             app.quit();
             return null;
         }
-        return require('child_process').spawn('jre/Contents/Home/bin/java', ['-jar', '-Dvaadin.productionMode=true', filename, '--logging.file=flow-designer.log'], {
+        return require('child_process').spawn('jre/Contents/Home/bin/java', ['-jar', '-Dvaadin.productionMode=true', '-Dserver.port=' + port, filename, '--logging.file=flow-designer.log'], {
             cwd: app.getAppPath() + '/java/'
         }).on('error', function (code, signal) {
             showStartUpErrorMessage();
         });
     }
-    else {
+    if (platform === 'linux') {
+        return require('child_process').spawn('jre/Contents/Home/bin', ['-jar', '-Dvaadin.productionMode=true', '-Dserver.port=' + port, filename, '--logging.file=flow-designer.log'], {
+            cwd: app.getAppPath() + '/java/'
+        }).on('error', function (code, signal) {
+            showStartUpErrorMessage();
+        });
+    } else {
         throw new Error("Platform not supported");
     }
 };
@@ -143,32 +137,23 @@ const showLoadingScreen = function () {
 };
 if (!gotTheLock) {
     app.quit()
-}
-else {
+} else {
     focusSecondInstance();
     app.on('window-all-closed', function () {
         app.quit();
     });
     app.on('ready', function () {
-        isPortAvailable(function (isPort) {
-            if (!isPort) {
-                dialog.showMessageBox(null, {
-                    type: 'error'
-                    , buttons: ['Ok']
-                    , title: 'Port not available'
-                    , message: '"Designer for Flow" is not able to start if port ' + port + ' is not free.'
-                });
-                app.quit();
-            }
-            else {
-                showLoadingScreen();
-                serverProcess = spawnServerProcess();
-                var appUrl = "http://localhost:" + port;
-                awaitStartUp(appUrl, function () {
-                    showDesigner(appUrl);
-                });
-            }
-        });
+        i18n = new (require('./translations/i18n'));
+        showLoadingScreen();
+        const getPort = require('get-port');
+        (async () => {
+            const port = await getPort();
+            serverProcess = spawnServerProcess(port);
+            var appUrl = "http://localhost:" + port;
+            awaitStartUp(appUrl, function () {
+                showDesigner(appUrl);
+            });
+        })();
     });
     app.on('will-quit', function () {
         serverProcess.kill('SIGINT');
