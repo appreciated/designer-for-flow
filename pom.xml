@@ -18,13 +18,17 @@
         <vaadin.version>14.3.7</vaadin.version>
         <vaadin.bowerMode>false</vaadin.bowerMode>
 
-		<!-- Apache -->
-		<apache2.commons.io.version>2.7</apache2.commons.io.version><!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-		<apache2.commons.net.version>3.6</apache2.commons.net.version><!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
-		<apache2.commons.collections4.version>4.4</apache2.commons.collections4.version><!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4  -->
-		
-		<!-- Google -->
-		<google.guava.version>29.0-jre</google.guava.version><!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <!-- Apache -->
+        <apache2.commons.io.version>2.7
+        </apache2.commons.io.version><!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <apache2.commons.net.version>3.6
+        </apache2.commons.net.version><!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+        <apache2.commons.collections4.version>4.4
+        </apache2.commons.collections4.version><!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4  -->
+
+        <!-- Google -->
+        <google.guava.version>29.0-jre
+        </google.guava.version><!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
     </properties>
 
     <parent>
@@ -75,7 +79,7 @@
     </dependencyManagement>
 
     <dependencies>
-    	<!-- Vaadin -->
+        <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <!-- Replace artifactId with vaadin-core to use only free components -->
@@ -119,7 +123,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -191,43 +195,43 @@
             <artifactId>cssparser</artifactId>
             <version>0.9.27</version>
         </dependency>
-			
-		<!-- Apache -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${apache2.commons.io.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>${apache2.commons.net.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>${apache2.commons.collections4.version}</version>
-		</dependency>
-			
-		<!-- Google -->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${google.guava.version}</version>
-		</dependency>
-        
-		<!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+
+        <!-- Apache -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${apache2.commons.io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${apache2.commons.net.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${apache2.commons.collections4.version}</version>
+        </dependency>
+
+        <!-- Google -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${google.guava.version}</version>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <!-- Testing -->
@@ -360,7 +364,7 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>1.10.0</version>
                         <configuration>
-                            <installDirectory>target/electron</installDirectory>
+                            <installDirectory>target/node</installDirectory>
                         </configuration>
                         <executions>
                             <execution>
@@ -441,10 +445,13 @@
                                     <goal>wget</goal>
                                 </goals>
                                 <configuration>
+                                    <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
                                     <url>
                                         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_windows_hotspot_8u265b01.zip
                                     </url>
-                                    <outputDirectory>${project.build.directory}/openjdk-jre/windows/</outputDirectory>
+                                    <outputDirectory>
+                                        ${project.build.directory}/electron/designer-for-flow-win32-x64/resources/app/java
+                                    </outputDirectory>
                                     <outputFileName>jre_windows.zip</outputFileName>
                                 </configuration>
                             </execution>
@@ -455,10 +462,13 @@
                                     <goal>wget</goal>
                                 </goals>
                                 <configuration>
+                                    <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
                                     <url>
                                         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_mac_hotspot_8u265b01.tar.gz
                                     </url>
-                                    <outputDirectory>${project.build.directory}/openjdk-jre/mac-os/</outputDirectory>
+                                    <outputDirectory>
+                                        ${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java
+                                    </outputDirectory>
                                     <outputFileName>jre_mac.tar.gz</outputFileName>
                                 </configuration>
                             </execution>
@@ -469,63 +479,14 @@
                                     <goal>wget</goal>
                                 </goals>
                                 <configuration>
+                                    <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
                                     <url>
                                         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_linux_hotspot_8u265b01.tar.gz
                                     </url>
-                                    <outputDirectory>${project.build.directory}/openjdk-jre/linux/</outputDirectory>
+                                    <outputDirectory>
+                                        ${project.build.directory}/electron/designer-for-flow-linux-x64/resources/app/java
+                                    </outputDirectory>
                                     <outputFileName>jre_linux.tar.gz</outputFileName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>truezip-maven-plugin</artifactId>
-                        <version>1.2</version>
-                        <executions>
-                            <execution>
-                                <id>unpack-openjdk-jre-mac-os</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <configuration>
-                                    <fileset>
-                                        <directory>${project.build.directory}/openjdk-jre/mac-os/jre_mac.tar.gz
-                                        </directory>
-                                        <outputDirectory>${project.build.directory}/openjdk-jre/mac-os/
-                                        </outputDirectory>
-                                    </fileset>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>unpack-openjdk-jre-windows</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <configuration>
-                                    <fileset>
-                                        <directory>${project.build.directory}/openjdk-jre/windows/jre_windows.zip
-                                        </directory>
-                                        <outputDirectory>${project.build.directory}/openjdk-jre/windows/
-                                        </outputDirectory>
-                                    </fileset>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>unpack-openjdk-jre-linux</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <configuration>
-                                    <fileset>
-                                        <directory>${project.build.directory}/openjdk-jre/linux/jre_linux.tar.gz
-                                        </directory>
-                                        <outputDirectory>${project.build.directory}/openjdk-jre/linux/
-                                        </outputDirectory>
-                                    </fileset>
                                 </configuration>
                             </execution>
                         </executions>
@@ -552,60 +513,6 @@
                                             <includes>
                                                 <include>LICENSE</include>
                                             </includes>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>copy-openjdk-jre-windows</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>
-                                        ${project.build.directory}/electron/designer-for-flow-win32-x64/resources/app/java/jre
-                                    </outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.directory}/openjdk-jre/windows/jdk8u265-b01-jre
-                                            </directory>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>copy-openjdk-jre-mac-os</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>
-                                        ${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java/jre/
-                                    </outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.directory}/openjdk-jre/mac-os/jdk8u265-b01-jre
-                                            </directory>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>copy-openjdk-jre-linux</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>
-                                        ${project.build.directory}/electron/designer-for-flow-linux-x64/resources/app/java/jre/
-                                    </outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.directory}/openjdk-jre/mac-os/jdk8u265-b01-jre
-                                            </directory>
                                         </resource>
                                     </resources>
                                 </configuration>

@@ -1,22 +1,23 @@
 {
   "name": "designer-for-flow",
   "version": "0.7.9",
-  "main": "main.js",
+  "main": "./main.js",
   "license": "GPL-3.0",
   "description": "Electron wrapper for 'Designer for Flow'",
   "dependencies": {
     "minimal-request-promise": "^1.5.0",
-    "get-port": "^5.1.1"
+    "get-port": "^5.1.1",
+    "decompress": "^4.2.1"
   },
   "scripts": {
     "package": "electron-packager ./ --icon=icon.ico --ignore=node\\b",
-    "package-windows": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=win32",
-    "package-linux": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=linux",
-    "package-mac": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=darwin",
-    "package-all": "electron-packager ./ --icon=icon.ico --ignore=node\\b --platform=all"
+    "package-windows": "electron-packager ./ --icon=icon.ico  --platform=win32",
+    "package-linux": "electron-packager ./ --icon=icon.ico  --platform=linux",
+    "package-mac": "electron-packager ./ --icon=icon.ico --platform=darwin",
+    "package-all": "electron-packager ./ --icon=icon.ico --platform=all"
   },
   "devDependencies": {
     "electron-packager": "^15.1.0",
-    "electron": "^10.1.2"
+    "electron": "^10.1.3"
   }
 }
