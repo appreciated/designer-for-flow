@@ -81,18 +81,30 @@ public class JavaGenerator {
     }
 
     private FieldDeclaration addComponent(Component component) {
-        Component actualComponent = unwrapComponent(component);
-        // create a field for the new component
+        FieldDeclaration field = null;
         ObjectCreationExpr creation = new ObjectCreationExpr();
-        creation.setType(actualComponent.getClass());
-        FieldDeclaration field = componentClass.addFieldWithInitializer(actualComponent.getClass(), getGeneratedFieldName(actualComponent) + getCounterForComponent(actualComponent), creation);
+        // Project Components
+        Component actualComponent = unwrapComponent(component);
+        if (designCompilerInformation.hasComponentMetainfo(actualComponent) && designCompilerInformation.getComponentMetainfo(actualComponent).isProjectComponent()) {
+            compilationUnit.addImport(designCompilerInformation.getComponentMetainfo(actualComponent).getPackageDeclaration() + "." + designCompilerInformation.getComponentMetainfo(actualComponent).getClassName());
+            creation.setType(designCompilerInformation.getComponentMetainfo(actualComponent).getClassName());
+
+            field = componentClass.addFieldWithInitializer(
+                    designCompilerInformation.getComponentMetainfo(actualComponent).getClassName(),
+                    designCompilerInformation.getComponentMetainfo(actualComponent).getClassName() + getCounterForComponent(designCompilerInformation.getComponentMetainfo(actualComponent).getClassName()), creation
+            );
+        } else {
+            // All other Components
+            creation.setType(actualComponent.getClass());
+            field = componentClass.addFieldWithInitializer(actualComponent.getClass(), getGeneratedFieldName(actualComponent) + getCounterForComponent(actualComponent), creation);
+            addFieldProperties(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
+            if (ComponentContainerHelper.isComponentContainer(actualComponent, designCompilerInformation) && ComponentContainerHelper.getChildren(actualComponent).count() > 0) {
+                addChildren(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
+            }
+        }
         field.createGetter();
         field.createSetter();
         // add a none parameterised initialization (a AssignExpr) to the constructor
-        addFieldProperties(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
-        if (ComponentContainerHelper.isComponentContainer(actualComponent) && ComponentContainerHelper.getChildren(actualComponent).count() > 0) {
-            addChildren(new NameExpr(field.getVariables().get(0).getName()), actualComponent);
-        }
         return field;
     }
 
@@ -102,7 +114,10 @@ public class JavaGenerator {
     }
 
     private int getCounterForComponent(Component simpleName) {
-        String name = simpleName.getClass().getSimpleName();
+        return getCounterForComponent(simpleName.getClass().getSimpleName());
+    }
+
+    private int getCounterForComponent(String name) {
         if (counters.containsKey(name)) {
             counters.put(name, counters.get(name) + 1);
         } else {
@@ -120,7 +135,6 @@ public class JavaGenerator {
                         expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))
                 );
     }
-
 
     private void addChildren(Expression expression, Component component) {
         Component actualComponent = component instanceof DesignerComponentWrapper ? ((DesignerComponentWrapper) component).getActualComponent() : component;

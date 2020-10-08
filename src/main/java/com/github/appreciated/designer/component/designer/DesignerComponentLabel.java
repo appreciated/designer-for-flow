@@ -9,9 +9,9 @@ public class DesignerComponentLabel extends Span {
     private String name;
 
     public DesignerComponentLabel(DesignerComponent designerComponent) {
-        super(designerComponent.getClassName().getSimpleName());
+        super(designerComponent.getClassNameAsString());
         this.designerComponent = designerComponent;
-        name = designerComponent.getClassName().getSimpleName();
+        name = designerComponent.getClassNameAsString();
         setWidthFull();
         getStyle().set("cursor", "grab")
                 .set("padding", "5px")

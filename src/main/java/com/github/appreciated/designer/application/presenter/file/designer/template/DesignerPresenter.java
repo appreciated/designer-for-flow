@@ -101,7 +101,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
 
     private void initDesignerComponentWrappers(DesignerComponentWrapper component) {
         initDesignerComponentWrapper(component);
-        if (isComponentContainer(component.getActualComponent())) {
+        if (isComponentContainer(component.getActualComponent(), projectFileModel.getInformation())) {
             ComponentContainerHelper.getChildren(component.getActualComponent()).forEach(component1 -> {
                 if (!(component1 instanceof AccordionPanel)) {
                     initDesignerComponentWrappers((DesignerComponentWrapper) component1);
@@ -125,7 +125,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             initDesignerComponentWrapper((DesignerComponentWrapper) component);
             addDragListener(component);
             addDropListener(component);
-            if (isComponentContainer(((DesignerComponentWrapper) component).getActualComponent())) {
+            if (isComponentContainer(((DesignerComponentWrapper) component).getActualComponent(), projectFileModel.getInformation())) {
                 ComponentContainerHelper.getChildren(((DesignerComponentWrapper) component).getActualComponent()).forEach(this::initDragAndDropListeners);
             }
         }
@@ -159,7 +159,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private void addHasComponentsFiller(Component designerComponentWrapper, DesignerComponentWrapper draggedComponent) {
-        if (isComponentContainer(unwrapDesignerComponent(designerComponentWrapper))) {
+        if (isComponentContainer(unwrapDesignerComponent(designerComponentWrapper), projectFileModel.getInformation())) {
             ComponentContainerHelper.getChildren(unwrapDesignerComponent(designerComponentWrapper)).collect(Collectors.toList()).forEach(component -> {
                 if (component instanceof DesignerComponentWrapper) {
                     addHasComponentsFiller(component, draggedComponent);
@@ -183,10 +183,10 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
 
     private void removeHasComponentsFiller(Component componentContainer) {
         Component unwrappedComponent = unwrapDesignerComponent(componentContainer);
-        if (isComponentContainer(unwrappedComponent)) {
+        if (isComponentContainer(unwrappedComponent, projectFileModel.getInformation())) {
             ComponentContainerHelper.getChildren(unwrappedComponent).collect(Collectors.toList()).forEach(component -> {
                 Component unwrappedChild = unwrapDesignerComponent(component);
-                if (isComponentContainer(unwrappedChild) && !(unwrappedChild instanceof DropTargetComponent)) {
+                if (isComponentContainer(unwrappedChild, projectFileModel.getInformation()) && !(unwrappedChild instanceof DropTargetComponent)) {
                     removeHasComponentsFiller(unwrappedChild);
                 }
                 if (unwrappedChild instanceof DropTargetComponent) {
@@ -220,13 +220,13 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         // If a DesignerComponentLabel is dropped onto the root it needs to be transformed into the actual representation
         if (!dropWasHandled(draggedComponent, targetComponent)) {
             draggedComponent.getParent().ifPresent(component -> {
-                if (isComponentContainer(component)) {
+                if (isComponentContainer(component, projectFileModel.getInformation())) {
                     removeChild(component, draggedComponent);
                 }
             });
             if (targetComponent instanceof DesignerComponentWrapper || targetComponent instanceof DropTargetDiv) {
                 targetComponent.getParent().ifPresent(component1 -> {
-                    if (isComponentContainer(component1)) {
+                    if (isComponentContainer(component1, projectFileModel.getInformation())) {
                         ComponentContainerHelper.addComponentAtIndex(component1, ComponentContainerHelper.indexOf(component1, targetComponent), draggedComponent);
                     }
                 });

@@ -24,7 +24,7 @@ public class DesignerComponentNormalizer {
 
     public void iterate(Component component) {
         processComponent(component);
-        if (isComponentContainer(component)) {
+        if (isComponentContainer(component, compilerInformation)) {
             getChildren(component).forEach(this::iterate);
         }
     }

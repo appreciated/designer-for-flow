@@ -4,6 +4,7 @@ import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
+import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
@@ -23,6 +24,7 @@ public class StructureView extends BaseView {
 
     // Data
     private final TreeGrid<Component> grid;
+    private final DesignCompilerInformation info;
 
     public StructureView(final ProjectFileModel projectFileModel) {
         super("structure");
@@ -30,7 +32,15 @@ public class StructureView extends BaseView {
         grid = new TreeGrid<>();
         grid.setVerticalScrollingEnabled(true);
         grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER);
-        grid.addHierarchyColumn(component -> component.getClass().getSimpleName());
+        info = projectFileModel.getInformation();
+
+        grid.addHierarchyColumn(component -> {
+            if (info.hasComponentMetainfo(component) && info.getComponentMetainfo(component).isProjectComponent()) {
+                return info.getComponentMetainfo(component).getClassName();
+            } else {
+                return component.getClass().getSimpleName();
+            }
+        });
         grid.setSizeFull();
         grid.setRowsDraggable(true);
         grid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
@@ -93,7 +103,7 @@ public class StructureView extends BaseView {
         if (designRootComponent != null) {
             uiAccess(() -> {
                 grid.setItems(Collections.singletonList(unpack(designRootComponent)), component -> {
-                    if (ComponentContainerHelper.isComponentContainer(component)) {
+                    if (ComponentContainerHelper.isComponentContainer(component, info)) {
                         return unpack(ComponentContainerHelper.getChildren(component)).collect(Collectors.toList());
                     } else {
                         return Collections.emptyList();

@@ -24,10 +24,10 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     private Component actualComponent;
     private Consumer consumer;
 
-    public DesignerComponentWrapper(Component component) {
+    public DesignerComponentWrapper(Component component, boolean isProjectComponent) {
         this.actualComponent = component;
         getElement().appendChild(component.getElement());
-        if (!isComponentContainer(component)) {
+        if (!isComponentContainer(component, isProjectComponent)) {
             wrapper.getElement().getClassList().add("no-pointer-events");
         }
         if (actualComponent instanceof HasSize) {

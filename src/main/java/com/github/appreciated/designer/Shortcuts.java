@@ -19,7 +19,7 @@ public class Shortcuts {
             if (isNoDialogOpen(ui)) {
                 if (service.getCurrentProjectFileModel() != null && service.getCurrentProjectFileModel().getCurrentFocus() != null) {
                     service.getCurrentProjectFileModel().getCurrentFocus().getParent().get().getParent().ifPresent(parent -> {
-                        if (isComponentContainer(parent)) {
+                        if (isComponentContainer(parent, service.getCurrentProjectFileModel().getInformation())) {
                             removeChild(parent, service.getCurrentProjectFileModel().getCurrentFocus().getParent().get());
                             eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFileModel().getInformation().getComponent());
                         } else {

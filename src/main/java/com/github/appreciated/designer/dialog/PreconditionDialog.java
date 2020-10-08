@@ -2,6 +2,7 @@ package com.github.appreciated.designer.dialog;
 
 import com.github.appreciated.designer.component.DesignerComponent;
 import com.github.appreciated.designer.file.HasPreconditions;
+import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.service.ComponentService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -23,13 +24,15 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class PreconditionDialog extends Dialog {
+    private Project project;
     private final HasPreconditions preconditions;
     private final H2 header;
     private ComponentService componentService;
     private final Binder<Map<String, Object>> binder;
     private final FormLayout form;
 
-    public PreconditionDialog(HasPreconditions preconditions, Consumer onFulfilled) {
+    public PreconditionDialog(Project project, HasPreconditions preconditions, Consumer onFulfilled) {
+        this.project = project;
         this.preconditions = preconditions;
         this.componentService = new ComponentService();
         header = new H2(getTranslation("please.enter.the.following.data"));
@@ -86,7 +89,7 @@ public class PreconditionDialog extends Dialog {
             ComboBox<Class> comboBox = new ComboBox<>();
             comboBox.setLabel(entry.getKey());
             comboBox.setItemLabelGenerator(Class::getSimpleName);
-            comboBox.setItems(componentService.getAllComponents().map(DesignerComponent::getClassName));
+            comboBox.setItems(componentService.getAllButProjectComponents().map(DesignerComponent::getClassName));
             binder.forField(comboBox)
                     .asRequired()
                     .bind((ValueProvider<Map<String, Object>, Class>) map -> (Class) map.get(entry.getKey()),

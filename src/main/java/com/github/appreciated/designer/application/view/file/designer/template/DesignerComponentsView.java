@@ -6,8 +6,6 @@ import com.github.appreciated.designer.component.DesignerComponent;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.service.ComponentService;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -15,8 +13,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DesignerComponentsView extends BaseView {
     private static final long serialVersionUID = 3391173526041012926L;
@@ -32,8 +33,8 @@ public class DesignerComponentsView extends BaseView {
         super("components");
         this.projectFileModel = projectFileModel;
 
-        componentsCategories = Maps.newHashMap();
-        components = Maps.newHashMap();
+        componentsCategories = new HashMap<>();
+        components = new HashMap<>();
 
         componentsContainer = new VerticalLayout();
         componentsContainer.setPadding(false);
@@ -47,9 +48,15 @@ public class DesignerComponentsView extends BaseView {
         search.setClearButtonVisible(true);
         search.addValueChangeListener(event -> initAccordions(event.getValue()));
         add(search);
-        components.put(getTranslation("vaadin.components"), Lists.newArrayList());
-        components.put(getTranslation("html.components"), Lists.newArrayList());
-        service.getAllComponents().forEach(this::initDragAndDrop);
+        components.put(getTranslation("project.components"), new ArrayList<>());
+        components.put(getTranslation("vaadin.components"), new ArrayList<>());
+        components.put(getTranslation("html.components"), new ArrayList<>());
+        service.getHtmlComponents()
+                .forEach(component -> initDragAndDrop(component, getTranslation("html.components")));
+        service.getVaadinComponents()
+                .forEach(component -> initDragAndDrop(component, getTranslation("vaadin.components")));
+        service.getProjectComponents(projectFileModel.getInformation().getProject())
+                .forEach(component -> initDragAndDrop(component, getTranslation("project.components")));
         components.keySet().forEach(key -> {
             VerticalLayout accordionPanel = new VerticalLayout();
             accordionPanel.setMargin(false);
@@ -74,27 +81,29 @@ public class DesignerComponentsView extends BaseView {
                 .forEach(designerComponentLabel -> componentsCategories.get(key).add(designerComponentLabel)));
     }
 
-    private void initDragAndDrop(DesignerComponent component) {
+
+    private void initDragAndDrop(DesignerComponent component, String key) {
         DesignerComponentLabel label = new DesignerComponentLabel(component);
         DragSource<DesignerComponentLabel> source = DragSource.create(label);
 
-        DesignerComponentWrapper designerComponentWrapper = label.getDesignerComponent().generateComponent();
-        designerComponentWrapper.setNonNestedClickListener(o -> {
-            projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper);
-        });
-
+        AtomicReference<DesignerComponentWrapper> currentComponent = new AtomicReference<>();
         source.addDragStartListener(e -> {
-            projectFileModel.setCurrentDragItem(designerComponentWrapper);
-            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(designerComponentWrapper, true);
+            currentComponent.set(generateDesignerComponentWrapper(label.getDesignerComponent()));
+            projectFileModel.setCurrentDragItem(currentComponent.get());
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(currentComponent.get(), true);
         });
         source.addDragEndListener(e -> {
             projectFileModel.removeCurrentDragItem();
-            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(designerComponentWrapper, false);
+            projectFileModel.getEventService().getDesignerComponentDragEventPublisher().publish(currentComponent.get(), false);
         });
-        if (component.getTagName().startsWith("<vaadin")) {
-            components.get(getTranslation("vaadin.components")).add(label);
-        } else {
-            components.get(getTranslation("html.components")).add(label);
-        }
+        components.get(key).add(label);
+    }
+
+    DesignerComponentWrapper generateDesignerComponentWrapper(DesignerComponent component) {
+        DesignerComponentWrapper designerComponentWrapper = component.generateComponent(projectFileModel);
+        designerComponentWrapper.setNonNestedClickListener(o -> {
+            projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper);
+        });
+        return designerComponentWrapper;
     }
 }

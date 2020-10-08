@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.dialog;
 
 import com.github.appreciated.designer.file.JavaFile;
+import com.github.appreciated.designer.model.project.Project;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
@@ -14,16 +15,13 @@ import lombok.Getter;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.github.appreciated.designer.file.JavaFile.PACKAGE;
+import static com.github.appreciated.designer.helper.DesignerFileHelper.isFileDesignerFile;
 
 @Getter
 public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
@@ -36,13 +34,15 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
     protected final GridContextMenu<File> contextMenu;
     protected final GridMenuItem<File> contextMenuAdd;
     protected final GridMenuItem<File> contextMenuSelect;
+    private Project project;
 
-    public CreateOrOpenDesignTabDialog(final File parentFile, final Consumer<File> fileConsumer) {
-        this(parentFile, fileConsumer, true);
+    public CreateOrOpenDesignTabDialog(Project project, final File parentFile, final Consumer<File> fileConsumer) {
+        this(project, parentFile, fileConsumer, true);
     }
 
-    public CreateOrOpenDesignTabDialog(final File parentFile, final Consumer<File> fileConsumer, final boolean init) {
+    public CreateOrOpenDesignTabDialog(Project project, final File parentFile, final Consumer<File> fileConsumer, final boolean init) {
         super(parentFile, fileConsumer, false, false);
+        this.project = project;
 
         contextMenu = createContextMenu();
 
@@ -104,7 +104,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
             objectHashMap.put(PACKAGE, packageName);
             objectHashMap.put(JavaFile.SOURCE_FILE, parentFile);
             javaFile.setPreconditions(objectHashMap);
-            new PreconditionDialog(javaFile, o -> {
+            new PreconditionDialog(this.project, javaFile, o -> {
                 getFileConsumer().accept(javaFile.create());
                 close();
             }).open();
@@ -145,7 +145,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         if (file.isDirectory()) {
             layout.add(VaadinIcon.FOLDER.create());
         } else {
-            if (isDesignerFile(file)) {
+            if (isFileDesignerFile(file)) {
                 layout.add(VaadinIcon.VAADIN_H.create());
             } else {
                 layout.add(VaadinIcon.FILE.create());
@@ -153,16 +153,6 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         }
         layout.add(new Span(file.getName()));
         return layout;
-    }
-
-    boolean isDesignerFile(File file) {
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(file.getPath()));
-            return lines.stream().anyMatch(line -> line.startsWith("@Generated(value = \"com.github.appreciated.designer.template.java.generator.JavaGenerator\""));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override
@@ -179,7 +169,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
     @Override
     public void update(final File selectedFile) {
         if (selectedFile != null) {
-            select.setEnabled(!selectedFile.isDirectory() && isDesignerFile(selectedFile));
+            select.setEnabled(!selectedFile.isDirectory() && isFileDesignerFile(selectedFile));
             addButton.setEnabled(selectedFile.isDirectory());
         } else {
             select.setEnabled(false);

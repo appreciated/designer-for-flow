@@ -57,7 +57,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         });
 
         getContent().getDial().addClickListener(event -> {
-            files = new CreateOrOpenDesignTabDialog(projectService.getProject().getSourceFolder(), this::addTab);
+            files = new CreateOrOpenDesignTabDialog(projectService.getProject(), projectService.getProject().getSourceFolder(), this::addTab);
             files.open();
         });
     }

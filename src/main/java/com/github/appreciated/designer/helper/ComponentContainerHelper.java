@@ -1,5 +1,6 @@
 package com.github.appreciated.designer.helper;
 
+import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.accordion.AccordionPanel;
@@ -17,19 +18,27 @@ import java.util.stream.Stream;
 
 public class ComponentContainerHelper {
 
-    public static boolean isComponentContainer(Component component) {
+    public static boolean isComponentContainer(Component component, DesignCompilerInformation designCompilerInformation) {
+        return isComponentContainer(component, isProjectComponent(component, designCompilerInformation));
+    }
 
+    public static boolean isComponentContainer(Component component, boolean isProjectComponent) {
         Class classInstance = component.getClass();
         for (Method method : classInstance.getMethods()) {
             if (method.getName().equals("add") || method.getName().equals("addContent")) {
                 if (method.getParameterCount() == 1) {
-                    if (!(component instanceof HasText || component instanceof CheckboxGroup)) {
+                    if (!(component instanceof HasText || component instanceof CheckboxGroup || isProjectComponent)) {
                         return true;
                     }
                 }
             }
         }
         return false;
+    }
+
+    public static boolean isProjectComponent(Component component, DesignCompilerInformation designCompilerInformation) {
+        return designCompilerInformation.hasComponentMetainfo(component) &&
+                designCompilerInformation.getComponentMetainfo(component).isProjectComponent();
     }
 
     public static void addComponent(Component parent, Component child) {

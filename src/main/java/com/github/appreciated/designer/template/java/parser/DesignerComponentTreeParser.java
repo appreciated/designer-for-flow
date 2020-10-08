@@ -16,8 +16,7 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.appreciated.designer.helper.ComponentContainerHelper.addComponent;
-import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
+import static com.github.appreciated.designer.helper.ComponentContainerHelper.*;
 
 public class DesignerComponentTreeParser {
 
@@ -34,20 +33,20 @@ public class DesignerComponentTreeParser {
         generator = new ComponentTreeParser(compilationUnit, projectService.getProject());
     }
 
-    public static Component wrap(Component component) {
-        if (isComponentContainer(component)) {
+    public static Component wrap(Component component, DesignCompilerInformation information) {
+        if (isComponentContainer(component, information)) {
             List<Component> children = ComponentContainerHelper.getChildren(component).collect(Collectors.toList());
             ComponentContainerHelper.removeAll(component);
             children.forEach(child -> {
                 if (child instanceof AccordionPanel) {
                     addComponent(component, child);
                 } else {
-                    addComponent(component, wrap(child));
+                    addComponent(component, wrap(child, information));
                 }
             });
-            return new DesignerComponentWrapper(component);
+            return new DesignerComponentWrapper(component, isProjectComponent(component, information));
         }
-        return new DesignerComponentWrapper(component);
+        return new DesignerComponentWrapper(component, isProjectComponent(component, information));
     }
 
     public DesignCompilerInformation getDesignCompilerInformation() {
@@ -56,7 +55,7 @@ public class DesignerComponentTreeParser {
         info.setProject(projectService.getProject());
         Component parsedComponent = generator.getComponent();
         DesignerComponentNormalizer.normalize(parsedComponent, info);
-        info.setComponent(wrap(parsedComponent));
+        info.setComponent(wrap(parsedComponent, info));
         info.setClassName(generator.getClassName());
         info.setCompilationMetaInformation(generator.getCompilationMetaInformation());
         return info;

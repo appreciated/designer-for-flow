@@ -1,7 +1,6 @@
 package com.github.appreciated.designer.model;
 
 import com.github.appreciated.designer.model.project.Project;
-import com.github.appreciated.designer.template.java.generator.ComponentInformation;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.Component;
 import lombok.Data;
@@ -21,7 +20,6 @@ public class DesignCompilerInformation {
     private File design;
     private Component component;
     private Theme theme;
-    private Map<Component, ComponentInformation> componentInformation = new HashMap<>();
 
     private String className;
     private Map<Component, CompilationMetainformation> compilationMetaInformation = new HashMap<>();
@@ -42,14 +40,14 @@ public class DesignCompilerInformation {
         }
     }
 
+    public boolean hasComponentMetainfo(Component component) {
+        return compilationMetaInformation.containsKey(component);
+    }
+
     public CompilationMetainformation getOrCreateCompilationMetainformation(Component component) {
         if (!hasComponentMetainfo(component)) {
             compilationMetaInformation.put(component, new CompilationMetainformation());
         }
         return compilationMetaInformation.get(component);
-    }
-
-    public boolean hasComponentMetainfo(Component component) {
-        return compilationMetaInformation.containsKey(component);
     }
 }

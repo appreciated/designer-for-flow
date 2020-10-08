@@ -13,7 +13,7 @@ public class ComponentComparer {
             component1 = ((DesignerComponentWrapper) component1).getActualComponent();
         }
 
-        if (ComponentContainerHelper.isComponentContainer(component1) && ComponentContainerHelper.isComponentContainer(component2)) {
+        if (ComponentContainerHelper.isComponentContainer(component1, false) && ComponentContainerHelper.isComponentContainer(component2, false)) {
             if (component1.getClass() != component2.getClass()) {
                 return false;
             }
@@ -27,7 +27,7 @@ public class ComponentComparer {
                 }
                 return true;
             }
-        } else if (!ComponentContainerHelper.isComponentContainer(component1) && !ComponentContainerHelper.isComponentContainer(component2)) {
+        } else if (!ComponentContainerHelper.isComponentContainer(component1, false) && !ComponentContainerHelper.isComponentContainer(component2, false)) {
             return component1.getClass() == component2.getClass();
         }
         return false;
