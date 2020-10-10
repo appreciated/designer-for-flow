@@ -30,6 +30,7 @@ public class ProjectView extends VerticalLayout {
     public ProjectView() {
         tabs = new Tabs();
         tabs.setHeight("60px");
+        tabs.getStyle().set("box-shadow", "none");
         dial = new AddButton(VaadinIcon.PLUS.create());
         dial.setBottom("30px");
         Image logo = new Image("img/logo-floating-low.png", "logo");
