@@ -137,7 +137,7 @@ try {
                 showStartUpErrorMessage();
             });
         } else if (platform === 'linux') {
-            return child_process.spawn(jreFolder + 'jdk8u265-b01-jre/Contents/Home/bin', ['-jar', '-Dvaadin.productionMode=true', '-Dserver.port=' + port, filename, '--logging.file=designer-for-flow.log'], {
+            return child_process.spawn(jreFolder + '/bin/java', ['-jar', '-Dvaadin.productionMode=true', '-Dserver.port=' + port, filename, '--logging.file=designer-for-flow.log'], {
                 cwd: app.getAppPath() + '/java/'
             }).on('error', function (code, signal) {
                 showStartUpErrorMessage();
