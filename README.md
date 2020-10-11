@@ -3,7 +3,7 @@
 <h1>Designer for Flow</h1>
 </p> 
 
-This is a WYSIWYG-Editor that allows to create and edit Components for the Vaadin Platform.
+This is a WYSIWYG-Editor that allows to create and edit Views for the Vaadin Platform.
 
 Currently the following input and output formats are supported:
 - Java Classes    
