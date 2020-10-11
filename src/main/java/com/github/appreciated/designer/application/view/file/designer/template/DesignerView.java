@@ -26,7 +26,7 @@ public class DesignerView extends BaseView {
 
     // Tabs
     protected final Tabs tabs;
-    protected final Tab fullSizeTab;
+    protected final Tab resizeableTab;
     protected final Tab mobileTab;
     protected final Tab mobileLandscapeTab;
     protected final Tab tabletTab;
@@ -39,7 +39,7 @@ public class DesignerView extends BaseView {
         // Tabs
         tabs = new Tabs();
 
-        fullSizeTab = createTab(tabs, VaadinIcon.EXPAND_SQUARE);
+        resizeableTab = createTab(tabs, VaadinIcon.EXPAND_SQUARE);
         mobileTab = createTab(tabs, VaadinIcon.MOBILE);
         mobileLandscapeTab = createTab(tabs, VaadinIcon.MOBILE, 90);
         tabletTab = createTab(tabs, VaadinIcon.TABLET, 90);
@@ -68,9 +68,10 @@ public class DesignerView extends BaseView {
         designWrapper.setMargin(false);
         designWrapper.setPadding(false);
         designWrapper.getStyle()
-                .set("resize", "both")
                 .set("flex-shrink", "0")
                 .set("overflow", "hidden");
+        designWrapper.setWidth("98%");
+        designWrapper.setHeight("98%");
 
         wrapperContainer = new HorizontalLayout(designWrapper);
         wrapperContainer.setJustifyContentMode(JustifyContentMode.CENTER);
@@ -80,46 +81,52 @@ public class DesignerView extends BaseView {
 
         tabs.getStyle().set("align-self", "flex-end");
         tabs.addSelectedChangeListener(this::checkTabIfPresentAndSetup);
-        tabs.setSelectedTab(fullSizeTab);
+        tabs.setSelectedTab(resizeableTab);
 
         add(header, wrapperContainer);
     }
 
     protected void checkTabIfPresentAndSetup(final SelectedChangeEvent event) {
-        if (fullSizeTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("100%");
-            designWrapper.setHeight("100%");
+        if (resizeableTab.equals(event.getSelectedTab())) {
+            designWrapper.setWidth("98%");
+            designWrapper.setHeight("98%");
             designWrapper.getStyle()
+                    .set("resize", "both")
                     .set("border", "unset")
                     .set("border-radius", "0px");
         } else if (mobileTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("7cm");
-            designWrapper.setHeight("14cm");
+            designWrapper.setWidth("calc(2.81em * 7)");
+            designWrapper.setHeight("calc(2.81em * 14)");
             designWrapper.getStyle()
+                    .set("resize", "none")
                     .set("border", "3px solid black")
                     .set("border-radius", "10px");
         } else if (mobileLandscapeTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("14cm");
-            designWrapper.setHeight("7cm");
+            designWrapper.setWidth("calc(2.81em * 14)");
+            designWrapper.setHeight("calc(2.81em * 7)");
             designWrapper.getStyle()
+                    .set("resize", "none")
                     .set("border", "3px solid black")
                     .set("border-radius", "10px");
         } else if (tabletTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("17cm");
-            designWrapper.setHeight("24cm");
+            designWrapper.setWidth("calc(2.81em * 17)");
+            designWrapper.setHeight("calc(2.81em * 24)");
             designWrapper.getStyle()
+                    .set("resize", "none")
                     .set("border", "3px solid black")
                     .set("border-radius", "10px");
         } else if (tabletLandscapeTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("24cm");
-            designWrapper.setHeight("17cm");
+            designWrapper.setWidth("calc(2.81em * 24)");
+            designWrapper.setHeight("calc(2.81em * 17)");
             designWrapper.getStyle()
+                    .set("resize", "none")
                     .set("border", "3px solid black")
                     .set("border-radius", "10px");
         } else if (laptopTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("33.2cm");
-            designWrapper.setHeight("18.7cm");
+            designWrapper.setWidth("calc(2.81em * 33.2)");
+            designWrapper.setHeight("calc(2.81em * 18.7)");
             designWrapper.getStyle()
+                    .set("resize", "none")
                     .set("border", "3px solid black")
                     .set("border-radius", "10px");
         }

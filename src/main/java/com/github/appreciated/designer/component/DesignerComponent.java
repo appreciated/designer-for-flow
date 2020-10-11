@@ -29,7 +29,7 @@ public class DesignerComponent {
 
     public DesignerComponent(File file) {
         this.file = file;
-        classNameAsString = file.getName();
+        classNameAsString = file.getName().substring(0, file.getName().length() - 5);
     }
 
     public String getTagName() {
