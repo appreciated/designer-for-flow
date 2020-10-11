@@ -120,7 +120,7 @@ try {
                 showStartUpErrorMessage();
             });
         } else if (platform === 'darwin') {
-            child_process.exec('chmod +X ' + app.getAppPath() + '/java/jre/Contents/Home/bin/' + 'java');
+            child_process.exec('chmod +X ' + app.getAppPath() + '/java/' + jreFolder + '/Contents/Home/bin/' + 'java');
             if (!app.getAppPath().startsWith("/Applications/")) {
                 dialog.showMessageBox(null, {
                     type: 'error'
