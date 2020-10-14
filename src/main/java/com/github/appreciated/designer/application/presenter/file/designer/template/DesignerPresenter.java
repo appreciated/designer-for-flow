@@ -84,7 +84,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
                 new AccordionPanelDragTargetHandler(this)
         };
         eventService.getDesignerComponentDropListener().addEventConsumer(dropEvent -> {
-            handleDropEvent((DesignerComponentWrapper) dropEvent.getDraggedComponent(), dropEvent.getTargetComponent());
+            handleDropEvent(dropEvent.getDraggedComponent(), dropEvent.getTargetComponent());
         });
         eventService.getDesignerComponentDragListener().addEventConsumer(dragEvent -> {
             setHasComponentsFillerVisible(dragEvent.isStarted(), dragEvent.getDraggedComponent());
@@ -102,11 +102,12 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     private void initDesignerComponentWrappers(DesignerComponentWrapper component) {
         initDesignerComponentWrapper(component);
         if (isComponentContainer(component.getActualComponent(), projectFileModel.getInformation())) {
-            ComponentContainerHelper.getChildren(component.getActualComponent()).forEach(component1 -> {
-                if (!(component1 instanceof AccordionPanel)) {
-                    initDesignerComponentWrappers((DesignerComponentWrapper) component1);
-                }
-            });
+            ComponentContainerHelper.getChildren(component.getActualComponent())
+                    .forEach(component1 -> {
+                        if (!(component1 instanceof AccordionPanel) && component1 instanceof DesignerComponentWrapper) {
+                            initDesignerComponentWrappers((DesignerComponentWrapper) component1);
+                        }
+                    });
         }
     }
 
@@ -202,7 +203,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         dropTarget.setDropEffect(DropEffect.MOVE);
         dropTarget.addDropListener(event -> {
             Component currentDraggedItem = projectFileModel.getCurrentDragItem();
-            handleDropEvent((DesignerComponentWrapper) (currentDraggedItem == null ? event.getDragSourceComponent().get() : currentDraggedItem), event.getComponent());
+            handleDropEvent(currentDraggedItem == null ? event.getDragSourceComponent().get() : currentDraggedItem, event.getComponent());
             removeHasComponentsFiller(designerRoot);
         });
         return div;
@@ -237,7 +238,9 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
 
     private boolean dropWasHandled(Component draggedComponent, Component targetComponent) {
         if (draggedComponent instanceof DesignerComponentWrapper) {
-            Optional<DropHandler> handler = Arrays.stream(dropHandlers).filter(dropHandler1 -> dropHandler1.canHandleDropEvent((DesignerComponentWrapper) draggedComponent, targetComponent)).findFirst();
+            Optional<DropHandler> handler = Arrays.stream(dropHandlers)
+                    .filter(dropHandler1 -> dropHandler1.canHandleDropEvent((DesignerComponentWrapper) draggedComponent, targetComponent))
+                    .findFirst();
             if (handler.isPresent()) {
                 handler.get().handleDropEvent((DesignerComponentWrapper) draggedComponent, targetComponent);
                 return true;
@@ -247,7 +250,9 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private boolean dragTargetWasHandled(DesignerComponentWrapper draggedComponent, Component targetComponent) {
-        Optional<DragTargetHandler> handler = Arrays.stream(dragTargetHandlers).filter(dropHandler1 -> dropHandler1.canHandleDragTargetEvent(draggedComponent, targetComponent)).findFirst();
+        Optional<DragTargetHandler> handler = Arrays.stream(dragTargetHandlers)
+                .filter(dropHandler1 -> dropHandler1.canHandleDragTargetEvent(draggedComponent, targetComponent))
+                .findFirst();
         if (handler.isPresent()) {
             if (handler.get().showDropTargetInComponent(draggedComponent, targetComponent)) {
                 ComponentContainerHelper.addComponent(unwrapDesignerComponent(targetComponent), getDropTargetDiv(targetComponent));
@@ -259,9 +264,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private void initDesignerComponentWrapper(DesignerComponentWrapper generatedComponent) {
-        generatedComponent.setNonNestedClickListener(o -> {
-            notifyFocusListeners(generatedComponent.getActualComponent());
-        });
+        generatedComponent.setNonNestedClickListener(o -> notifyFocusListeners(generatedComponent.getActualComponent()));
     }
 
     private void focusElementVisually(DesignerComponentWrapper generatedComponent) {

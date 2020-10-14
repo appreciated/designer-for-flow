@@ -204,9 +204,7 @@ public class ComponentTreeParser {
             info.setClassName(unit.getPrimaryTypeName().get());
             compilationMetaInformation.put(component, info);
             return component;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ParseException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;

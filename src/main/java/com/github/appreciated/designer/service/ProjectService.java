@@ -34,7 +34,7 @@ public class ProjectService {
             } catch (ParseException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            DesignCompilerInformation info = parser.getDesignCompilerInformation();
+            DesignCompilerInformation info = parser.getRootDesignCompilerInformation();
             info.setProject(project);
             project.getTemplates().add(info);
             return info;

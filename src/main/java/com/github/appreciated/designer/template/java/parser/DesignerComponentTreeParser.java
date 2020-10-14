@@ -20,7 +20,6 @@ import static com.github.appreciated.designer.helper.ComponentContainerHelper.*;
 
 public class DesignerComponentTreeParser {
 
-    private static DesignerComponentTreeParser parser;
     private final File file;
     private final ProjectService projectService;
     private final ComponentTreeParser generator;
@@ -34,7 +33,7 @@ public class DesignerComponentTreeParser {
     }
 
     public static Component wrap(Component component, DesignCompilerInformation information) {
-        if (isComponentContainer(component, information)) {
+        if (isComponentContainer(component, information) && !isProjectComponent(component, information)) {
             List<Component> children = ComponentContainerHelper.getChildren(component).collect(Collectors.toList());
             ComponentContainerHelper.removeAll(component);
             children.forEach(child -> {
@@ -49,15 +48,15 @@ public class DesignerComponentTreeParser {
         return new DesignerComponentWrapper(component, isProjectComponent(component, information));
     }
 
-    public DesignCompilerInformation getDesignCompilerInformation() {
+    public DesignCompilerInformation getRootDesignCompilerInformation() {
         DesignCompilerInformation info = new DesignCompilerInformation();
         info.setDesign(file);
         info.setProject(projectService.getProject());
+        info.setCompilationMetaInformation(generator.getCompilationMetaInformation());
+        info.setClassName(generator.getClassName());
         Component parsedComponent = generator.getComponent();
         DesignerComponentNormalizer.normalize(parsedComponent, info);
         info.setComponent(wrap(parsedComponent, info));
-        info.setClassName(generator.getClassName());
-        info.setCompilationMetaInformation(generator.getCompilationMetaInformation());
         return info;
     }
 

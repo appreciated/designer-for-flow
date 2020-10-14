@@ -22,12 +22,14 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     @Id("wrapper")
     Div wrapper;
     private Component actualComponent;
+    private boolean isProjectComponent;
     private Consumer consumer;
 
     public DesignerComponentWrapper(Component component, boolean isProjectComponent) {
         this.actualComponent = component;
+        this.isProjectComponent = isProjectComponent;
         getElement().appendChild(component.getElement());
-        if (!isComponentContainer(component, isProjectComponent)) {
+        if (!isComponentContainer(component, isProjectComponent) || isProjectComponent) {
             wrapper.getElement().getClassList().add("no-pointer-events");
         }
         if (actualComponent instanceof HasSize) {
@@ -92,5 +94,9 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
 
     public void setNonNestedClickListener(Consumer consumer) {
         this.consumer = consumer;
+    }
+
+    public boolean isProjectComponent() {
+        return isProjectComponent;
     }
 }
