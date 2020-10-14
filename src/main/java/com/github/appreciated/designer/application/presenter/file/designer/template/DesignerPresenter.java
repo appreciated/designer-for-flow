@@ -232,7 +232,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
                 });
             }
         }
-        getModel().getEventService().getFocusedEventPublisher().publish(draggedComponent);
+        notifyFocusListeners(draggedComponent);
     }
 
     private boolean dropWasHandled(Component draggedComponent, Component targetComponent) {
@@ -273,7 +273,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private void notifyFocusListeners(Component actualComponent) {
-        getModel().getEventService().getFocusedEventPublisher().publish(actualComponent);
+        getModel().getEventService().getFocusedEventPublisher().publish(unwrapDesignerComponent(actualComponent));
     }
 
 }

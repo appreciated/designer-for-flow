@@ -89,6 +89,8 @@ public class StructureView extends BaseView {
         projectFileModel.getEventService().getStructureChangedEventListener().addEventConsumer(event -> {
             if (event.getComponent() == projectFileModel.getInformation().getComponent()) {
                 updateStructure(event.getComponent());
+            } else {
+                System.err.println("projectFileModel.getInformation().getComponent()" + " is empty");
             }
         });
         projectFileModel.getEventService().getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {

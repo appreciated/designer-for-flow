@@ -18,7 +18,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import java.beans.PropertyDescriptor;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -47,15 +46,14 @@ public class PropertiesView extends BaseView {
         parser.getProperties()
                 .entrySet()
                 .stream()
-                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .sorted(Map.Entry.comparingByKey())
                 .forEach(entrySet -> addRenderer(properties, entrySet, propertyParent));
 
         renderers.getPropertyRenderers().stream()
                 .filter(propertyRenderer -> propertyRenderer.canRender(propertyParent))
                 .map(render -> (Stream<RenderPair>) render.render(propertyParent))
-                .forEach(renderers -> renderers.forEach(renderPair -> {
-                            properties.add(getLabelComponent(renderPair.getPropertyName(), renderPair.getPropertyComponent()));
-                        }
+                .forEach(renderers -> renderers.forEach(renderPair ->
+                        properties.add(getLabelComponent(renderPair.getPropertyName(), renderPair.getPropertyComponent()))
                 ));
 
         HasStyleRenderer renderer = new HasStyleRenderer();
@@ -87,6 +85,8 @@ public class PropertiesView extends BaseView {
             if (!fittingRenderer.isPresent()) {
                 System.out.println("No Property component for \"" + entrySet.getKey() + "\" with type \"" + entrySet.getValue().getPropertyType().getName() + "\"");
             }
+        } else {
+
         }
     }
 
