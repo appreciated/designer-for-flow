@@ -19,6 +19,12 @@ To build the project run the following maven command:
 
 After executing the ready to use electron application can be found under `target/electron/designer-for-flow-<archtype>`.
 
+# Versioning
+The Version of the Editor will be coupled to the respective Vaadin version that was used during the build. The Editor will only use patch versioning. This make it more obvious for the user for which vaadin Version the designer ist designated. 
+
+designer-for-flow v14.0.* -> Vaadin 14.0
+designer-for-flow v14.1.* -> Vaadin 14.1
+
 # Branching
 
 * `master` the latest version of the starter, using the latest platform snapshot
