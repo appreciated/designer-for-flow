@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/appreciated/designer-for-flow/master/src/main/resources/META-INF/resources/img/logo-floating-low.png?token=AANGKNLTCYUVNOUCI5CBBES7OOX3K">
+<p align="center"><img src=https://raw.githubusercontent.com/appreciated/designer-for-flow/master/src/main/resources/META-INF/resources/img/logo-floating-low.png?token=AANGKNOLUJSUZWDYFHJ4AD27SFIPS">
 <br>
 <h1>Designer for Flow</h1>
 </p> 
@@ -18,6 +18,12 @@ To build the project run the following maven command:
 `mvn clean install -Pproduction` 
 
 After executing the ready to use electron application can be found under `target/electron/designer-for-flow-<archtype>`.
+
+# Versioning
+The Version of the Editor will be coupled to the respective Vaadin version that was used during the build. The Editor will only use patch versioning. This make it more obvious for the user for which vaadin Version the designer ist designated. 
+
+designer-for-flow v14.0.* -> Vaadin 14.0  
+designer-for-flow v14.1.* -> Vaadin 14.1  
 
 # Branching
 
