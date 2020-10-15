@@ -14,7 +14,7 @@ public class SideBarView extends VerticalLayout {
     private final Tab editorTab;
     private final Tab themeTab;
 
-    private SplitLayout propertiesAndStructure = new SplitLayout();
+    private final SplitLayout propertiesAndStructure = new SplitLayout();
 
     public SideBarView() {
         propertiesAndStructure.setOrientation(SplitLayout.Orientation.VERTICAL);

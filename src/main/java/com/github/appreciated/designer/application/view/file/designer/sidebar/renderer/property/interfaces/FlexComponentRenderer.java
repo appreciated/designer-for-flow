@@ -20,16 +20,12 @@ public class FlexComponentRenderer extends AbstractPropertyRenderer<FlexComponen
         ComboBox<FlexComponent.Alignment> alignmentComponent = new ComboBox<>();
         alignmentComponent.setItems(FlexComponent.Alignment.values());
         setValueButNull(alignmentComponent, component.getAlignItems());
-        alignmentComponent.addValueChangeListener(event -> {
-            component.setAlignItems(event.getValue());
-        });
+        alignmentComponent.addValueChangeListener(event -> component.setAlignItems(event.getValue()));
 
         ComboBox<FlexComponent.JustifyContentMode> justifyContentComponent = new ComboBox<>();
         justifyContentComponent.setItems(FlexComponent.JustifyContentMode.values());
         setValueButNull(justifyContentComponent, component.getJustifyContentMode());
-        justifyContentComponent.addValueChangeListener(event -> {
-            component.setJustifyContentMode(event.getValue());
-        });
+        justifyContentComponent.addValueChangeListener(event -> component.setJustifyContentMode(event.getValue()));
 
         return Stream.of(
                 new RenderPair("alignment", alignmentComponent),

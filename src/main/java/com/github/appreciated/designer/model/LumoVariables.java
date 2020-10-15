@@ -104,8 +104,8 @@ public enum LumoVariables {
     TINT_80PCT("--lumo-tint-80pct", " hsla(0, 0%, 100%, 0.84)"),
     TINT_90PCT("--lumo-tint-90pct", " hsla(0, 0%, 100%, 0.9)");
 
-    private String variableName;
-    private String defaultValue;
+    private final String variableName;
+    private final String defaultValue;
 
     LumoVariables(String variableName, String defaultValue) {
         this.variableName = variableName;

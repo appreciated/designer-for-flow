@@ -24,18 +24,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class PreconditionDialog extends Dialog {
-    private Project project;
-    private final HasPreconditions preconditions;
-    private final H2 header;
-    private ComponentService componentService;
+    private final ComponentService componentService;
     private final Binder<Map<String, Object>> binder;
     private final FormLayout form;
 
     public PreconditionDialog(Project project, HasPreconditions preconditions, Consumer onFulfilled) {
-        this.project = project;
-        this.preconditions = preconditions;
         this.componentService = new ComponentService();
-        header = new H2(getTranslation("please.enter.the.following.data"));
+        H2 header = new H2(getTranslation("please.enter.the.following.data"));
         binder = new Binder<>();
         form = new FormLayout();
         if (preconditions.getPreconditions() != null) {

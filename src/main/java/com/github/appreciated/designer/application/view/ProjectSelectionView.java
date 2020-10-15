@@ -59,7 +59,7 @@ public class ProjectSelectionView extends VerticalLayout {
     // Data
     private final ExceptionService exceptionService;
     private final ProjectRepository repository;
-    private AppConfig config;
+    private final AppConfig config;
 
     public ProjectSelectionView(@Autowired ProjectRepository repository, @Autowired ExceptionService exceptionService, @Autowired AppConfig config) {
         super();
@@ -85,9 +85,9 @@ public class ProjectSelectionView extends VerticalLayout {
         } else {
             repository.findAll().forEach(projectPath -> layout.add(getCard(projectPath)));
         }
-        AddButton button = new AddButton(VaadinIcon.PLUS.create(), buttonClickEvent -> {
-            new OpenProjectDialog(file -> addProject(file)).open();
-        });
+        AddButton button = new AddButton(VaadinIcon.PLUS.create(),
+                buttonClickEvent -> new OpenProjectDialog(this::addProject).open()
+        );
         button.setBottom("30px");
         add(button);
     }
@@ -163,9 +163,7 @@ public class ProjectSelectionView extends VerticalLayout {
             exceptionService.setError(event.getThrowable());
             event.getThrowable().printStackTrace();
 
-            attachEvent.getUI().access(() -> {
-                new Dialog(new ErrorViewDialog(exceptionService)).open();
-            });
+            attachEvent.getUI().access(() -> new Dialog(new ErrorViewDialog(exceptionService)).open());
         });
     }
 }

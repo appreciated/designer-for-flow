@@ -12,8 +12,8 @@ import java.util.List;
 
 public class Renderers {
 
-    private List<com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer> typeRenderer = new ArrayList<>();
-    private List<AbstractPropertyRenderer> propertyRenderer = new ArrayList<>();
+    private final List<com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer> typeRenderer = new ArrayList<>();
+    private final List<AbstractPropertyRenderer> propertyRenderer = new ArrayList<>();
 
     public Renderers(ProjectFileModel projectFileModel) {
 
@@ -32,7 +32,7 @@ public class Renderers {
                 new HasItemsRenderer(),
                 new HasSizeRenderer(),
                 new HasTextRenderer(),
-                new ThemableLayoutRenderer()
+                new ThemeableLayoutRenderer()
         ));
         propertyRenderer.addAll(Arrays.asList(
                 new ComponentRenderer(),

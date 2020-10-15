@@ -22,17 +22,16 @@ import java.util.stream.Stream;
 @Log4j2
 public class MavenProject extends Project {
 
-    private String defaultSourcePath = "src" + File.separator + "main" + File.separator + "java";
-    private String defaultResourcePath = "src" + File.separator + "main" + File.separator + "resources";
-    private String defaultFrontendPath = "frontend";
-    private String defaultThemePath = defaultFrontendPath + File.separator + "styles";
-    private String defaultThemeFileName = "theme.css";
-    private String projectDefinitionFile = "pom.xml";
+    private final String defaultSourcePath = "src" + File.separator + "main" + File.separator + "java";
+    private final String defaultResourcePath = "src" + File.separator + "main" + File.separator + "resources";
+    private final String defaultFrontendPath = "frontend";
+    private final String defaultThemePath = defaultFrontendPath + File.separator + "styles";
+    private final String defaultThemeFileName = "theme.css";
+    private final String projectDefinitionFile = "pom.xml";
 
     private File themeFile;
     private File frontendFolder;
     private File sourceFolder;
-    private File resourceFolder;
 
     public MavenProject(File projectRootPath) {
         super(projectRootPath);
@@ -180,7 +179,6 @@ public class MavenProject extends Project {
 
     @Override
     public void setResourceFolder(File folder) {
-        this.resourceFolder = folder;
     }
 
 }

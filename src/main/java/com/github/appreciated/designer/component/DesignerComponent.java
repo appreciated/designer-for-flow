@@ -16,7 +16,7 @@ import static com.github.appreciated.designer.helper.DesignerFileHelper.getCompi
 public class DesignerComponent {
     String name;
     Component component;
-    private String classNameAsString;
+    private final String classNameAsString;
     private Class<? extends Component> className;
     private File file;
 

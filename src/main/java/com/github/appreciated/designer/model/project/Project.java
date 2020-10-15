@@ -8,8 +8,8 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public abstract class Project {
-    private File projectRoot;
-    private ArrayList<DesignCompilerInformation> templates = new ArrayList<>();
+    private final File projectRoot;
+    private final ArrayList<DesignCompilerInformation> templates = new ArrayList<>();
 
     public Project(File projectFolder) {
         this.projectRoot = projectFolder;

@@ -9,7 +9,7 @@ import java.io.File;
 
 public class PathValidator implements Validator<String> {
 
-    private ProjectFileModel projectFileModel;
+    private final ProjectFileModel projectFileModel;
 
     public PathValidator(ProjectFileModel projectFileModel) {
         this.projectFileModel = projectFileModel;

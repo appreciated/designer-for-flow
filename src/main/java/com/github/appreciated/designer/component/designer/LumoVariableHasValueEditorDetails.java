@@ -13,7 +13,7 @@ import com.vaadin.flow.data.binder.Binder;
 
 public abstract class LumoVariableHasValueEditorDetails<T extends LumoVariableHasValueEditorDetails> extends HasValueEditorDetails<T> {
 
-    private EventService eventService;
+    private final EventService eventService;
 
     public LumoVariableHasValueEditorDetails(String title, HasComponents components, EventService eventService, boolean editable) {
         super(title, components, editable);

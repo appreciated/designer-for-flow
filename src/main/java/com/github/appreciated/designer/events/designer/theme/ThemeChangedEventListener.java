@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 @UIScope
 public class ThemeChangedEventListener implements ApplicationListener<ThemeChangedEvent> {
-    private List<Consumer<ThemeChangedEvent>> consumerList = new ArrayList<>();
+    private final List<Consumer<ThemeChangedEvent>> consumerList = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(ThemeChangedEvent event) {

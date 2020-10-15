@@ -27,12 +27,12 @@ public class HasItemsRenderer extends AbstractPropertyRenderer<HasItems> {
 
     @Override
     public Stream<RenderPair> render(HasItems propertyParent) {
-        MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+        MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox<>();
         multiselectComboBox.setWidth("100%");
         multiselectComboBox.setPlaceholder("Add some items");
 // custom values handler to process the added value(s)
         multiselectComboBox.addCustomValuesSetListener(e -> {
-            LinkedHashSet<String> value = new LinkedHashSet<>(multiselectComboBox.getValue().stream().collect(Collectors.toSet()));
+            LinkedHashSet<String> value = new LinkedHashSet<>(multiselectComboBox.getValue());
             value.add(e.getDetail());
             List<String> updatedItems = multiselectComboBox.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
             updatedItems.add(e.getDetail());

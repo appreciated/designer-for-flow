@@ -27,15 +27,15 @@ public class HasStyleJavaGenerator implements VaadinComponentJavaGenerator<HasSt
     @Override
     public Stream<Expression> parse(CompilationUnit compilationUnit, HasStyle propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
-        propertyParent.getStyle().getNames().forEach(s -> {
-            new MethodCallExpr(nameExpr, "test", // TODO why is the test String required?
-                    new NodeList<>(new MethodCallExpr(
-                            new MethodCallExpr(new MethodCallExpr(), "getStyle"),
-                            "set",
-                            new NodeList<>(new StringLiteralExpr(s), new StringLiteralExpr(propertyParent.getStyle().get(s)))
-                    ))
-            );
-        });
+        propertyParent.getStyle().getNames().forEach(s ->
+                // TODO why is the test String required?
+                new MethodCallExpr(nameExpr, "test",
+                        new NodeList<>(new MethodCallExpr(
+                                new MethodCallExpr(new MethodCallExpr(), "getStyle"),
+                                "set",
+                                new NodeList<>(new StringLiteralExpr(s), new StringLiteralExpr(propertyParent.getStyle().get(s)))
+                        ))
+                ));
         return expressionList.stream();
     }
 

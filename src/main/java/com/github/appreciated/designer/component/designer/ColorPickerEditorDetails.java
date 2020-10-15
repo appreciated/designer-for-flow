@@ -14,7 +14,6 @@ public class ColorPickerEditorDetails extends LumoVariableHasValueEditorDetails<
 
     @Override
     public HasValue getField() {
-        ColorPickerFieldRaw colorPickerFieldRaw = new ColorPickerFieldRaw();
-        return colorPickerFieldRaw;
+        return new ColorPickerFieldRaw();
     }
 }

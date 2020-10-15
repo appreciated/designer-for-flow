@@ -11,7 +11,7 @@ import static com.github.appreciated.designer.helper.ComponentContainerHelper.ge
 import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
 
 public class DesignerComponentNormalizer {
-    private DesignCompilerInformation compilerInformation;
+    private final DesignCompilerInformation compilerInformation;
 
     public DesignerComponentNormalizer(Component parsedComponent, DesignCompilerInformation compilerInformation) {
         this.compilerInformation = compilerInformation;

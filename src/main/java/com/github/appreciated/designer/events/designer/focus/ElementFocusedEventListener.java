@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 @UIScope
 public class ElementFocusedEventListener implements ApplicationListener<ElementFocusedEvent> {
-    private List<Consumer<ElementFocusedEvent>> consumerList = new ArrayList<>();
+    private final List<Consumer<ElementFocusedEvent>> consumerList = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(ElementFocusedEvent event) {

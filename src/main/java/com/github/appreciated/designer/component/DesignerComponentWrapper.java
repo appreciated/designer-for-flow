@@ -21,8 +21,8 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
 
     @Id("wrapper")
     Div wrapper;
-    private Component actualComponent;
-    private boolean isProjectComponent;
+    private final Component actualComponent;
+    private final boolean isProjectComponent;
     private Consumer consumer;
 
     public DesignerComponentWrapper(Component component, boolean isProjectComponent) {

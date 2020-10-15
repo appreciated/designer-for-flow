@@ -8,7 +8,7 @@ import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 
 import java.util.stream.Stream;
 
-public class ThemableLayoutRenderer extends AbstractPropertyRenderer<ThemableLayout> {
+public class ThemeableLayoutRenderer extends AbstractPropertyRenderer<ThemableLayout> {
 
     @Override
     public boolean canRender(Component propertyParent) {

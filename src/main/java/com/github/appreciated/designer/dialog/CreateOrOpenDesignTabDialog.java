@@ -34,7 +34,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
     protected final GridContextMenu<File> contextMenu;
     protected final GridMenuItem<File> contextMenuAdd;
     protected final GridMenuItem<File> contextMenuSelect;
-    private Project project;
+    private final Project project;
 
     public CreateOrOpenDesignTabDialog(Project project, final File parentFile, final Consumer<File> fileConsumer) {
         this(project, parentFile, fileConsumer, true);

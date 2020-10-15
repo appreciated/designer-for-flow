@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 @UIScope
 public class FileChangedEventListener implements ApplicationListener<FileChangedEvent> {
-    private List<Consumer<FileChangedEvent>> consumerList = new ArrayList<>();
+    private final List<Consumer<FileChangedEvent>> consumerList = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(FileChangedEvent event) {

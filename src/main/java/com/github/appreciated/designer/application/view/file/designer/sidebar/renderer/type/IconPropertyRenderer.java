@@ -24,9 +24,9 @@ public class IconPropertyRenderer extends AbstractPropertyRenderer<Component> {
             return container;
         }));
         combobox.setItems(VaadinIcon.values());
-        combobox.addValueChangeListener(comboBoxVaadinIconComponentValueChangeEvent -> {
-            applyValue(propertyParent, propertyDescriptor, comboBoxVaadinIconComponentValueChangeEvent.getValue().create());
-        });
+        combobox.addValueChangeListener(comboBoxVaadinIconComponentValueChangeEvent ->
+                applyValue(propertyParent, propertyDescriptor, comboBoxVaadinIconComponentValueChangeEvent.getValue().create())
+        );
         return combobox;
     }
 

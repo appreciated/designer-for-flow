@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 public class FileChangedEvent extends ApplicationEvent {
 
     private final DesignerComponentWrapper parent;
-    private Component focus;
+    private final Component focus;
 
     public FileChangedEvent(Object source, Component focus, DesignerComponentWrapper parent) {
         super(source);

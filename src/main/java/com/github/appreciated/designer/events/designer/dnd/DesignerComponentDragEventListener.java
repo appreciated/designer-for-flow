@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 @UIScope
 public class DesignerComponentDragEventListener implements ApplicationListener<DesignerComponentDragEvent> {
-    private List<Consumer<DesignerComponentDragEvent>> consumerList = new ArrayList<>();
+    private final List<Consumer<DesignerComponentDragEvent>> consumerList = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(DesignerComponentDragEvent event) {

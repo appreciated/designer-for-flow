@@ -12,11 +12,10 @@ import com.vaadin.flow.shared.Registration;
 public class EditableGrid<T> extends Grid<T> {
 
     private final Binder<T> binder;
-    private final Editor<T> editor;
 
     public EditableGrid() {
         binder = new Binder<>();
-        editor = getEditor();
+        Editor<T> editor = getEditor();
         editor.setBinder(binder);
 
         /*emailField.getElement()
@@ -29,9 +28,7 @@ public class EditableGrid<T> extends Grid<T> {
             //field.focus();
         });
 
-        binder.addValueChangeListener(event -> {
-            getEditor().refresh();
-        });
+        binder.addValueChangeListener(event -> getEditor().refresh());
 
         addItemClickListener(event -> {
             if (binder.getBean() != null) {

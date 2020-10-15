@@ -33,10 +33,9 @@ import java.util.Map;
 public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> implements HasUrlParameter<String> {
 
     private CreateOrOpenDesignTabDialog files;
-    private String projectPath;
-    private EventService eventService;
-    private ProjectService projectService;
-    private Map<Tab, ProjectFileModel> fileMap = new HashMap<>();
+    private final EventService eventService;
+    private final ProjectService projectService;
+    private final Map<Tab, ProjectFileModel> fileMap = new HashMap<>();
 
     public ProjectPresenter(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         UI ui = UI.getCurrent();
@@ -93,7 +92,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         Location location = beforeEvent.getLocation();
         QueryParameters queryParameters = location.getQueryParameters();
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
-        projectPath = URLDecoder.decode(parametersMap.get("path").get(0));
+        String projectPath = URLDecoder.decode(parametersMap.get("path").get(0));
         projectService.initProject(new File(projectPath));
     }
 

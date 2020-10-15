@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ThemableLayoutJavaGenerator implements VaadinComponentJavaGenerator<ThemableLayout> {
+public class ThemeableLayoutJavaGenerator implements VaadinComponentJavaGenerator<ThemableLayout> {
 
     @Override
     public boolean canParse(Component propertyParent) {

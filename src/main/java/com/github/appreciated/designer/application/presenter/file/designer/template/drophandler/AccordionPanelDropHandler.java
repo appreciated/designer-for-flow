@@ -24,9 +24,7 @@ public class AccordionPanelDropHandler extends DropHandler {
     public void handleDropEvent(DesignerComponentWrapper draggedComponent, Component targetComponent) {
         if (targetComponent instanceof AccordionPanel) {
             Optional<Component> parent = targetComponent.getParent();
-            if (parent.isPresent()) {
-                ComponentContainerHelper.addComponent(parent.get(), draggedComponent.getActualComponent());
-            }
+            parent.ifPresent(component -> ComponentContainerHelper.addComponent(component, draggedComponent.getActualComponent()));
         } else {
             Notification.show("Nope!");
         }

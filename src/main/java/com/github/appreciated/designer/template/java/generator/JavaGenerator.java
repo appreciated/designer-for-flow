@@ -36,7 +36,7 @@ public class JavaGenerator {
     private final DesignCompilerInformation designCompilerInformation;
     private final Map<String, Integer> counters = new HashMap<>();
     private ClassOrInterfaceDeclaration componentClass;
-    private VaadinComponentJavaGeneratorCollection compilerCollection;
+    private final VaadinComponentJavaGeneratorCollection compilerCollection;
 
     public JavaGenerator(DesignCompilerInformation designCompilerInformation) {
         compilerCollection = new VaadinComponentJavaGeneratorCollection(designCompilerInformation);

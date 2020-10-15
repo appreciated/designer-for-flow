@@ -17,8 +17,8 @@ import java.util.Optional;
 
 public class CssCompiler {
     private final CascadingStyleSheet css;
-    private File themeFile;
-    private HashMap<LumoVariables, CssVariable> cssVariableMap;
+    private final File themeFile;
+    private final HashMap<LumoVariables, CssVariable> cssVariableMap;
 
     public CssCompiler(File themeFile, HashMap<LumoVariables, CssVariable> cssVariableMap) {
         this.themeFile = themeFile;

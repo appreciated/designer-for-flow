@@ -16,8 +16,8 @@ import java.util.function.Consumer;
 public abstract class HasValueEditorDetails<T extends HasValueEditorDetails> extends EditorDetails implements HasSize {
 
     private Button addButton = null;
-    private HasComponents components;
-    private boolean editable;
+    private final HasComponents components;
+    private final boolean editable;
 
     public HasValueEditorDetails(String title, HasComponents components, boolean editable) {
         super(title);

@@ -35,9 +35,11 @@ public class PropertiesView extends BaseView {
         properties.setMargin(false);
         add(properties);
         renderers = new Renderers(projectFileModel);
-        projectFileModel.getEventService().getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
-            getUI().ifPresent(ui -> ui.access(() -> onFocus(elementFocusedEvent.getFocus())));
-        });
+        projectFileModel.getEventService()
+                .getFocusedEventListener()
+                .addEventConsumer(elementFocusedEvent ->
+                        getUI().ifPresent(ui -> ui.access(() -> onFocus(elementFocusedEvent.getFocus())))
+                );
     }
 
     private void onFocus(Component propertyParent) {
@@ -78,9 +80,9 @@ public class PropertiesView extends BaseView {
             Optional<AbstractPropertyRenderer> fittingRenderer = renderers.getTypeRenderers().stream()
                     .filter(propertyRenderer -> propertyRenderer.canRender(propertyParent, entrySet.getKey(), entrySet.getValue()))
                     .findFirst();
-            fittingRenderer.ifPresent(propertyRenderer -> {
-                addRenderedComponent(formLayout, entrySet.getKey(), propertyRenderer.render(entrySet.getKey(), entrySet.getValue(), propertyParent));
-            });
+            fittingRenderer.ifPresent(propertyRenderer ->
+                    addRenderedComponent(formLayout, entrySet.getKey(), propertyRenderer.render(entrySet.getKey(), entrySet.getValue(), propertyParent))
+            );
 
             if (!fittingRenderer.isPresent()) {
                 System.out.println("No Property component for \"" + entrySet.getKey() + "\" with type \"" + entrySet.getValue().getPropertyType().getName() + "\"");

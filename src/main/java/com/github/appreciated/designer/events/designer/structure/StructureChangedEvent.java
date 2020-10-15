@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class StructureChangedEvent extends ApplicationEvent {
 
-    private Component component;
+    private final Component component;
 
     public StructureChangedEvent(Object source, Component component) {
         super(source);

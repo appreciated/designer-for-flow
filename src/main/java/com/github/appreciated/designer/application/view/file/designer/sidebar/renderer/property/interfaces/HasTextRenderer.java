@@ -29,16 +29,16 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
             textField.setReadOnly(false);
         });
         clear.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        Button localizationButton = new Button(VaadinIcon.FLAG.create(), event -> {
-            new LocalisationKeySelectionDialog((Component) component,
-                    "text",
-                    getProjectFileModel(),
-                    result -> {
-                        component.setText(getProjectFileModel().getInformation().getProject().getTranslationForKey(result));
-                        textField.setValue(result);
-                        textField.setReadOnly(true);
-                    }).open();
-        });
+        Button localizationButton = new Button(VaadinIcon.FLAG.create(), event ->
+                new LocalisationKeySelectionDialog((Component) component,
+                        "text",
+                        getProjectFileModel(),
+                        result -> {
+                            component.setText(getProjectFileModel().getInformation().getProject().getTranslationForKey(result));
+                            textField.setValue(result);
+                            textField.setReadOnly(true);
+                        }).open()
+        );
         HorizontalLayout buttons = new HorizontalLayout(clear, localizationButton);
         buttons.setSpacing(false);
         textField.setSuffixComponent(buttons);

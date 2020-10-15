@@ -22,11 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DesignerComponentsView extends BaseView {
     private static final long serialVersionUID = 3391173526041012926L;
 
-    private final TextField search;
     private final Map<String, VerticalLayout> componentsCategories;
     private final Map<String, List<DesignerComponentLabel>> components;
     private final VerticalLayout componentsContainer;
-    private ProjectFileModel projectFileModel;
+    private final ProjectFileModel projectFileModel;
 
 
     public DesignerComponentsView(final ProjectFileModel projectFileModel) {
@@ -40,7 +39,7 @@ public class DesignerComponentsView extends BaseView {
         componentsContainer.setPadding(false);
         componentsContainer.setMargin(false);
         ComponentService service = new ComponentService();
-        search = new TextField();
+        TextField search = new TextField();
         search.setPlaceholder(getTranslation("search"));
         search.setWidthFull();
         search.setValueChangeMode(ValueChangeMode.EAGER);
@@ -101,9 +100,9 @@ public class DesignerComponentsView extends BaseView {
 
     DesignerComponentWrapper generateDesignerComponentWrapper(DesignerComponent component) {
         DesignerComponentWrapper designerComponentWrapper = component.generateComponent(projectFileModel);
-        designerComponentWrapper.setNonNestedClickListener(o -> {
-            projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper.getActualComponent());
-        });
+        designerComponentWrapper.setNonNestedClickListener(o ->
+                projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper.getActualComponent())
+        );
         return designerComponentWrapper;
     }
 }

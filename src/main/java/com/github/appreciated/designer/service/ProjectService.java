@@ -18,7 +18,7 @@ import java.io.File;
 @UIScope
 public class ProjectService {
 
-    private AppConfig config;
+    private final AppConfig config;
     private Project project;
     private ProjectFileModel currentProjectFileModel;
 

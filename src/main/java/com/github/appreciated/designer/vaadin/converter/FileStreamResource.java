@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 
 // ./images/web_hi_res_512.png
 public class FileStreamResource extends StreamResource {
-    private File file;
+    private final File file;
 
     public FileStreamResource(File file) {
         super(file.getName(), () -> {

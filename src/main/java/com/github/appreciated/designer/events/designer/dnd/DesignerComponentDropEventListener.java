@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 @UIScope
 public class DesignerComponentDropEventListener implements ApplicationListener<DesignerComponentDropEvent> {
-    private List<Consumer<DesignerComponentDropEvent>> consumerList = new ArrayList<>();
+    private final List<Consumer<DesignerComponentDropEvent>> consumerList = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(DesignerComponentDropEvent event) {

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 @UIScope
 public class StructureChangedEventListener implements ApplicationListener<StructureChangedEvent> {
-    private List<Consumer<StructureChangedEvent>> consumerList = new ArrayList<>();
+    private final List<Consumer<StructureChangedEvent>> consumerList = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(StructureChangedEvent event) {

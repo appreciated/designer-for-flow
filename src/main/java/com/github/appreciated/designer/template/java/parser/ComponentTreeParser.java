@@ -98,7 +98,7 @@ public class ComponentTreeParser {
             }
         }
         if (!found) {
-            errors.forEach(throwable -> throwable.printStackTrace());
+            errors.forEach(Throwable::printStackTrace);
             throw new UnsupportedOperationException("No fitting Method found for:\"" + expression.getNameAsString() + "\"");
         }
         return result;

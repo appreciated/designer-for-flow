@@ -5,8 +5,8 @@ import com.vaadin.flow.component.html.Span;
 
 public class DesignerComponentLabel extends Span {
 
-    private DesignerComponent designerComponent;
-    private String name;
+    private final DesignerComponent designerComponent;
+    private final String name;
 
     public DesignerComponentLabel(DesignerComponent designerComponent) {
         super(designerComponent.getClassNameAsString());

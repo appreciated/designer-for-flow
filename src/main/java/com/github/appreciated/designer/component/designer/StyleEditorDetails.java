@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StyleEditorDetails extends HasValueEditorDetails<StyleEditorDetails> {
-    private Set<CssStyle> styles = new HashSet<>();
-    private Style style;
+    private final Set<CssStyle> styles = new HashSet<>();
+    private final Style style;
 
     public StyleEditorDetails(Style style) {
         super("styles", new VerticalLayout(), true);

@@ -17,7 +17,6 @@ public class ComponentPropertyParser {
     public ComponentPropertyParser(Component bean) {
         try {
             PropertyDescriptor[] scannedProperties = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
-            PropertyDescriptor[] baseProperties = Introspector.getBeanInfo(Component.class, Object.class).getPropertyDescriptors();
             properties = Arrays.stream(scannedProperties)
                     .filter(propertyDescriptor -> propertyDescriptor.getWriteMethod() != null && propertyDescriptor.getReadMethod() != null)
                     .collect(Collectors.toMap(FeatureDescriptor::getName, propertyDescriptor -> propertyDescriptor));
@@ -25,7 +24,6 @@ public class ComponentPropertyParser {
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }
-        System.out.println("");
     }
 
     public Map<String, PropertyDescriptor> getProperties() {
