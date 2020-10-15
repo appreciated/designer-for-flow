@@ -101,7 +101,14 @@ public class DesignerView extends BaseView {
                 .withConverter(new Converter<String, Size>() {
                     @Override
                     public Result<Size> convertToModel(String s, ValueContext valueContext) {
-                        return Result.ok(Size.parse(s));
+                        if (s == null) {
+                            return Result.ok(null);
+                        }
+                        try {
+                            return Result.ok(Size.parse(s));
+                        } catch (NumberFormatException e) {
+                            return Result.error(getTranslation("input.requires.the.following.format"));
+                        }
                     }
 
                     @Override
@@ -112,15 +119,17 @@ public class DesignerView extends BaseView {
                 .bind(AtomicReference::get, AtomicReference::set);
         binder.setBean(null);
         binder.addValueChangeListener((HasValue.ValueChangeListener<HasValue.ValueChangeEvent<?>>) valueChangeEvent -> {
-            Size value = Size.parse((String) valueChangeEvent.getValue());
-            designWrapper.setWidth(value.getWidthAsString());
-            designWrapper.setHeight(value.getHeightAsString());
-            designWrapper.getStyle()
-                    .set("resize", "none")
-                    .set("border", "3px solid black")
-                    .set("box-shadow", "var(--design-shadow-m)")
-                    .set("border-radius", "10px");
-            tabs.setSelectedTab(null);
+            if (valueChangeEvent.getValue() != null) {
+                Size value = Size.parse((String) valueChangeEvent.getValue());
+                designWrapper.setWidth(value.getWidthAsString());
+                designWrapper.setHeight(value.getHeightAsString());
+                designWrapper.getStyle()
+                        .set("resize", "none")
+                        .set("border", "3px solid black")
+                        .set("box-shadow", "var(--design-shadow-m)")
+                        .set("border-radius", "10px");
+                tabs.setSelectedTab(null);
+            }
         });
         sizes.setItems("1024x600", "1280x720", "1920x1080");
         sizes.addCustomValueSetListener(event -> sizes.setValue(event.getDetail()));
@@ -231,7 +240,7 @@ class Size {
     }
 
     static Size parse(String value) {
-        if (value.contains("x") && value.split("x").length == 2) {
+        if (value != null && value.contains("x") && value.split("x").length == 2) {
             int x = Integer.parseInt(value.split("x")[0]);
             int y = Integer.parseInt(value.split("x")[1]);
             return new Size(x, y);
