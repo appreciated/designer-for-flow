@@ -3,11 +3,11 @@ package com.github.appreciated.designer.application.view.file.designer.template;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.Tabs.SelectedChangeEvent;
@@ -25,9 +25,9 @@ public class DesignerView extends BaseView {
     private static final long serialVersionUID = -5707329831685871000L;
 
     // Layout
-    protected final VerticalLayout designWrapper;
-    protected final HorizontalLayout designHolder;
-    protected final HorizontalLayout wrapperContainer;
+    protected final Div designWrapper;
+    protected final Div designHolder;
+    protected final Div wrapperContainer;
 
     // Header
     protected final HorizontalLayout header;
@@ -71,18 +71,13 @@ public class DesignerView extends BaseView {
         header.expand(title);
         header.setPadding(true);
 
-        designHolder = new HorizontalLayout();
-        designHolder.setPadding(true);
-        designHolder.setJustifyContentMode(JustifyContentMode.CENTER);
-        designHolder.setAlignItems(Alignment.CENTER);
-
-        designWrapper = new VerticalLayout();
+        designHolder = new Div();
+        designWrapper = new Div();
         designWrapper.getElement().getClassList().add("design-view");
         designWrapper.add(designHolder);
-        designWrapper.setMargin(false);
-        designWrapper.setPadding(false);
         designWrapper.getStyle()
                 .set("flex-shrink", "0")
+                .set("margin", "auto")
                 .set("overflow", "hidden");
         designWrapper.setWidth("98%");
         designWrapper.setHeight("98%");
@@ -136,10 +131,9 @@ public class DesignerView extends BaseView {
         sizes.setAllowCustomValue(true);
         designerViewSizeInput.addComponentAtIndex(0, sizes);
 
-        wrapperContainer = new HorizontalLayout(designWrapper);
-        wrapperContainer.setJustifyContentMode(JustifyContentMode.CENTER);
+        wrapperContainer = new Div(designWrapper);
         wrapperContainer.getStyle().set("overflow", "auto");
-        wrapperContainer.setAlignItems(Alignment.CENTER);
+        wrapperContainer.getStyle().set("display", "flex");
         wrapperContainer.setSizeFull();
 
         designerViewSizeInput.getStyle().set("align-self", "flex-end");

@@ -60,7 +60,11 @@ public class HasThemeRenderer extends AbstractPropertyRenderer<HasTheme> {
             if (event.getOldValue() != null) {
                 component.setThemeName(event.getOldValue(), false);
             }
-            component.setThemeName(event.getValue());
+            if (event.getValue() != null) {
+                component.setThemeName(event.getValue());
+            } else {
+                component.removeThemeName(event.getOldValue());
+            }
         });
         return Stream.of(new RenderPair("themes", combobox));
     }

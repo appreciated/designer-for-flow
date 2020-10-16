@@ -85,7 +85,7 @@ public class PropertiesView extends BaseView {
             );
 
             if (!fittingRenderer.isPresent()) {
-                System.out.println("No Property component for \"" + entrySet.getKey() + "\" with type \"" + entrySet.getValue().getPropertyType().getName() + "\"");
+                System.out.println("The Property \"" + propertyParent.getClass().getName() + "." + entrySet.getKey() + "\" with type \"" + entrySet.getValue().getPropertyType().getName() + " cannot be rendered");
             }
         } else {
 
@@ -115,3 +115,5 @@ public class PropertiesView extends BaseView {
         formLayout.add(getLabelComponent(key, render));
     }
 }
+
+

@@ -158,7 +158,7 @@ public class FileChooserDialog extends Dialog {
     }
 
     protected void update(final File selectedFile) {
-        getSelect().setEnabled(selectedFile != null && selectedFile.isDirectory() && selectedFile.list() != null && Arrays.asList(selectedFile.list()).contains("pom.xml"));
+        getSelect().setEnabled(selectedFile != null && !selectedFile.isDirectory());
     }
 
     protected void initGrid(final File parent) {

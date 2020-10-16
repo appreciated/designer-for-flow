@@ -62,12 +62,14 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
     }
 
     public void setSrc(Image component, TextField src) {
-        if (src.getValue() != null) {
-            component.setSrc(new FileStreamResource(new File(getProjectFileModel().getInformation().getProject().getFrontendFolder() + File.separator + src.getValue().replace("/", File.separator))));
-            getProjectFileModel().getInformation().getComponentMetainfo(component).setPropertyReplacement("src", src.getValue());
-        } else {
-            component.getElement().setAttribute("src", "");
-            getProjectFileModel().getInformation().getComponentMetainfo(component).setPropertyReplacement("src", null);
+        if (component != null || (src.getValue() != null && !src.getValue().equals(""))) {
+            if (src.getValue() != null && !src.getValue().equals("")) {
+                component.setSrc(new FileStreamResource(new File(getProjectFileModel().getInformation().getProject().getFrontendFolder() + File.separator + src.getValue().replace("/", File.separator))));
+                getProjectFileModel().getInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement("src", src.getValue());
+            } else {
+                component.getElement().setAttribute("src", "");
+                getProjectFileModel().getInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement("src", null);
+            }
         }
     }
 

@@ -131,6 +131,7 @@ public class ComponentTreeParser {
         if (fieldMap.containsKey(arg.getNameAsString())) {
             accessFieldOfObject(fieldMap.get(arg.getNameAsString()), arg);
         } else {
+            // Enums
             String[] scope = resolveScope(arg).toArray(String[]::new);
             String resolved = resolveName(scope[0]).get();
             Class classname = Class.forName(resolved + "$" + scope[1]);
@@ -173,7 +174,27 @@ public class ComponentTreeParser {
                 .stream()
                 .filter(importDeclaration -> importDeclaration.getName().asString().endsWith(typeName))
                 .findFirst();
-        return declaration.map(importDeclaration -> importDeclaration.getName().asString());
+        if (declaration.isPresent()) {
+            return declaration.map(importDeclaration -> importDeclaration.getName().asString());
+        } else {
+            return compilationUnit.getImports()
+                    .stream()
+                    .filter(importDeclaration -> importDeclaration.getNameAsString().startsWith("com.vaadin"))
+                    .filter(ImportDeclaration::isAsterisk)
+                    .filter(importDeclaration -> {
+                        try {
+                            // Since we don't know if there are multiple imports with asterisks which is the correct one
+                            // the correct one needs to be found by bruteforce
+                            Class.forName(importDeclaration.getNameAsString() + "." + typeName);
+                            return true;
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    })
+                    .map(importDeclaration -> importDeclaration.getNameAsString() + "." + typeName)
+                    .findFirst();
+        }
     }
 
     private void instantiateField(FieldDeclaration field) {
@@ -181,12 +202,14 @@ public class ComponentTreeParser {
         Optional<String> fieldType = resolveName(field.getElementType().asString());
         boolean isClassAvailable = false;
         try {
-            Class.forName(fieldType.get());
-            isClassAvailable = true;
+            if (fieldType.isPresent()) {
+                Class.forName(fieldType.get());
+                isClassAvailable = true;
+            }
         } catch (ClassNotFoundException e) {
         }
         if (fieldType.isPresent() && isClassAvailable) {
-            fieldMap.put(fieldName, (Component) instantiateClassWithName(fieldType.get()));
+            fieldMap.put(fieldName, (Component) instantiateClassWithName(field.getElementType().asString()));
         } else if (isFieldProjectComponent(field)) {
             fieldMap.put(fieldName, (Component) instantiateProjectComponentClassWithName(field));
         } else {

@@ -40,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
@@ -147,9 +148,13 @@ public class ProjectSelectionView extends VerticalLayout {
                 .ifPresent(urlPath -> {
                     urlPath = urlPath.replace("{String}", "");
                     final Map<String, List<String>> map = Maps.newHashMap();
-                    map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath())));
-                    // using UI#navigate causes many Components to not be drawn incorrectly
-                    getUI().get().getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
+                    try {
+                        map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath(), "UTF-8")));
+                        // using UI#navigate causes many Components to not be drawn incorrectly
+                        getUI().get().getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 });
     }
 
@@ -157,12 +162,8 @@ public class ProjectSelectionView extends VerticalLayout {
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         attachEvent.getUI().getSession().setErrorHandler(event -> {
-            if (config.getDeveloperMode()) {
-                event.getThrowable().printStackTrace();
-            }
-            exceptionService.setError(event.getThrowable());
             event.getThrowable().printStackTrace();
-
+            exceptionService.setError(event.getThrowable());
             attachEvent.getUI().access(() -> new Dialog(new ErrorViewDialog(exceptionService)).open());
         });
     }

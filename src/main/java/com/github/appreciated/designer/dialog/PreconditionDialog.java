@@ -84,7 +84,7 @@ public class PreconditionDialog extends Dialog {
             ComboBox<Class> comboBox = new ComboBox<>();
             comboBox.setLabel(entry.getKey());
             comboBox.setItemLabelGenerator(Class::getSimpleName);
-            comboBox.setItems(componentService.getAllButProjectComponents().map(DesignerComponent::getClassName));
+            comboBox.setItems(componentService.getVaadinLayoutsComponents().map(DesignerComponent::getClassName));
             binder.forField(comboBox)
                     .asRequired()
                     .bind((ValueProvider<Map<String, Object>, Class>) map -> (Class) map.get(entry.getKey()),

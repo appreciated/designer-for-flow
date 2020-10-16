@@ -34,7 +34,9 @@ public class ImageJavaGenerator implements VaadinComponentJavaGenerator<Image> {
     @Override
     public Stream<Expression> parse(CompilationUnit compilationUnit, Image propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
-        if (propertyParent.getSrc() != null && designCompilerInformation.getComponentMetainfo(propertyParent).hasPropertyReplacement("src")) {
+        if (propertyParent.getSrc() != null &&
+                designCompilerInformation.hasComponentMetainfo(propertyParent) &&
+                designCompilerInformation.getComponentMetainfo(propertyParent).hasPropertyReplacement("src")) {
             expressionList.add(new MethodCallExpr(nameExpr, "setSrc", new NodeList<>(new StringLiteralExpr((String) designCompilerInformation.getComponentMetainfo(propertyParent).getPropertyReplacement("src")))));
         }
         return expressionList.stream();

@@ -12,7 +12,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -22,6 +21,7 @@ import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -45,14 +45,6 @@ import java.util.stream.Stream;
  * A Class which purpose is to return the available Vaadin {@link Component}'s.
  */
 public class ComponentService {
-
-    public Stream<DesignerComponent> getAllComponents(Project model) {
-        return Stream.concat(Stream.concat(getHtmlComponents(), getVaadinComponents()), getProjectComponents(model));
-    }
-
-    public Stream<DesignerComponent> getAllButProjectComponents() {
-        return Stream.concat(getHtmlComponents(), getVaadinComponents());
-    }
 
     public Stream<DesignerComponent> getHtmlComponents() {
         List<Class<? extends Component>> list = Arrays.asList(
@@ -101,6 +93,31 @@ public class ComponentService {
         }).filter(Objects::nonNull);
     }
 
+    public Stream<DesignerComponent> getVaadinLayoutsComponents() {
+        List<Class<? extends Component>> list = Arrays.asList(
+                FormLayout.class,
+                HorizontalLayout.class,
+                Scroller.class,
+                SplitLayout.class,
+                VerticalLayout.class
+        );
+
+        return list.stream().map(aClass -> {
+            try {
+                if (aClass.isAnnotationPresent(Tag.class)) {
+                    return new DesignerComponent(aClass.getAnnotation(Tag.class).value(), aClass);
+                } else {
+                    return new DesignerComponent(aClass.getSimpleName(), aClass);
+                }
+            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                System.err.println(aClass.getSimpleName());
+                e.printStackTrace();
+            }
+            return null;
+        }).filter(Objects::nonNull);
+    }
+
+
     public Stream<DesignerComponent> getVaadinComponents() {
         List<Class<? extends Component>> list = Arrays.asList(
                 Accordion.class,
@@ -109,13 +126,10 @@ public class ComponentService {
                 Checkbox.class,
                 CheckboxGroup.class,
                 ComboBox.class,
-                ContextMenu.class,
                 DatePicker.class,
                 DateTimePicker.class,
                 EmailField.class,
-                FormLayout.class,
                 Grid.class,
-                HorizontalLayout.class,
                 Image.class,
                 ListBox.class,
                 LoginForm.class,
@@ -124,16 +138,15 @@ public class ComponentService {
                 PasswordField.class,
                 ProgressBar.class,
                 RadioButtonGroup.class,
+                Scroller.class,
                 Select.class,
-                SplitLayout.class,
                 Tab.class,
                 Tabs.class,
                 TextArea.class,
                 TextField.class,
                 TimePicker.class,
                 TreeGrid.class,
-                Upload.class,
-                VerticalLayout.class
+                Upload.class
         );
 
         return list.stream().map(aClass -> {

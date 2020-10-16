@@ -16,6 +16,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 
 import javax.annotation.Generated;
 import java.io.File;
@@ -35,8 +36,8 @@ public class JavaGenerator {
     private final SourceRoot sourceRoot;
     private final DesignCompilerInformation designCompilerInformation;
     private final Map<String, Integer> counters = new HashMap<>();
-    private ClassOrInterfaceDeclaration componentClass;
     private final VaadinComponentJavaGeneratorCollection compilerCollection;
+    private ClassOrInterfaceDeclaration componentClass;
 
     public JavaGenerator(DesignCompilerInformation designCompilerInformation) {
         compilerCollection = new VaadinComponentJavaGeneratorCollection(designCompilerInformation);
@@ -144,6 +145,8 @@ public class JavaGenerator {
             addChildrenHasComponents(expression, component, "addContent", false);
         } else if (actualComponent instanceof Accordion) {
             addChildrenHasComponents(expression, component, "add", false);
+        } else if (actualComponent instanceof Scroller) {
+            addChildrenHasComponents(expression, component, "setContent", false);
         } else {
             throw new IllegalStateException("The following component class is currently not supported: " + component.getClass().getSimpleName());
         }

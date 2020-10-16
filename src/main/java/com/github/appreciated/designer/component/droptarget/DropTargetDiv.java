@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.component;
+package com.github.appreciated.designer.component.droptarget;
 
 import com.vaadin.flow.component.html.Div;
 

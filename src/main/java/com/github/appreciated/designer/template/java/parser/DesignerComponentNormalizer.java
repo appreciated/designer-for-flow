@@ -22,19 +22,19 @@ public class DesignerComponentNormalizer {
         new DesignerComponentNormalizer(parsedComponent, compilerInformation);
     }
 
-    public void iterate(Component component) {
+    private void iterate(Component component) {
         processComponent(component);
         if (isComponentContainer(component, compilerInformation)) {
             getChildren(component).forEach(this::iterate);
         }
     }
 
-    public void processComponent(Component component) {
+    private void processComponent(Component component) {
         if (component instanceof Image) {
-            if (((Image) component).getSrc() != null) {
+            if (((Image) component).getSrc() != null && !((Image) component).getSrc().equals("")) {
                 String src = ((Image) component).getSrc();
                 ((Image) component).setSrc(new FileStreamResource(new File(getCompilerInformation().getProject().getFrontendFolder() + File.separator + src.replace("/", File.separator))));
-                getCompilerInformation().getComponentMetainfo(component).setPropertyReplacement("src", src);
+                getCompilerInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement("src", src);
             }
         }
     }

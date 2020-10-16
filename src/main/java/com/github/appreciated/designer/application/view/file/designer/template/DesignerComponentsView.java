@@ -7,14 +7,14 @@ import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.service.ComponentService;
 import com.vaadin.flow.component.dnd.DragSource;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -32,11 +32,12 @@ public class DesignerComponentsView extends BaseView {
         super("components");
         this.projectFileModel = projectFileModel;
 
-        componentsCategories = new HashMap<>();
-        components = new HashMap<>();
+        componentsCategories = new LinkedHashMap<>();
+        components = new LinkedHashMap<>();
 
         componentsContainer = new VerticalLayout();
         componentsContainer.setPadding(false);
+        componentsContainer.setSpacing(false);
         componentsContainer.setMargin(false);
         ComponentService service = new ComponentService();
         TextField search = new TextField();
@@ -47,23 +48,32 @@ public class DesignerComponentsView extends BaseView {
         search.setClearButtonVisible(true);
         search.addValueChangeListener(event -> initAccordions(event.getValue()));
         add(search);
+        components.put(getTranslation("vaadin.layouts"), new ArrayList<>());
         components.put(getTranslation("project.components"), new ArrayList<>());
         components.put(getTranslation("vaadin.components"), new ArrayList<>());
         components.put(getTranslation("html.components"), new ArrayList<>());
-        service.getHtmlComponents()
-                .forEach(component -> initDragAndDrop(component, getTranslation("html.components")));
-        service.getVaadinComponents()
-                .forEach(component -> initDragAndDrop(component, getTranslation("vaadin.components")));
+        service.getVaadinLayoutsComponents()
+                .forEach(component -> initDragAndDrop(component, getTranslation("vaadin.layouts")));
         service.getProjectComponents(projectFileModel.getInformation().getProject())
                 .forEach(component -> initDragAndDrop(component, getTranslation("project.components")));
+        service.getVaadinComponents()
+                .forEach(component -> initDragAndDrop(component, getTranslation("vaadin.components")));
+        service.getHtmlComponents()
+                .forEach(component -> initDragAndDrop(component, getTranslation("html.components")));
+
         components.keySet().forEach(key -> {
             VerticalLayout accordionPanel = new VerticalLayout();
             accordionPanel.setMargin(false);
+            accordionPanel.setSpacing(false);
             accordionPanel.setPadding(false);
-            accordionPanel.add(new H3(key));
+            accordionPanel.add(new H4(key));
             VerticalLayout wrapper = new VerticalLayout();
             wrapper.setMargin(false);
             wrapper.setPadding(false);
+            wrapper.setSpacing(false);
+            wrapper.getStyle().set("border-radius", "var(--lumo-border-radius-m)")
+                    .set("box-shadow", "var(--lumo-box-shadow-xs)")
+                    .set("background", "var(--lumo-primary-contrast-color)");
             accordionPanel.add(wrapper);
             componentsCategories.put(key, wrapper);
             componentsContainer.add(accordionPanel);
@@ -71,6 +81,7 @@ public class DesignerComponentsView extends BaseView {
         initAccordions(null);
         add(componentsContainer);
         componentsContainer.setSizeFull();
+        setSpacing(false);
     }
 
     private void initAccordions(String name) {

@@ -6,6 +6,7 @@ import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Log4j2
+@CssImport(value = "./styles/grid-tree-toggle-adjust.css", themeFor = "vaadin-grid-tree-toggle")
 public class StructureView extends BaseView {
     private static final long serialVersionUID = -878124261779595119L;
 

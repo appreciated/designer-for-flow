@@ -1,15 +1,16 @@
 package com.github.appreciated.designer.application.presenter.file.designer.template;
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
-import com.github.appreciated.designer.application.presenter.file.designer.template.draghandler.AccordionPanelDragTargetHandler;
-import com.github.appreciated.designer.application.presenter.file.designer.template.draghandler.DragTargetHandler;
+import com.github.appreciated.designer.application.presenter.file.designer.template.draghandler.*;
 import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.AccordionPanelDropHandler;
 import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.DropHandler;
+import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.TabsDropHandler;
 import com.github.appreciated.designer.application.view.file.designer.template.DesignerView;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
-import com.github.appreciated.designer.component.DropTargetAccordionPanel;
-import com.github.appreciated.designer.component.DropTargetComponent;
-import com.github.appreciated.designer.component.DropTargetDiv;
+import com.github.appreciated.designer.component.droptarget.DropTargetAccordionPanel;
+import com.github.appreciated.designer.component.droptarget.DropTargetComponent;
+import com.github.appreciated.designer.component.droptarget.DropTargetDiv;
+import com.github.appreciated.designer.component.droptarget.DropTargetTab;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.service.EventService;
@@ -23,6 +24,7 @@ import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.dnd.DropEffect;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.component.dnd.EffectAllowed;
+import com.vaadin.flow.component.tabs.Tabs;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +39,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
 
     private final DesignerComponentWrapper designerRoot;
     private final DropHandler[] dropHandlers;
-    private final DragTargetHandler[] dragTargetHandlers;
+    private final DragHandler[] dragTargetHandlers;
     private final ProjectFileModel projectFileModel;
     private DesignerComponentWrapper currentFocus;
 
@@ -77,16 +79,20 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             );
         });
         dropHandlers = new DropHandler[]{
-                new AccordionPanelDropHandler(this)
+                new AccordionPanelDropHandler(this),
+                new TabsDropHandler(this)
         };
-        dragTargetHandlers = new DragTargetHandler[]{
-                new AccordionPanelDragTargetHandler(this)
+        dragTargetHandlers = new DragHandler[]{
+                new AccordionPanelDragHandler(this),
+                new MenuItemDragHandler(this),
+                new ScrollerDragHandler(this),
+                new TabsDragHandler(this)
         };
         eventService.getDesignerComponentDropListener().addEventConsumer(dropEvent ->
                 handleDropEvent(dropEvent.getDraggedComponent(), dropEvent.getTargetComponent())
         );
         eventService.getDesignerComponentDragListener().addEventConsumer(dragEvent ->
-                setHasComponentsFillerVisible(dragEvent.isStarted(), dragEvent.getDraggedComponent())
+                setComponentContainerFillerVisible(dragEvent.isStarted(), dragEvent.getDraggedComponent())
         );
     }
 
@@ -143,30 +149,26 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     private void addDragListener(Component component) {
         DragSource<Component> dragSource = DragSource.create(component);
         dragSource.setEffectAllowed(EffectAllowed.ALL);
-        dragSource.addDragStartListener(event -> setHasComponentsFillerVisible(true, (DesignerComponentWrapper) event.getComponent()));
-        dragSource.addDragEndListener(event -> setHasComponentsFillerVisible(false, (DesignerComponentWrapper) event.getComponent()));
+        dragSource.addDragStartListener(event -> setComponentContainerFillerVisible(true, (DesignerComponentWrapper) event.getComponent()));
+        dragSource.addDragEndListener(event -> setComponentContainerFillerVisible(false, (DesignerComponentWrapper) event.getComponent()));
     }
 
-    private synchronized void setHasComponentsFillerVisible(boolean isVisible, DesignerComponentWrapper component) {
+    private synchronized void setComponentContainerFillerVisible(boolean isVisible, DesignerComponentWrapper component) {
         if (isVisible) {
-            addHasComponentsFiller(designerRoot, component);
-            setDragClass(isVisible);
+            addComponentContainerFiller(designerRoot, component);
+            setDragClass(true);
         } else {
-            removeHasComponentsFiller(designerRoot);
+            removeComponentContainerFiller(designerRoot);
             notifyStructureListeners();
-            setDragClass(isVisible);
+            setDragClass(false);
         }
     }
 
-    private void addHasComponentsFiller(Component designerComponentWrapper, DesignerComponentWrapper draggedComponent) {
+    private void addComponentContainerFiller(Component designerComponentWrapper, DesignerComponentWrapper draggedComponent) {
         if (isComponentContainer(unwrapDesignerComponent(designerComponentWrapper), projectFileModel.getInformation())) {
-            ComponentContainerHelper.getChildren(unwrapDesignerComponent(designerComponentWrapper)).collect(Collectors.toList()).forEach(component -> {
-                if (component instanceof DesignerComponentWrapper) {
-                    addHasComponentsFiller(component, draggedComponent);
-                } else {
-                    addHasComponentsFiller(component, draggedComponent);
-                }
-            });
+            ComponentContainerHelper.getChildren(unwrapDesignerComponent(designerComponentWrapper))
+                    .collect(Collectors.toList())
+                    .forEach(component -> addComponentContainerFiller(component, draggedComponent));
             if (!dragTargetWasHandled(draggedComponent, designerComponentWrapper)) {
                 ComponentContainerHelper.addComponent(unwrapDesignerComponent(designerComponentWrapper), getDropTargetDiv(designerComponentWrapper));
             }
@@ -181,16 +183,18 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         }
     }
 
-    private void removeHasComponentsFiller(Component componentContainer) {
+    private void removeComponentContainerFiller(Component componentContainer) {
         Component unwrappedComponent = unwrapDesignerComponent(componentContainer);
         if (isComponentContainer(unwrappedComponent, projectFileModel.getInformation())) {
             ComponentContainerHelper.getChildren(unwrappedComponent).collect(Collectors.toList()).forEach(component -> {
                 Component unwrappedChild = unwrapDesignerComponent(component);
                 if (isComponentContainer(unwrappedChild, projectFileModel.getInformation()) && !(unwrappedChild instanceof DropTargetComponent)) {
-                    removeHasComponentsFiller(unwrappedChild);
+                    removeComponentContainerFiller(unwrappedChild);
                 }
                 if (unwrappedChild instanceof DropTargetComponent) {
-                    ComponentContainerHelper.removeChild(component.getParent().get(), unwrappedChild);
+                    if (component.getParent().isPresent()) {
+                        ComponentContainerHelper.removeChild(component.getParent().get(), unwrappedChild);
+                    }
                 }
             });
         }
@@ -203,7 +207,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         dropTarget.addDropListener(event -> {
             Component currentDraggedItem = projectFileModel.getCurrentDragItem();
             handleDropEvent(currentDraggedItem == null ? event.getDragSourceComponent().get() : currentDraggedItem, event.getComponent());
-            removeHasComponentsFiller(designerRoot);
+            removeComponentContainerFiller(designerRoot);
         });
         return div;
     }
@@ -211,6 +215,8 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     Component getDropTargetComponent(Component target) {
         if (unwrapDesignerComponent(target) instanceof Accordion) {
             return new DropTargetAccordionPanel();
+        } else if (unwrapDesignerComponent(target) instanceof Tabs) {
+            return new DropTargetTab();
         } else {
             return new DropTargetDiv();
         }
@@ -249,7 +255,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private boolean dragTargetWasHandled(DesignerComponentWrapper draggedComponent, Component targetComponent) {
-        Optional<DragTargetHandler> handler = Arrays.stream(dragTargetHandlers)
+        Optional<DragHandler> handler = Arrays.stream(dragTargetHandlers)
                 .filter(dropHandler1 -> dropHandler1.canHandleDragTargetEvent(draggedComponent, targetComponent))
                 .findFirst();
         if (handler.isPresent()) {

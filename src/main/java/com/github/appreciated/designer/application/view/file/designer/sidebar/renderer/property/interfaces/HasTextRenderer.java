@@ -43,7 +43,8 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
         buttons.setSpacing(false);
         textField.setSuffixComponent(buttons);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
-        if (getProjectFileModel().getInformation().hasComponentMetainfo((Component) component)) {
+        if (getProjectFileModel().getInformation().hasComponentMetainfo((Component) component) &&
+                getProjectFileModel().getInformation().getComponentMetainfo((Component) component).hasPropertyReplacement("text")) {
             textField.setValue((String) getProjectFileModel().getInformation().getComponentMetainfo((Component) component).getPropertyReplacement("text"));
             textField.setReadOnly(true);
         } else {

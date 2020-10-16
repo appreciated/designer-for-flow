@@ -40,11 +40,8 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
     public ProjectPresenter(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         UI ui = UI.getCurrent();
         ui.getSession().setErrorHandler(event -> {
-            if (projectService.getConfig().getDeveloperMode()) {
-                event.getThrowable().printStackTrace();
-            }
-            exceptionService.setError(event.getThrowable());
             event.getThrowable().printStackTrace();
+            exceptionService.setError(event.getThrowable());
             ui.access(() -> new ErrorViewDialog(exceptionService).open());
         });
         this.eventService = eventService;
@@ -79,7 +76,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         super.onAttach(attachEvent);
         Shortcuts.register(attachEvent.getUI(), projectService, eventService);
         if (projectService.getConfig().getDeveloperMode()) {
-            File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\view\\TestDesign.java");
+            File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\view\\AllComponentsDesign.java");
             if (defaultFile.exists()) {
                 addTab(defaultFile);
             }

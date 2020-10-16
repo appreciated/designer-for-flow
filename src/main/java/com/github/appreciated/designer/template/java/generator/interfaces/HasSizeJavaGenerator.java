@@ -21,13 +21,14 @@ public class HasSizeJavaGenerator implements VaadinComponentJavaGenerator<HasSiz
 
     @Override
     public boolean requiresParsing(HasSize propertyParent) {
-        Component parent = ((Component) propertyParent).getParent().get();
-        if (parent instanceof HasSize) {
-            HasSize hasSizeParent = ((HasSize) parent);
-            return hasSizeParent.getWidth() != null || hasSizeParent.getHeight() != null;
-        } else {
-            return false;
+        if (propertyParent instanceof Component && ((Component) propertyParent).getParent().isPresent()) {
+            Component parent = ((Component) propertyParent).getParent().get();
+            if (parent instanceof HasSize) {
+                HasSize hasSizeParent = ((HasSize) parent);
+                return hasSizeParent.getWidth() != null || hasSizeParent.getHeight() != null;
+            }
         }
+        return false;
     }
 
     @Override

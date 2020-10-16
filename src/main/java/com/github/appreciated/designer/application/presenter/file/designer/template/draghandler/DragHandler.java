@@ -6,11 +6,11 @@ import com.vaadin.flow.component.Component;
 import lombok.Data;
 
 @Data
-public abstract class DragTargetHandler {
+public abstract class DragHandler {
 
     private DesignerPresenter presenter;
 
-    public DragTargetHandler(DesignerPresenter presenter) {
+    public DragHandler(DesignerPresenter presenter) {
         this.presenter = presenter;
     }
 
