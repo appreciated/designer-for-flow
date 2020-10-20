@@ -12,7 +12,7 @@ import com.github.appreciated.designer.AppConfig;
 import com.github.appreciated.designer.application.presenter.ProjectPresenter;
 import com.github.appreciated.designer.component.AddButton;
 import com.github.appreciated.designer.dialog.ErrorViewDialog;
-import com.github.appreciated.designer.dialog.OpenProjectDialog;
+import com.github.appreciated.designer.dialog.file.OpenProjectDialog;
 import com.github.appreciated.designer.model.ProjectPath;
 import com.github.appreciated.designer.model.project.ProjectTypes;
 import com.github.appreciated.designer.service.ExceptionService;

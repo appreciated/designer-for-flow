@@ -3,7 +3,7 @@ package com.github.appreciated.designer.application.view.file.designer.sidebar.r
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.github.appreciated.designer.component.IconButton;
-import com.github.appreciated.designer.dialog.FileChooserDialog;
+import com.github.appreciated.designer.dialog.file.FileChooserDialog;
 import com.github.appreciated.designer.vaadin.converter.FileStreamResource;
 import com.github.appreciated.designer.vaadin.converter.PathValidator;
 import com.vaadin.flow.component.Component;

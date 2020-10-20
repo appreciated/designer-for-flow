@@ -11,6 +11,7 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.AccordionPanel;
+import com.vaadin.flow.component.tabs.Tab;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +38,7 @@ public class DesignerComponentTreeParser {
             List<Component> children = ComponentContainerHelper.getChildren(component).collect(Collectors.toList());
             ComponentContainerHelper.removeAll(component);
             children.forEach(child -> {
-                if (child instanceof AccordionPanel) {
+                if (child instanceof AccordionPanel || child instanceof Tab) {
                     addComponent(component, child);
                 } else {
                     addComponent(component, wrap(child, information));

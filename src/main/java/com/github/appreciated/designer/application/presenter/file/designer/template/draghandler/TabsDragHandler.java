@@ -3,6 +3,7 @@ package com.github.appreciated.designer.application.presenter.file.designer.temp
 import com.github.appreciated.designer.application.presenter.file.designer.template.DesignerPresenter;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 
 
@@ -13,7 +14,7 @@ public class TabsDragHandler extends DragHandler {
     }
 
     public boolean canHandleDragTargetEvent(DesignerComponentWrapper draggedComponent, Component targetComponent) {
-        return getPresenter().unwrapDesignerComponent(targetComponent) instanceof Tabs;
+        return draggedComponent.getActualComponent() instanceof Tab && getPresenter().unwrapDesignerComponent(targetComponent) instanceof Tabs;
     }
 
     @Override

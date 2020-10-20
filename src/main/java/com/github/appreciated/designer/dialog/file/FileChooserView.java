@@ -1,12 +1,10 @@
-package com.github.appreciated.designer.dialog;
+package com.github.appreciated.designer.dialog.file;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,36 +15,62 @@ import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.provider.hierarchy.AbstractBackEndHierarchicalDataProvider;
 import com.vaadin.flow.data.provider.hierarchy.HierarchicalQuery;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Getter
-public class FileChooserDialog extends Dialog {
+@Setter
+public class FileChooserView extends VerticalLayout {
     private static final long serialVersionUID = -8905937388281013238L;
 
     // Layout
-    protected final H2 header;
     protected final HorizontalLayout buttons;
     protected final Button select;
     // Data
-    protected final Consumer<File> fileConsumer;
+    protected Consumer<File> fileConsumer;
     protected TreeGrid<File> grid;
-    protected File parentFile;
-    private AbstractBackEndHierarchicalDataProvider<File, Void> dataProvider;
 
-    public FileChooserDialog(final File parentFile, final Consumer<File> fileConsumer) {
-        this(parentFile, fileConsumer, true, false);
+    protected File parentFile;
+    protected Function<File, Component> getRowComponentForFile = file -> {
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.add(new Span(file.getName()));
+        return layout;
+    };
+    private AbstractBackEndHierarchicalDataProvider<File, Void> dataProvider;
+    // Events
+    private Function<File, Stream<File>> getFiles = file -> Arrays.stream(file.listFiles().clone());
+    private Consumer onClose;
+    private Consumer<File> onSelect = file -> {
+        if (file != null && fileConsumer != null) {
+            fileConsumer.accept(file);
+            onClose.accept(null);
+        } else {
+            Notification.show(getTranslation("please.select.a.file"));
+        }
+    };
+    private Consumer<ItemDoubleClickEvent<File>> processDoubleClickEvent = event -> {
+        final File selectedFile = event.getItem();
+        if (selectedFile != null && !selectedFile.isDirectory()) {
+            onSelect.accept(selectedFile);
+        }
+    };
+    private Consumer<File> update = selectedFile -> getSelect().setEnabled(selectedFile != null && !selectedFile.isDirectory());
+
+
+    public FileChooserView(final File parentFile, final Consumer<File> fileConsumer, Consumer onClose) {
+        this(parentFile, fileConsumer, true, false, onClose);
     }
 
-    public FileChooserDialog(final File parentFile, final Consumer<File> fileConsumer, final boolean init, boolean allowSwitchingVolumes) {
-        super();
-        setMinWidth("50%");
-        setMinHeight("50%");
+
+    public FileChooserView(final File parentFile, final Consumer<File> fileConsumer, final boolean init, boolean allowSwitchingVolumes, Consumer onClose) {
+        this.onClose = onClose;
         this.fileConsumer = fileConsumer;
         this.parentFile = parentFile;
 
@@ -57,8 +81,6 @@ public class FileChooserDialog extends Dialog {
         buttons = new HorizontalLayout(select);
         buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         buttons.setWidthFull();
-        header = new H2(getTranslation("select.a.file"));
-        VerticalLayout wrapper = new VerticalLayout(header);
         HorizontalLayout gridHeader = new HorizontalLayout();
         gridHeader.setWidthFull();
         if (allowSwitchingVolumes) {
@@ -86,12 +108,10 @@ public class FileChooserDialog extends Dialog {
             }));
         }
         gridHeader.add(new Button(VaadinIcon.REFRESH.create(), event -> dataProvider.refreshAll()));
-        wrapper.add(gridHeader, grid, buttons);
-        wrapper.setPadding(false);
-        wrapper.setMargin(false);
-        wrapper.setSizeFull();
-        setWidth("500px");
-        add(wrapper);
+        add(gridHeader, grid, buttons);
+        setPadding(false);
+        setMargin(false);
+        setSizeFull();
 
         if (init) { // init
             update();
@@ -99,7 +119,7 @@ public class FileChooserDialog extends Dialog {
     }
 
     protected void onSelectSelected() {
-        onSelect(getGrid().getSelectedItems().stream().findFirst().orElse(null));
+        onSelect.accept(getGrid().getSelectedItems().stream().findFirst().orElse(null));
     }
 
     private void refresh(final File parent) {
@@ -108,21 +128,21 @@ public class FileChooserDialog extends Dialog {
 
             @Override
             public int getChildCount(HierarchicalQuery<File, Void> hierarchicalQuery) {
-                return hierarchicalQuery.getParent() == null ? getFiles(parent).length : getFiles(hierarchicalQuery.getParent()).length;
+                return (int) (hierarchicalQuery.getParent() == null ? getFiles.apply(parent).count() : getFiles.apply(hierarchicalQuery.getParent()).count());
             }
 
             @Override
             public boolean hasChildren(File file) {
                 if (file == null) {
-                    return parent.isDirectory() && getFiles(parent).length > 0;
+                    return parent.isDirectory() && getFiles.apply(parent).count() > 0;
                 } else {
-                    return file.isDirectory() && getFiles(file) != null && getFiles(file).length > 0;
+                    return file.isDirectory() && getFiles.apply(file) != null && getFiles.apply(file).count() > 0;
                 }
             }
 
             @Override
             protected Stream<File> fetchChildrenFromBackEnd(HierarchicalQuery<File, Void> hierarchicalQuery) {
-                return Arrays.stream(hierarchicalQuery.getParent() == null ? getFiles(parent) : getFiles(hierarchicalQuery.getParent()));
+                return hierarchicalQuery.getParent() == null ? getFiles.apply(parent) : getFiles.apply(hierarchicalQuery.getParent());
             }
         };
         grid.setDataProvider(dataProvider);
@@ -141,55 +161,25 @@ public class FileChooserDialog extends Dialog {
     }
 
     protected void update() {
-        update(getGrid().getSelectedItems().stream().findFirst().orElse(null));
-    }
-
-    protected void onSelect(final File file) {
-        if (file != null) {
-            fileConsumer.accept(file);
-            close();
-        } else {
-            Notification.show(getTranslation("please.select.a.file"));
-        }
-    }
-
-    protected File[] getFiles(final File root) {
-        return root.listFiles();
-    }
-
-    protected void update(final File selectedFile) {
-        getSelect().setEnabled(selectedFile != null && !selectedFile.isDirectory());
+        update.accept(getGrid().getSelectedItems().stream().findFirst().orElse(null));
     }
 
     protected void initGrid(final File parent) {
         this.grid = new TreeGrid<>();
         grid.setVerticalScrollingEnabled(true);
         refresh(parent);
-        grid.addItemDoubleClickListener(this::processDoubleClickEvent);
-        grid.addSelectionListener(e -> update(e.getFirstSelectedItem().orElse(null)));
+        grid.addItemDoubleClickListener(event -> processDoubleClickEvent.accept(event));
+        grid.addSelectionListener(e -> update.accept(e.getFirstSelectedItem().orElse(null)));
         grid.addExpandListener(event -> grid.expandRecursively(event.getItems(), singleDirectoriesRecursive(event.getItems(), -1)));
-        grid.addComponentHierarchyColumn(this::getRowComponentForFile);
+        grid.addComponentHierarchyColumn(file -> getRowComponentForFile.apply(file));
         grid.setWidthFull();
     }
 
-    protected Component getRowComponentForFile(File file) {
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.add(new Span(file.getName()));
-        return layout;
-    }
 
     private int singleDirectoriesRecursive(final Collection<File> files, int expand) {
         if ((long) files.size() == 1 && files.stream().anyMatch(File::isDirectory)) {
             return singleDirectoriesRecursive(Arrays.asList(files.stream().findFirst().get().listFiles()), ++expand);
         }
         return Math.max(expand, 0);
-    }
-
-    protected void processDoubleClickEvent(final ItemDoubleClickEvent<File> event) {
-        final File selectedFile = event.getItem();
-
-        if (selectedFile != null && !selectedFile.isDirectory()) {
-            onSelect(selectedFile);
-        }
     }
 }

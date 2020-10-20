@@ -1,10 +1,9 @@
-package com.github.appreciated.designer.dialog;
+package com.github.appreciated.designer.dialog.file;
 
+import com.github.appreciated.designer.dialog.PreconditionDialog;
 import com.github.appreciated.designer.file.JavaFile;
 import com.github.appreciated.designer.model.project.Project;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
 import com.vaadin.flow.component.html.Span;
@@ -19,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.github.appreciated.designer.file.JavaFile.PACKAGE;
 import static com.github.appreciated.designer.helper.DesignerFileHelper.isFileDesignerFile;
@@ -56,12 +56,67 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         getHeader().setText(getTranslation("select.a.file.or.package"));
 
         if (init) { // init
-            update();
+            getView().update();
         }
+
+        getView().setGetFiles(root -> {
+            if (root.listFiles() == null) {
+                return Stream.empty();
+            } else {
+                return Arrays.stream(root.listFiles())
+                        .filter(file -> FilenameUtils.getExtension(file.getName()).equals("java") || file.isDirectory());
+            }
+        });
+        getView().setUpdate(selectedFile -> {
+            if (selectedFile != null) {
+                getSelect().setEnabled(!selectedFile.isDirectory() && isFileDesignerFile(selectedFile));
+                addButton.setEnabled(selectedFile.isDirectory());
+            } else {
+                getSelect().setEnabled(false);
+                addButton.setEnabled(false);
+            }
+        });
+        getView().setOnSelect(file -> {
+            if (file != null) {
+                if (FilenameUtils.getExtension(file.getName()).equals("java")) {
+                    getView().getFileConsumer().accept(file);
+                    close();
+                } else {
+                    Notification.show(getTranslation("please.select.a.java.file"));
+                }
+            } else {
+                Notification.show(getTranslation("please.select.a.java.file"));
+            }
+        });
+        getView().setProcessDoubleClickEvent(event -> {
+            final File selectedFile = event.getItem();
+
+            if (selectedFile != null) {
+                if (selectedFile.isDirectory()) {
+                    onCreate(selectedFile);
+                } else {
+                    getView().getOnSelect().accept(selectedFile);
+                }
+            }
+        });
+        getView().setGetRowComponentForFile(file -> {
+            HorizontalLayout layout = new HorizontalLayout();
+            if (file.isDirectory()) {
+                layout.add(VaadinIcon.FOLDER.create());
+            } else {
+                if (isFileDesignerFile(file)) {
+                    layout.add(VaadinIcon.VAADIN_H.create());
+                } else {
+                    layout.add(VaadinIcon.FILE.create());
+                }
+            }
+            layout.add(new Span(file.getName()));
+            return layout;
+        });
     }
 
-    protected GridContextMenu<File> createContextMenu() {
-        final GridContextMenu<File> contextMenu = grid.addContextMenu();
+    private GridContextMenu<File> createContextMenu() {
+        final GridContextMenu<File> contextMenu = getGrid().addContextMenu();
 
         contextMenu.addGridContextMenuOpenedListener(e -> {
             final File file = e.getItem().orElse(null);
@@ -79,7 +134,6 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
                 contextMenuSelect.setEnabled(false);
             }
         });
-
         return contextMenu;
     }
 
@@ -97,83 +151,19 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         if (file.isDirectory()) {
             JavaFile javaFile = new JavaFile();
             HashMap<String, Object> objectHashMap = new HashMap<>();
-            String packageName = file.getPath().substring(parentFile.getPath().length()).replace(File.separator, ".");
+            String packageName = file.getPath().substring(getParentFile().getPath().length()).replace(File.separator, ".");
             if (packageName.startsWith(".")) {
                 packageName = packageName.substring(1);
             }
             objectHashMap.put(PACKAGE, packageName);
-            objectHashMap.put(JavaFile.SOURCE_FILE, parentFile);
+            objectHashMap.put(JavaFile.SOURCE_FILE, getParentFile());
             javaFile.setPreconditions(objectHashMap);
             new PreconditionDialog(this.project, javaFile, o -> {
-                getFileConsumer().accept(javaFile.create());
+                getView().getFileConsumer().accept(javaFile.create());
                 close();
             }).open();
         } else {
             Notification.show(getTranslation("please.select.a.java.file"));
-        }
-    }
-
-    @Override
-    protected void processDoubleClickEvent(final ItemDoubleClickEvent<File> event) {
-        final File selectedFile = event.getItem();
-
-        if (selectedFile != null) {
-            if (selectedFile.isDirectory()) {
-                onCreate(selectedFile);
-            } else {
-                onSelect(selectedFile);
-            }
-        }
-    }
-
-    @Override
-    protected void onSelect(final File file) {
-        if (file != null) {
-            if (FilenameUtils.getExtension(file.getName()).equals("java")) {
-                getFileConsumer().accept(file);
-                close();
-            } else {
-                Notification.show(getTranslation("please.select.a.java.file"));
-            }
-        } else {
-            Notification.show(getTranslation("please.select.a.java.file"));
-        }
-    }
-
-    protected Component getRowComponentForFile(File file) {
-        HorizontalLayout layout = new HorizontalLayout();
-        if (file.isDirectory()) {
-            layout.add(VaadinIcon.FOLDER.create());
-        } else {
-            if (isFileDesignerFile(file)) {
-                layout.add(VaadinIcon.VAADIN_H.create());
-            } else {
-                layout.add(VaadinIcon.FILE.create());
-            }
-        }
-        layout.add(new Span(file.getName()));
-        return layout;
-    }
-
-    @Override
-    protected File[] getFiles(final File root) {
-        if (root.listFiles() == null) {
-            return null;
-        } else {
-            return Arrays.stream(root.listFiles())
-                    .filter(file -> FilenameUtils.getExtension(file.getName()).equals("java") || file.isDirectory())
-                    .toArray(File[]::new);
-        }
-    }
-
-    @Override
-    public void update(final File selectedFile) {
-        if (selectedFile != null) {
-            select.setEnabled(!selectedFile.isDirectory() && isFileDesignerFile(selectedFile));
-            addButton.setEnabled(selectedFile.isDirectory());
-        } else {
-            select.setEnabled(false);
-            addButton.setEnabled(false);
         }
     }
 }
