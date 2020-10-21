@@ -5,6 +5,7 @@ import com.github.appreciated.designer.application.view.file.designer.sidebar.re
 import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
@@ -22,12 +23,14 @@ public class ComponentRenderer extends AbstractPropertyRenderer<Component> {
         componentBinder.setBean(component);
 
         TextField id = new TextField();
+        id.addThemeVariants(TextFieldVariant.LUMO_SMALL);
         id.setValueChangeMode(ValueChangeMode.EAGER);
         componentBinder.forField(id)
                 .bind(component1 -> component1.getId().orElse(null), Component::setId);
         componentBinder.setBean(component);
 
         TextField variableName = new TextField();
+        variableName.addThemeVariants(TextFieldVariant.LUMO_SMALL);
         variableName.setValueChangeMode(ValueChangeMode.EAGER);
         boolean hasInfo = getProjectFileModel().getInformation().hasCompilationMetaInformation(component);
         CompilationMetaInformation info = getProjectFileModel().getInformation().getCompilationMetaInformation(component);

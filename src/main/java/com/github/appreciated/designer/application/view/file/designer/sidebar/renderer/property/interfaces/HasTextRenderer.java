@@ -2,14 +2,15 @@ package com.github.appreciated.designer.application.view.file.designer.sidebar.r
 
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
+import com.github.appreciated.designer.component.SmallIconButton;
 import com.github.appreciated.designer.dialog.LocalisationKeySelectionDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.util.stream.Stream;
@@ -24,12 +25,13 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
     @Override
     public Stream<RenderPair> render(HasText component) {
         TextField textField = new TextField();
-        Button clear = new Button(VaadinIcon.CLOSE_SMALL.create(), event -> {
+        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        SmallIconButton clear = new SmallIconButton(VaadinIcon.CLOSE_SMALL.create(), event -> {
             textField.setValue("");
             textField.setReadOnly(false);
         });
         clear.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        Button localizationButton = new Button(VaadinIcon.FLAG.create(), event ->
+        SmallIconButton localizationButton = new SmallIconButton(VaadinIcon.FLAG.create(), event ->
                 new LocalisationKeySelectionDialog((Component) component,
                         "text",
                         getProjectFileModel(),

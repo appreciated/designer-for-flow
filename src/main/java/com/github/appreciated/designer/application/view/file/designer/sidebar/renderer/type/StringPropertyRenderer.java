@@ -2,6 +2,7 @@ package com.github.appreciated.designer.application.view.file.designer.sidebar.r
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.beans.PropertyDescriptor;
@@ -15,6 +16,7 @@ public class StringPropertyRenderer extends AbstractPropertyRenderer<String> {
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
         TextField textField = new TextField();
+        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
         try {
             String value = (String) propertyDescriptor.getReadMethod().invoke(propertyParent);

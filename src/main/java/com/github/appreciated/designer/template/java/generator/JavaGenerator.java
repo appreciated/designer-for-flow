@@ -63,7 +63,7 @@ public class JavaGenerator {
             componentClass = componentClass.addAnnotation(new NormalAnnotationExpr(new Name("Generated"),
                     new NodeList<>(
                             new MemberValuePair("value", new StringLiteralExpr("com.github.appreciated.designer.template.java.generator.JavaGenerator")),
-                            new MemberValuePair("comments", new StringLiteralExpr("This is generated code, do not modify")),
+                            new MemberValuePair("comments", new StringLiteralExpr("This is generated code. Manual changes are currently not supported.")),
                             new MemberValuePair("date", new StringLiteralExpr(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)))
                     )
             ));

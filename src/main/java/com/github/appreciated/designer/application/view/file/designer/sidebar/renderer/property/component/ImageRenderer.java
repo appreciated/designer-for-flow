@@ -11,6 +11,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.Binder;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
     @Override
     public Stream<RenderPair> render(Image component) {
         TextField src = new TextField();
+        src.addThemeVariants(TextFieldVariant.LUMO_SMALL);
         src.setSuffixComponent(new IconButton(VaadinIcon.FOLDER.create(), buttonClickEvent -> {
             new FileChooserDialog(getProjectFileModel().getInformation().getProject().getFrontendFolder(),
                     file -> src.setValue("." + file.getPath().substring(getProjectFileModel().getInformation().getProject().getFrontendFolder().getPath().length()).replace("\\", "/")))
