@@ -40,8 +40,8 @@ public class ComponentContainerHelper {
     }
 
     public static boolean isProjectComponent(Component component, DesignCompilerInformation designCompilerInformation) {
-        return designCompilerInformation.hasComponentMetainfo(component) &&
-                designCompilerInformation.getComponentMetainfo(component).isProjectComponent();
+        return designCompilerInformation.hasCompilationMetaInformation(component) &&
+                designCompilerInformation.getCompilationMetaInformation(component).isProjectComponent();
     }
 
     public static void addComponent(Component parent, Component child) {

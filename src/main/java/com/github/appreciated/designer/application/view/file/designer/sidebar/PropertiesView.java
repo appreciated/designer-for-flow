@@ -7,7 +7,7 @@ import com.github.appreciated.designer.application.view.file.designer.sidebar.re
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.HasStyleRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer;
 import com.github.appreciated.designer.component.ComponentPropertyParser;
-import com.github.appreciated.designer.component.designer.StyleEditorDetails;
+import com.github.appreciated.designer.component.designer.StyleEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
@@ -62,7 +62,7 @@ public class PropertiesView extends BaseView {
         if (renderer.canRender(propertyParent)) {
             Stream<RenderPair> component = renderer.render((HasStyle) propertyParent);
             RenderPair pair = component.findFirst().get();
-            StyleEditorDetails details = (StyleEditorDetails) pair.getPropertyComponent();
+            StyleEditor details = (StyleEditor) pair.getPropertyComponent();
             renderers.getPropertyRenderers().stream()
                     .filter(interfaceRenderer -> interfaceRenderer.canRender(propertyParent))
                     .forEach(interfaceRenderer -> details.removeRenderedStyles(interfaceRenderer.rendersCssStyle()));

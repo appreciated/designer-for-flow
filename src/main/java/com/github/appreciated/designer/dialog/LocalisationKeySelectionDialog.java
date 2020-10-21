@@ -22,7 +22,7 @@ public class LocalisationKeySelectionDialog extends Dialog {
         HorizontalLayout header = new HorizontalLayout(new H3(getTranslation("select.localization.key")));
         ComboBox<String> localisationKeys = new ComboBox<>();
         Button save = new Button(getTranslation("save"), event -> {
-            model.getInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement(property, localisationKeys.getValue());
+            model.getInformation().getOrCreateCompilationMetaInformation(component).setPropertyReplacement(property, localisationKeys.getValue());
             resultConsumer.accept(localisationKeys.getValue());
             close();
         });
@@ -39,14 +39,14 @@ public class LocalisationKeySelectionDialog extends Dialog {
             localisationKeys.setWidthFull();
             localisationKeys.setAllowCustomValue(false);
             localisationKeys.addValueChangeListener(event -> save.setEnabled(event.getValue() != null));
-            if (model.getInformation().hasComponentMetainfo(component) &&
-                    model.getInformation().getComponentMetainfo(component).hasPropertyReplacement("text")) {
-                localisationKeys.setValue((String) model.getInformation().getComponentMetainfo(component).getPropertyReplacement("text"));
+            if (model.getInformation().hasCompilationMetaInformation(component) &&
+                    model.getInformation().getCompilationMetaInformation(component).hasPropertyReplacement("text")) {
+                localisationKeys.setValue((String) model.getInformation().getCompilationMetaInformation(component).getPropertyReplacement("text"));
             }
             layout.add(localisationKeys);
             footer.add(save);
         } else {
-            layout.add(new Span("Project has not i18n Files configured"));
+            layout.add(new Span(getTranslation("project.has.no.i18n.files.configured")));
         }
         layout.add(footer);
         layout.setPadding(false);

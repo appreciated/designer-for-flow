@@ -19,11 +19,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StyleEditorDetails extends HasValueEditorDetails<StyleEditorDetails> {
+public class StyleEditor extends HasValueEditorDetails<StyleEditor> {
     private final Set<CssStyle> styles = new HashSet<>();
     private final Style style;
 
-    public StyleEditorDetails(Style style) {
+    public StyleEditor(Style style) {
         super("styles", new VerticalLayout(), true);
         this.style = style;
         updateRenderedStyles();

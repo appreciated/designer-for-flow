@@ -9,7 +9,7 @@ import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.binder.HasItems;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,12 +28,12 @@ public class HasItemsJavaGenerator implements VaadinComponentJavaGenerator<HasIt
 
     @Override
     public boolean requiresParsing(HasItems propertyParent) {
-        return designCompilerInformation.hasComponentMetainfo((Component) propertyParent) && designCompilerInformation.getComponentMetainfo((Component) propertyParent).hasPropertyReplacement("items");
+        return designCompilerInformation.hasCompilationMetaInformation((Component) propertyParent) && designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).hasPropertyReplacement("items");
     }
 
     @Override
     public Stream<Expression> parse(CompilationUnit compilationUnit, HasItems propertyParent, Expression nameExpr) {
-        Set<String> items = (Set<String>) designCompilerInformation.getComponentMetainfo((Component) propertyParent).getPropertyReplacement("items");
+        Collection<String> items = (Collection<String>) designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).getPropertyReplacement("items");
         return Stream.of(new MethodCallExpr(nameExpr, "setItems", new NodeList<>(items.stream().map(StringLiteralExpr::new).collect(Collectors.toList()))));
     }
 

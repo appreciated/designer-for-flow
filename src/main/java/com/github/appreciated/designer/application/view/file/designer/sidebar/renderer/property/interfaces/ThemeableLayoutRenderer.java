@@ -38,8 +38,4 @@ public class ThemeableLayoutRenderer extends AbstractPropertyRenderer<ThemableLa
         return super.rendersCssStyle();
     }
 
-    @Override
-    public void applyValue(ThemableLayout propertyParent) {
-
-    }
 }

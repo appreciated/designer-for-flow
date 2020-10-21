@@ -86,13 +86,13 @@ public class JavaGenerator {
         ObjectCreationExpr creation = new ObjectCreationExpr();
         // Project Components
         Component actualComponent = unwrapComponent(component);
-        if (designCompilerInformation.hasComponentMetainfo(actualComponent) && designCompilerInformation.getComponentMetainfo(actualComponent).isProjectComponent()) {
-            compilationUnit.addImport(designCompilerInformation.getComponentMetainfo(actualComponent).getPackageDeclaration() + "." + designCompilerInformation.getComponentMetainfo(actualComponent).getClassName());
-            creation.setType(designCompilerInformation.getComponentMetainfo(actualComponent).getClassName());
+        if (designCompilerInformation.hasCompilationMetaInformation(actualComponent) && designCompilerInformation.getCompilationMetaInformation(actualComponent).isProjectComponent()) {
+            compilationUnit.addImport(designCompilerInformation.getCompilationMetaInformation(actualComponent).getPackageDeclaration() + "." + designCompilerInformation.getCompilationMetaInformation(actualComponent).getClassName());
+            creation.setType(designCompilerInformation.getCompilationMetaInformation(actualComponent).getClassName());
 
             field = componentClass.addFieldWithInitializer(
-                    designCompilerInformation.getComponentMetainfo(actualComponent).getClassName(),
-                    designCompilerInformation.getComponentMetainfo(actualComponent).getClassName() + getCounterForComponent(designCompilerInformation.getComponentMetainfo(actualComponent).getClassName()), creation
+                    designCompilerInformation.getCompilationMetaInformation(actualComponent).getClassName(),
+                    designCompilerInformation.getCompilationMetaInformation(actualComponent).getClassName() + getCounterForComponent(designCompilerInformation.getCompilationMetaInformation(actualComponent).getClassName()), creation
             );
         } else {
             // All other Components

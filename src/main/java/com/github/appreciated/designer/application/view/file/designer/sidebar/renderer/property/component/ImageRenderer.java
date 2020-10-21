@@ -38,8 +38,8 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
             is.setSrc(component.getSrc());
             src.setValue(component.getSrc());
             setSrc(component, src);
-        } else if (getProjectFileModel().getInformation().getComponentMetainfo(component).hasPropertyReplacement("src")) {
-            is.setSrc((String) getProjectFileModel().getInformation().getComponentMetainfo(component).getPropertyReplacement("src"));
+        } else if (getProjectFileModel().getInformation().getCompilationMetaInformation(component).hasPropertyReplacement("src")) {
+            is.setSrc((String) getProjectFileModel().getInformation().getCompilationMetaInformation(component).getPropertyReplacement("src"));
         }
         sourceBinder.setBean(is);
         src.addBlurListener(textFieldBlurEvent -> sourceBinder.validate());
@@ -62,13 +62,13 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
     }
 
     public void setSrc(Image component, TextField src) {
-        if (component != null || (src.getValue() != null && !src.getValue().equals(""))) {
-            if (src.getValue() != null && !src.getValue().equals("")) {
+        if (component != null) {
+            if (src.getValue() != null && (src.getValue() != null && !src.getValue().equals(""))) {
                 component.setSrc(new FileStreamResource(new File(getProjectFileModel().getInformation().getProject().getFrontendFolder() + File.separator + src.getValue().replace("/", File.separator))));
-                getProjectFileModel().getInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement("src", src.getValue());
+                getProjectFileModel().getInformation().getOrCreateCompilationMetaInformation(component).setPropertyReplacement("src", src.getValue());
             } else {
                 component.getElement().setAttribute("src", "");
-                getProjectFileModel().getInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement("src", null);
+                getProjectFileModel().getInformation().getOrCreateCompilationMetaInformation(component).removePropertyReplacement("src");
             }
         }
     }
@@ -83,10 +83,6 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
         return Stream.of("src");
     }
 
-    @Override
-    public void applyValue(Image propertyParent) {
-
-    }
 
     class ImageSource {
         String src;

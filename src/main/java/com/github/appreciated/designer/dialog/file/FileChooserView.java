@@ -32,7 +32,7 @@ public class FileChooserView extends VerticalLayout {
 
     // Layout
     protected final HorizontalLayout buttons;
-    protected final Button select;
+    protected final Button selectFileButton;
     // Data
     protected Consumer<File> fileConsumer;
     protected TreeGrid<File> grid;
@@ -61,7 +61,7 @@ public class FileChooserView extends VerticalLayout {
             onSelect.accept(selectedFile);
         }
     };
-    private Consumer<File> update = selectedFile -> getSelect().setEnabled(selectedFile != null && !selectedFile.isDirectory());
+    private Consumer<File> update = selectedFile -> getSelectFileButton().setEnabled(selectedFile != null && !selectedFile.isDirectory());
 
 
     public FileChooserView(final File parentFile, final Consumer<File> fileConsumer, Consumer onClose) {
@@ -76,9 +76,9 @@ public class FileChooserView extends VerticalLayout {
 
         initGrid(parentFile);
 
-        select = new Button(getTranslation("open"), event -> onSelectSelected());
-        select.setThemeName(ButtonVariant.LUMO_PRIMARY.getVariantName());
-        buttons = new HorizontalLayout(select);
+        selectFileButton = new Button(getTranslation("open"), event -> onSelectSelected());
+        selectFileButton.setThemeName(ButtonVariant.LUMO_PRIMARY.getVariantName());
+        buttons = new HorizontalLayout(selectFileButton);
         buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         buttons.setWidthFull();
         HorizontalLayout gridHeader = new HorizontalLayout();

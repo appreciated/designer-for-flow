@@ -45,7 +45,7 @@ public class FileChooserDialog extends Dialog {
     }
 
     protected Button getSelect() {
-        return view.getSelect();
+        return view.getSelectFileButton();
     }
 
     protected TreeGrid<File> getGrid() {

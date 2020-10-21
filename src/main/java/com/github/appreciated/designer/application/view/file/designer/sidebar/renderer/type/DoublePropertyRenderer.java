@@ -5,6 +5,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 
 public class DoublePropertyRenderer extends AbstractPropertyRenderer<Double> {
     @Override
@@ -17,6 +18,14 @@ public class DoublePropertyRenderer extends AbstractPropertyRenderer<Double> {
         numberField.setValueChangeMode(ValueChangeMode.EAGER);
         numberField.setHasControls(true);
         numberField.setStep(0.01);
+        try {
+            Double value = (Double) propertyDescriptor.getReadMethod().invoke(propertyParent);
+            if (value != null) {
+                numberField.setValue(value);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
         numberField.addValueChangeListener(checkboxBooleanComponentValueChangeEvent -> applyValue(propertyParent, propertyDescriptor, numberField.getValue()));
         return numberField;
     }

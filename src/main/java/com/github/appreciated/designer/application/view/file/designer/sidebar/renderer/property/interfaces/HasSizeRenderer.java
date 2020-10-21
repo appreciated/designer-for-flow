@@ -47,8 +47,6 @@ public class HasSizeRenderer extends AbstractPropertyRenderer<HasSize> {
                     new IconButton(VaadinIcon.ARROWS_LONG_H.create(),
                             buttonClickEvent -> widthComponent.setValue("100%"))
             );
-            String widht = widthComponent.getWidth();
-            String styleWidth = widthComponent.getStyle().get("width");
             widthComponent.setValueChangeMode(ValueChangeMode.EAGER);
             componentBinder.forField(widthComponent)
                     .withValidator(new RegexpValidator("Not a valid css length", CssRegex.getLengthRegex()))
@@ -67,8 +65,4 @@ public class HasSizeRenderer extends AbstractPropertyRenderer<HasSize> {
         return Stream.of("height", "width");
     }
 
-    @Override
-    public void applyValue(HasSize propertyParent) {
-
-    }
 }

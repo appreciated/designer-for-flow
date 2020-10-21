@@ -34,7 +34,7 @@ public class DesignerComponentNormalizer {
             if (((Image) component).getSrc() != null && !((Image) component).getSrc().equals("")) {
                 String src = ((Image) component).getSrc();
                 ((Image) component).setSrc(new FileStreamResource(new File(getCompilerInformation().getProject().getFrontendFolder() + File.separator + src.replace("/", File.separator))));
-                getCompilerInformation().getOrCreateCompilationMetainformation(component).setPropertyReplacement("src", src);
+                getCompilerInformation().getOrCreateCompilationMetaInformation(component).setPropertyReplacement("src", src);
             }
         }
     }

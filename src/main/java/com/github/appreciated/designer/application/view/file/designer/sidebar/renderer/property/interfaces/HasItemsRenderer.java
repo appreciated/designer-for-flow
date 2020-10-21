@@ -2,15 +2,12 @@ package com.github.appreciated.designer.application.view.file.designer.sidebar.r
 
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
+import com.github.appreciated.designer.component.designer.StringItemsEditor;
+import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.binder.HasItems;
-import com.vaadin.flow.data.provider.Query;
-import org.vaadin.gatanaso.MultiselectComboBox;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HasItemsRenderer extends AbstractPropertyRenderer<HasItems> {
@@ -21,34 +18,22 @@ public class HasItemsRenderer extends AbstractPropertyRenderer<HasItems> {
     }
 
     @Override
-    public void applyValue(HasItems propertyParent) {
-
-    }
-
-    @Override
     public Stream<RenderPair> render(HasItems propertyParent) {
-        MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox<>();
-        multiselectComboBox.setWidth("100%");
-        multiselectComboBox.setPlaceholder("Add some items");
-// custom values handler to process the added value(s)
-        multiselectComboBox.addCustomValuesSetListener(e -> {
-            LinkedHashSet<String> value = new LinkedHashSet<>(multiselectComboBox.getValue());
-            value.add(e.getDetail());
-            List<String> updatedItems = multiselectComboBox.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
-            updatedItems.add(e.getDetail());
-            multiselectComboBox.setItems(updatedItems);
-            multiselectComboBox.setValue(value);
-        });
-        if (getProjectFileModel().getInformation().hasComponentMetainfo((Component) propertyParent) && getProjectFileModel().getInformation().getComponentMetainfo((Component) propertyParent).hasPropertyReplacement("items")) {
-            multiselectComboBox.setItems((Set<String>) getProjectFileModel().getInformation().getComponentMetainfo((Component) propertyParent).getPropertyReplacement("items"));
-            multiselectComboBox.setValue((Set<String>) getProjectFileModel().getInformation().getComponentMetainfo((Component) propertyParent).getPropertyReplacement("items"));
-        }
 
-        multiselectComboBox.addValueChangeListener(event -> {
-            getProjectFileModel().getInformation().getOrCreateCompilationMetainformation((Component) propertyParent).setPropertyReplacement("items", event.getValue());
-            propertyParent.setItems(event.getValue());
-        });
-        return Stream.of(new RenderPair("items", multiselectComboBox));
+        boolean hasMetaInformation = getProjectFileModel().getInformation().hasCompilationMetaInformation((Component) propertyParent);
+        CompilationMetaInformation metaInformation = getProjectFileModel().getInformation().getCompilationMetaInformation((Component) propertyParent);
+
+        return Stream.of(
+                new RenderPair("items",
+                        new StringItemsEditor("items",
+                                (hasMetaInformation ? ((List<String>) metaInformation.getPropertyReplacement("items")).stream() : Stream.empty()),
+                                collection -> {
+                                    propertyParent.setItems(collection);
+                                    getProjectFileModel().getInformation().getOrCreateCompilationMetaInformation((Component) propertyParent).setPropertyReplacement("items", collection);
+                                }
+                        )
+                )
+        );
     }
 
 

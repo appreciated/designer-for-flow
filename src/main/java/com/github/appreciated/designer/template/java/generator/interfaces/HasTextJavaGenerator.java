@@ -33,15 +33,15 @@ public class HasTextJavaGenerator implements VaadinComponentJavaGenerator<HasTex
 
     @Override
     public Stream<Expression> parse(CompilationUnit compilationUnit, HasText propertyParent, Expression nameExpr) {
-        if (designCompilerInformation.hasComponentMetainfo((Component) propertyParent) && designCompilerInformation.getComponentMetainfo((Component) propertyParent).hasPropertyReplacement("text")) {
+        if (designCompilerInformation.hasCompilationMetaInformation((Component) propertyParent) && designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).hasPropertyReplacement("text")) {
             List<Expression> expressionList = new ArrayList<>();
-            if (propertyParent.getText() != null && designCompilerInformation.getComponentMetainfo((Component) propertyParent).hasPropertyReplacement("text")) {
+            if (propertyParent.getText() != null && designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).hasPropertyReplacement("text")) {
                 expressionList.add(
                         new MethodCallExpr(nameExpr,
                                 "setText",
                                 new NodeList<>(
                                         new MethodCallExpr("getTranslation",
-                                                new StringLiteralExpr((String) designCompilerInformation.getComponentMetainfo((Component) propertyParent).getPropertyReplacement("text"))
+                                                new StringLiteralExpr((String) designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).getPropertyReplacement("text"))
                                         )
                                 )
                         )

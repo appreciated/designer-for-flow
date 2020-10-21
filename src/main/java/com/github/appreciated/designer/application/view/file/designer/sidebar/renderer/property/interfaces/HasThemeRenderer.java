@@ -68,9 +68,4 @@ public class HasThemeRenderer extends AbstractPropertyRenderer<HasTheme> {
         });
         return Stream.of(new RenderPair("themes", combobox));
     }
-
-    @Override
-    public void applyValue(HasTheme propertyParent) {
-
-    }
 }

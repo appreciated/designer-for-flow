@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.template.java.parser;
 
 import com.github.appreciated.designer.helper.DesignerFileHelper;
-import com.github.appreciated.designer.model.CompilationMetainformation;
+import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.service.ComponentService;
 import com.github.javaparser.ParseException;
@@ -29,7 +29,7 @@ public class ComponentTreeParser {
     private final ComponentService service;
     private final CompilationUnit compilationUnit;
     private final Project project;
-    private final Map<Component, CompilationMetainformation> compilationMetaInformation = new HashMap<>();
+    private final Map<Component, CompilationMetaInformation> compilationMetaInformation = new HashMap<>();
     Component rootComponent;
     Map<String, Component> fieldMap = new HashMap<>();
     private String className;
@@ -83,8 +83,8 @@ public class ComponentTreeParser {
                     if (args[0].getClass() == String.class) {
                         result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(String[]::new)});
                         if (component instanceof HasItems && foundMethod.getName().equals("setItems")) {
-                            CompilationMetainformation info = new CompilationMetainformation();
-                            info.setPropertyReplacement("items", Arrays.stream(Arrays.stream(args).toArray(String[]::new)).collect(Collectors.toSet()));
+                            CompilationMetaInformation info = new CompilationMetaInformation();
+                            info.setPropertyReplacement("items", Arrays.stream(Arrays.stream(args).toArray(String[]::new)).collect(Collectors.toList()));
                             compilationMetaInformation.put(component, info);
                         }
                     } else {
@@ -116,7 +116,7 @@ public class ComponentTreeParser {
         } else if (arg instanceof MethodCallExpr) {
             if (((MethodCallExpr) arg).getNameAsString().equals("getTranslation")) {
                 StringLiteralExpr argumentExpression = (StringLiteralExpr) ((MethodCallExpr) arg).getArguments().getFirst().get();
-                CompilationMetainformation info = new CompilationMetainformation();
+                CompilationMetaInformation info = new CompilationMetaInformation();
                 info.setPropertyReplacement("text", argumentExpression.asString());
                 compilationMetaInformation.put(component, info);
                 return project.getTranslationForKey(argumentExpression.getValue());
@@ -221,7 +221,7 @@ public class ComponentTreeParser {
         try {
             CompilationUnit unit = getDesignerFileForField(declaration).get();
             Component component = new ComponentTreeParser(getDesignerFileForField(declaration).get(), project).getComponent();
-            CompilationMetainformation info = new CompilationMetainformation();
+            CompilationMetaInformation info = new CompilationMetaInformation();
             info.setProjectComponent(true);
             info.setPackage(unit.getPackageDeclaration().get().getName().asString());
             info.setClassName(unit.getPrimaryTypeName().get());
@@ -288,7 +288,7 @@ public class ComponentTreeParser {
         return className;
     }
 
-    public Map<Component, CompilationMetainformation> getCompilationMetaInformation() {
+    public Map<Component, CompilationMetaInformation> getCompilationMetaInformation() {
         return compilationMetaInformation;
     }
 }

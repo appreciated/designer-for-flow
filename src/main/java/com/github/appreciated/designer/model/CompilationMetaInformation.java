@@ -3,7 +3,7 @@ package com.github.appreciated.designer.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CompilationMetainformation {
+public class CompilationMetaInformation {
     boolean isProjectComponent;
 
     String className;
@@ -12,12 +12,14 @@ public class CompilationMetainformation {
 
     private String packageDeclaration;
 
+    String variableName;
+
     public Object getPropertyReplacement(String property) {
         return propertyReplacement.get(property);
     }
 
     public boolean hasPropertyReplacement(String property) {
-        return propertyReplacement.containsKey(property);
+        return propertyReplacement.containsKey(property) && propertyReplacement.get(property) != null;
     }
 
     public void setPropertyReplacement(String property, Object replacement) {
@@ -46,5 +48,21 @@ public class CompilationMetainformation {
 
     public String getPackageDeclaration() {
         return packageDeclaration;
+    }
+
+    public boolean hasVariableName() {
+        return false;
+    }
+
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
+    public void removePropertyReplacement(String key) {
+        propertyReplacement.remove(key);
     }
 }

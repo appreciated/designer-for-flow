@@ -38,8 +38,4 @@ public class FlexComponentRenderer extends AbstractPropertyRenderer<FlexComponen
         return super.rendersCssStyle();
     }
 
-    @Override
-    public void applyValue(FlexComponent propertyParent) {
-
-    }
 }

@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.component;
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
-import com.github.appreciated.designer.model.CompilationMetainformation;
+import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.template.java.parser.ComponentTreeParser;
 import com.github.javaparser.ParseException;
@@ -54,7 +54,7 @@ public class DesignerComponent {
                 Project project = projectModel.getInformation().getProject();
                 CompilationUnit compilationUnit = getCompilationUnitFromDesignerFile(projectModel, file);
                 Component generatedComponent = new ComponentTreeParser(compilationUnit, project).getComponent();
-                CompilationMetainformation info = projectModel.getInformation().getOrCreateCompilationMetainformation(generatedComponent);
+                CompilationMetaInformation info = projectModel.getInformation().getOrCreateCompilationMetaInformation(generatedComponent);
                 info.setProjectComponent(true);
                 info.setPackage(compilationUnit.getPackageDeclaration().get().getName().asString());
                 info.setClassName(compilationUnit.getPrimaryTypeName().get());

@@ -22,7 +22,7 @@ public class DesignCompilerInformation {
     private Theme theme;
 
     private String className;
-    private Map<Component, CompilationMetainformation> compilationMetaInformation = new HashMap<>();
+    private Map<Component, CompilationMetaInformation> compilationMetaInformation = new HashMap<>();
 
     public void setProject(Project project) {
         this.project = project;
@@ -32,21 +32,21 @@ public class DesignCompilerInformation {
         }
     }
 
-    public CompilationMetainformation getComponentMetainfo(Component component) {
-        if (hasComponentMetainfo(component)) {
+    public CompilationMetaInformation getCompilationMetaInformation(Component component) {
+        if (hasCompilationMetaInformation(component)) {
             return compilationMetaInformation.get(component);
         } else {
             return null;
         }
     }
 
-    public boolean hasComponentMetainfo(Component component) {
+    public boolean hasCompilationMetaInformation(Component component) {
         return compilationMetaInformation.containsKey(component);
     }
 
-    public CompilationMetainformation getOrCreateCompilationMetainformation(Component component) {
-        if (!hasComponentMetainfo(component)) {
-            compilationMetaInformation.put(component, new CompilationMetainformation());
+    public CompilationMetaInformation getOrCreateCompilationMetaInformation(Component component) {
+        if (!hasCompilationMetaInformation(component)) {
+            compilationMetaInformation.put(component, new CompilationMetaInformation());
         }
         return compilationMetaInformation.get(component);
     }

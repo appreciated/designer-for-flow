@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class MavenProjectChooserView extends FileChooserView {
-    public MavenProjectChooserView(final File parentFile, final Consumer<File> fileConsumer, final boolean init, boolean allowSwitchingVolumes, Consumer onClose) {
-        super(parentFile, fileConsumer, onClose);
+    public MavenProjectChooserView(final File parentFile, final Consumer<File> fileConsumer, boolean init, boolean allowSwitchingVolumes, Consumer onClose) {
+        super(parentFile, fileConsumer, init, allowSwitchingVolumes, onClose);
         getGrid().setPageSize(100);
 
         setGetFiles(root -> {
@@ -21,7 +21,7 @@ public class MavenProjectChooserView extends FileChooserView {
             }
         });
         setUpdate(selectedFile -> {
-            getSelect().setEnabled(selectedFile != null && selectedFile.isDirectory() && selectedFile.list() != null && Arrays.asList(selectedFile.list()).contains("pom.xml"));
+            getSelectFileButton().setEnabled(selectedFile != null && selectedFile.isDirectory() && selectedFile.list() != null && Arrays.asList(selectedFile.list()).contains("pom.xml"));
         });
         setGetRowComponentForFile(file -> {
             HorizontalLayout layout = new HorizontalLayout();

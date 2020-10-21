@@ -11,8 +11,6 @@ public abstract class AbstractPropertyRenderer<T> {
 
     public abstract boolean canRender(Component propertyParent);
 
-    public abstract void applyValue(T propertyParent);
-
     public void setValueButNull(HasValue field, Object value) {
         if (value != null) {
             field.setValue(value);

@@ -43,16 +43,17 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
         buttons.setSpacing(false);
         textField.setSuffixComponent(buttons);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
-        if (getProjectFileModel().getInformation().hasComponentMetainfo((Component) component) &&
-                getProjectFileModel().getInformation().getComponentMetainfo((Component) component).hasPropertyReplacement("text")) {
-            textField.setValue((String) getProjectFileModel().getInformation().getComponentMetainfo((Component) component).getPropertyReplacement("text"));
+        if (getProjectFileModel().getInformation().hasCompilationMetaInformation((Component) component) &&
+                getProjectFileModel().getInformation().getCompilationMetaInformation((Component) component).hasPropertyReplacement("text")) {
+            textField.setValue((String) getProjectFileModel().getInformation().getCompilationMetaInformation((Component) component).getPropertyReplacement("text"));
             textField.setReadOnly(true);
         } else {
             textField.setValue(component.getText());
         }
         textField.addValueChangeListener(event -> {
-            if (getProjectFileModel().getInformation().hasComponentMetainfo((Component) component)) {
-                String key = (String) getProjectFileModel().getInformation().getComponentMetainfo((Component) component).getPropertyReplacement("text");
+            if (getProjectFileModel().getInformation().hasCompilationMetaInformation((Component) component) &&
+                    getProjectFileModel().getInformation().getCompilationMetaInformation((Component) component).hasPropertyReplacement("text")) {
+                String key = (String) getProjectFileModel().getInformation().getCompilationMetaInformation((Component) component).getPropertyReplacement("text");
                 component.setText(getProjectFileModel().getInformation().getProject().getTranslationForKey(key));
             } else {
                 component.setText(event.getValue());
@@ -61,8 +62,4 @@ public class HasTextRenderer extends AbstractPropertyRenderer<HasText> {
         return Stream.of(new RenderPair("text", textField));
     }
 
-    @Override
-    public void applyValue(HasText propertyParent) {
-
-    }
 }

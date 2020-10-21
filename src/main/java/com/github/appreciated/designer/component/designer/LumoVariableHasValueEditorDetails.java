@@ -6,7 +6,7 @@ import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.github.juchar.colorpicker.ColorPickerFieldRaw;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.HasOrderedComponents;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -15,7 +15,7 @@ public abstract class LumoVariableHasValueEditorDetails<T extends LumoVariableHa
 
     private final EventService eventService;
 
-    public LumoVariableHasValueEditorDetails(String title, HasComponents components, EventService eventService, boolean editable) {
+    public LumoVariableHasValueEditorDetails(String title, HasOrderedComponents components, EventService eventService, boolean editable) {
         super(title, components, editable);
         this.eventService = eventService;
     }
@@ -34,7 +34,6 @@ public abstract class LumoVariableHasValueEditorDetails<T extends LumoVariableHa
         if (field instanceof ColorPickerFieldRaw) {
             ColorPickerFieldRaw tf = (ColorPickerFieldRaw) field;
             tf.getTextField().setPlaceholder(variable.getDefaultValue());
-            //tf.getTextField().setClearButtonVisible(true);
         }
 
         getBinderForCssVariable(variable, theme)

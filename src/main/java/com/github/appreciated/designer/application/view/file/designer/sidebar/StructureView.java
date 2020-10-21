@@ -37,8 +37,8 @@ public class StructureView extends BaseView {
         info = projectFileModel.getInformation();
 
         grid.addHierarchyColumn(component -> {
-            if (info.hasComponentMetainfo(component) && info.getComponentMetainfo(component).isProjectComponent()) {
-                return info.getComponentMetainfo(component).getClassName();
+            if (info.hasCompilationMetaInformation(component) && info.getCompilationMetaInformation(component).isProjectComponent()) {
+                return info.getCompilationMetaInformation(component).getClassName();
             } else {
                 return component.getClass().getSimpleName();
             }
