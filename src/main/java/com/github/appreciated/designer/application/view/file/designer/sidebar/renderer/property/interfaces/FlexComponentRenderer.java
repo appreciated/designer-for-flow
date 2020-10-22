@@ -1,14 +1,14 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
+import com.github.appreciated.designer.component.properties.PropertyComboBox;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 
 import java.util.stream.Stream;
 
-public class FlexComponentRenderer extends AbstractPropertyRenderer<FlexComponent> {
+public class FlexComponentRenderer extends AbstractComponentPropertyRenderer<FlexComponent> {
 
     @Override
     public boolean canRender(Component propertyParent) {
@@ -17,12 +17,14 @@ public class FlexComponentRenderer extends AbstractPropertyRenderer<FlexComponen
 
     @Override
     public Stream<RenderPair> render(FlexComponent component) {
-        ComboBox<FlexComponent.Alignment> alignmentComponent = new ComboBox<>();
+        PropertyComboBox<FlexComponent.Alignment> alignmentComponent = new PropertyComboBox<>();
+        alignmentComponent.getStyle().set("min-width", "100px");
         alignmentComponent.setItems(FlexComponent.Alignment.values());
         setValueButNull(alignmentComponent, component.getAlignItems());
         alignmentComponent.addValueChangeListener(event -> component.setAlignItems(event.getValue()));
 
-        ComboBox<FlexComponent.JustifyContentMode> justifyContentComponent = new ComboBox<>();
+        PropertyComboBox<FlexComponent.JustifyContentMode> justifyContentComponent = new PropertyComboBox<>();
+        justifyContentComponent.getStyle().set("min-width", "100px");
         justifyContentComponent.setItems(FlexComponent.JustifyContentMode.values());
         setValueButNull(justifyContentComponent, component.getJustifyContentMode());
         justifyContentComponent.addValueChangeListener(event -> component.setJustifyContentMode(event.getValue()));

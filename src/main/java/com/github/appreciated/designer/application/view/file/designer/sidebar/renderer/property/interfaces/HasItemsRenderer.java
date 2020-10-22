@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.github.appreciated.designer.component.designer.StringItemsEditor;
 import com.github.appreciated.designer.model.CompilationMetaInformation;
@@ -10,7 +10,7 @@ import com.vaadin.flow.data.binder.HasItems;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class HasItemsRenderer extends AbstractPropertyRenderer<HasItems> {
+public class HasItemsRenderer extends AbstractComponentPropertyRenderer<HasItems> {
 
     @Override
     public boolean canRender(Component propertyParent) {

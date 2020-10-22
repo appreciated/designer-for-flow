@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type;
 
+import com.github.appreciated.designer.component.properties.PropertyComboBox;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,17 +17,17 @@ public class IconPropertyRenderer extends AbstractPropertyRenderer<Component> {
     }
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
-        ComboBox<VaadinIcon> combobox = new ComboBox<>();
-        combobox.setRenderer(new ComponentRenderer<>(item -> {
+        PropertyComboBox<VaadinIcon> icon = new PropertyComboBox<>();
+        icon.setRenderer(new ComponentRenderer<>(item -> {
             HorizontalLayout container = new HorizontalLayout();
             container.add(item.create(), new Label(item.name()));
             return container;
         }));
-        combobox.setItems(VaadinIcon.values());
-        combobox.addValueChangeListener(comboBoxVaadinIconComponentValueChangeEvent ->
+        icon.setItems(VaadinIcon.values());
+        icon.addValueChangeListener(comboBoxVaadinIconComponentValueChangeEvent ->
                 applyValue(propertyParent, propertyDescriptor, comboBoxVaadinIconComponentValueChangeEvent.getValue().create())
         );
-        return combobox;
+        return icon;
     }
 
 

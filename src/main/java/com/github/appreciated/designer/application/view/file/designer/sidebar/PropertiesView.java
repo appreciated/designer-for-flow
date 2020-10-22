@@ -33,6 +33,7 @@ public class PropertiesView extends BaseView {
         properties.setSizeFull();
         properties.setPadding(false);
         properties.setMargin(false);
+        properties.setSpacing(false);
         add(properties);
         renderers = new Renderers(projectFileModel);
         projectFileModel.getEventService()
@@ -94,6 +95,13 @@ public class PropertiesView extends BaseView {
 
     private Component getLabelComponent(String caption, Component input) {
         HorizontalLayout hl = new HorizontalLayout();
+        hl.getStyle()
+                .set("--lumo-contrast-10pct", "transparent")
+                .set("flex-shrink", "0")
+                .set("min-height", "34px")
+                .set("border-bottom", "1px solid var(--lumo-contrast-40pct)")
+                .set("--lumo-contrast-10pct", "transparent");
+
         hl.setAlignItems(Alignment.CENTER);
         Label label = new Label(caption);
         label.getStyle().set("flex-basis", "110px");

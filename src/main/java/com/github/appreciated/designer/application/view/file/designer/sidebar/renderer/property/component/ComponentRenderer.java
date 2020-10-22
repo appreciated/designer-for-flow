@@ -1,17 +1,15 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
+import com.github.appreciated.designer.component.properties.PropertyTextField;
 import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.util.stream.Stream;
 
-public class ComponentRenderer extends AbstractPropertyRenderer<Component> {
+public class ComponentRenderer extends AbstractComponentPropertyRenderer<Component> {
     @Override
     public boolean canRender(Component propertyParent) {
         return propertyParent != null;
@@ -22,16 +20,12 @@ public class ComponentRenderer extends AbstractPropertyRenderer<Component> {
         Binder<Component> componentBinder = new Binder<>();
         componentBinder.setBean(component);
 
-        TextField id = new TextField();
-        id.addThemeVariants(TextFieldVariant.LUMO_SMALL);
-        id.setValueChangeMode(ValueChangeMode.EAGER);
+        PropertyTextField id = new PropertyTextField();
         componentBinder.forField(id)
                 .bind(component1 -> component1.getId().orElse(null), Component::setId);
         componentBinder.setBean(component);
 
-        TextField variableName = new TextField();
-        variableName.addThemeVariants(TextFieldVariant.LUMO_SMALL);
-        variableName.setValueChangeMode(ValueChangeMode.EAGER);
+        PropertyTextField variableName = new PropertyTextField();
         boolean hasInfo = getProjectFileModel().getInformation().hasCompilationMetaInformation(component);
         CompilationMetaInformation info = getProjectFileModel().getInformation().getCompilationMetaInformation(component);
         if (hasInfo && info.hasVariableName()) {

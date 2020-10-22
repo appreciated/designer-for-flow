@@ -1,21 +1,19 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.github.appreciated.designer.component.SmallIconButton;
+import com.github.appreciated.designer.component.properties.PropertyTextField;
 import com.github.appreciated.designer.regex.CssRegex;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.RegexpValidator;
-import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.util.stream.Stream;
 
-public class HasSizeRenderer extends AbstractPropertyRenderer<HasSize> {
+public class HasSizeRenderer extends AbstractComponentPropertyRenderer<HasSize> {
 
 
     @Override
@@ -30,8 +28,7 @@ public class HasSizeRenderer extends AbstractPropertyRenderer<HasSize> {
             Binder<HasSize> componentBinder = new Binder<>();
             componentBinder.setBean((HasSize) parent);
 
-            TextField heightComponent = new TextField();
-            heightComponent.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+            PropertyTextField heightComponent = new PropertyTextField();
             heightComponent.setSuffixComponent(
                     new SmallIconButton(VaadinIcon.ARROWS_LONG_V.create(),
                             buttonClickEvent -> heightComponent.setValue("100%"))
@@ -40,17 +37,14 @@ public class HasSizeRenderer extends AbstractPropertyRenderer<HasSize> {
             componentBinder.forField(heightComponent)
                     .withValidator(new RegexpValidator("Not a valid css length", CssRegex.getLengthRegex()))
                     .bind(HasSize::getHeight, HasSize::setHeight);
-            heightComponent.setValueChangeMode(ValueChangeMode.EAGER);
 
             componentBinder.setBean((HasSize) parent);
-            TextField widthComponent = new TextField();
-            widthComponent.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+            PropertyTextField widthComponent = new PropertyTextField();
             widthComponent.setClearButtonVisible(true);
             widthComponent.setSuffixComponent(
                     new SmallIconButton(VaadinIcon.ARROWS_LONG_H.create(),
                             buttonClickEvent -> widthComponent.setValue("100%"))
             );
-            widthComponent.setValueChangeMode(ValueChangeMode.EAGER);
             componentBinder.forField(widthComponent)
                     .withValidator(new RegexpValidator("Not a valid css length", CssRegex.getLengthRegex()))
                     .bind(HasSize::getWidth, HasSize::setWidth);

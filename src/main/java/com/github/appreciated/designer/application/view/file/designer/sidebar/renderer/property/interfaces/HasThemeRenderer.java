@@ -1,14 +1,14 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
+import com.github.appreciated.designer.component.properties.PropertyComboBox;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasTheme;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.progressbar.ProgressBar;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
-public class HasThemeRenderer extends AbstractPropertyRenderer<HasTheme> {
+public class HasThemeRenderer extends AbstractComponentPropertyRenderer<HasTheme> {
 
     private final HashMap<Object, String[]> map;
 
@@ -50,13 +50,13 @@ public class HasThemeRenderer extends AbstractPropertyRenderer<HasTheme> {
 
     @Override
     public Stream<RenderPair> render(HasTheme component) {
-        ComboBox<String> combobox = new ComboBox<>();
-        combobox.setClearButtonVisible(true);
+        PropertyComboBox<String> themeVariant = new PropertyComboBox<>();
+        themeVariant.setClearButtonVisible(true);
         if (map.containsKey(component.getClass())) {
-            combobox.setItems(map.get(component.getClass()));
+            themeVariant.setItems(map.get(component.getClass()));
         }
-        setValueButNull(combobox, component.getThemeName());
-        combobox.addValueChangeListener(event -> {
+        setValueButNull(themeVariant, component.getThemeName());
+        themeVariant.addValueChangeListener(event -> {
             if (event.getOldValue() != null) {
                 component.setThemeName(event.getOldValue(), false);
             }
@@ -66,6 +66,6 @@ public class HasThemeRenderer extends AbstractPropertyRenderer<HasTheme> {
                 component.removeThemeName(event.getOldValue());
             }
         });
-        return Stream.of(new RenderPair("themes", combobox));
+        return Stream.of(new RenderPair("themes", themeVariant));
     }
 }

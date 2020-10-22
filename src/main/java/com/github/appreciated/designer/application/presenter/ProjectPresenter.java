@@ -22,6 +22,7 @@ import com.vaadin.flow.shared.ui.Transport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -32,10 +33,10 @@ import java.util.Map;
 @Push(transport = Transport.LONG_POLLING)
 public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> implements HasUrlParameter<String> {
 
-    private CreateOrOpenDesignTabDialog files;
     private final EventService eventService;
     private final ProjectService projectService;
     private final Map<Tab, ProjectFileModel> fileMap = new HashMap<>();
+    private CreateOrOpenDesignTabDialog files;
 
     public ProjectPresenter(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         UI ui = UI.getCurrent();
@@ -51,11 +52,13 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
             projectService.setCurrentProjectFileModel(fileMap.get(selectedChangeEvent.getSelectedTab()));
             getContent().getContent().setSelected(getContent().getTabs().getSelectedIndex());
         });
+        getContent().getDial().addClickListener(event -> showOpenTabDialog());
+        getContent().getTabs().addAddListener(this::showOpenTabDialog);
+    }
 
-        getContent().getDial().addClickListener(event -> {
-            files = new CreateOrOpenDesignTabDialog(projectService.getProject(), projectService.getProject().getSourceFolder(), this::addTab);
-            files.open();
-        });
+    void showOpenTabDialog() {
+        files = new CreateOrOpenDesignTabDialog(projectService.getProject(), projectService.getProject().getSourceFolder(), this::addTab);
+        files.open();
     }
 
     public void addTab(File file) {
@@ -76,21 +79,24 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         super.onAttach(attachEvent);
         Shortcuts.register(attachEvent.getUI(), projectService, eventService);
         if (projectService.getConfig().getDeveloperMode()) {
-            File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\view\\AllComponentsDesign.java");
+            File defaultFile = new File("C:\\Users\\Johannes\\IdeaProjects\\designer-test-project\\src\\main\\java\\com\\github\\appreciated\\designer\\view\\TestDesign.java");
             if (defaultFile.exists()) {
                 addTab(defaultFile);
             }
         }
     }
 
-
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String parameter) {
         Location location = beforeEvent.getLocation();
         QueryParameters queryParameters = location.getQueryParameters();
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
-        String projectPath = URLDecoder.decode(parametersMap.get("path").get(0));
-        projectService.initProject(new File(projectPath));
+        try {
+            String projectPath = URLDecoder.decode(parametersMap.get("path").get(0), "UTF-8");
+            projectService.initProject(new File(projectPath));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.application.view;
 
 import com.github.appreciated.designer.component.AddButton;
+import com.github.appreciated.designer.component.CustomTabs;
 import com.github.appreciated.designer.component.IconButton;
 import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.github.appreciated.designer.helper.UrlHelper;
@@ -14,7 +15,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 
 import javax.validation.constraints.NotNull;
 import java.util.function.Consumer;
@@ -22,13 +22,13 @@ import java.util.function.Consumer;
 @StyleSheet("./styles/styles.css")
 public class ProjectView extends VerticalLayout {
 
-    private final Tabs tabs;
+    private final CustomTabs tabs;
     private final IronPages content;
     private final AddButton dial;
     HorizontalLayout appBar = new HorizontalLayout();
 
     public ProjectView() {
-        tabs = new Tabs();
+        tabs = new CustomTabs();
         tabs.setHeight("60px");
         tabs.getStyle().set("box-shadow", "none");
         dial = new AddButton(VaadinIcon.PLUS.create());
@@ -73,9 +73,9 @@ public class ProjectView extends VerticalLayout {
 
     public Tab createTab(@NotNull String name, Consumer<Tab> clickListener) {
         Tab tab = new Tab();
-        tab.add(new Label(name),
-                new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> clickListener.accept(tab))
-        );
+        IconButton button = new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> clickListener.accept(tab));
+        button.getStyle().set("--_lumo-button-color", "gray");
+        tab.add(new Label(name), button);
         return tab;
     }
 
@@ -84,7 +84,7 @@ public class ProjectView extends VerticalLayout {
         tabs.setSelectedTab(tab);
     }
 
-    public Tabs getTabs() {
+    public CustomTabs getTabs() {
         return tabs;
     }
 

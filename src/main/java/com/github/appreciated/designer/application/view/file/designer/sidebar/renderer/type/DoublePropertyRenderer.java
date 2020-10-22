@@ -1,8 +1,7 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type;
 
+import com.github.appreciated.designer.component.properties.PropertyNumberField;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,10 +13,7 @@ public class DoublePropertyRenderer extends AbstractPropertyRenderer<Double> {
     }
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
-        NumberField numberField = new NumberField();
-        numberField.setValueChangeMode(ValueChangeMode.EAGER);
-        numberField.setHasControls(true);
-        numberField.setStep(0.01);
+        PropertyNumberField numberField = new PropertyNumberField();
         try {
             Double value = (Double) propertyDescriptor.getReadMethod().invoke(propertyParent);
             if (value != null) {

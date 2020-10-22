@@ -2,7 +2,9 @@ package com.github.appreciated.designer.application.view.file.designer.sidebar.r
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.ComponentRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.DateTimePickerRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.ImageRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.TimePickerRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.*;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.*;
 
@@ -12,11 +14,10 @@ import java.util.List;
 
 public class Renderers {
 
-    private final List<com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer> typeRenderer = new ArrayList<>();
-    private final List<AbstractPropertyRenderer> propertyRenderer = new ArrayList<>();
+    private final List<AbstractPropertyRenderer> typeRenderer = new ArrayList<>();
+    private final List<AbstractComponentPropertyRenderer> propertyRenderer = new ArrayList<>();
 
     public Renderers(ProjectFileModel projectFileModel) {
-
         typeRenderer.addAll(Arrays.asList(
                 new StringPropertyRenderer(),
                 new BooleanPropertyRenderer(),
@@ -28,6 +29,9 @@ public class Renderers {
         ));
         propertyRenderer.addAll(Arrays.asList(
                 new FlexComponentRenderer(),
+                new DateTimePickerRenderer(),
+                new TimePickerRenderer(),
+                new FlexComponentRenderer(),
                 new HasThemeRenderer(),
                 new HasItemsRenderer(),
                 new HasSizeRenderer(),
@@ -37,17 +41,16 @@ public class Renderers {
         propertyRenderer.addAll(Arrays.asList(
                 new ComponentRenderer(),
                 new ImageRenderer()
-                )
-        );
+        ));
         typeRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
         propertyRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
     }
 
-    public List<com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer> getTypeRenderers() {
+    public List<AbstractPropertyRenderer> getTypeRenderers() {
         return typeRenderer;
     }
 
-    public List<AbstractPropertyRenderer> getPropertyRenderers() {
+    public List<AbstractComponentPropertyRenderer> getPropertyRenderers() {
         return propertyRenderer;
     }
 }

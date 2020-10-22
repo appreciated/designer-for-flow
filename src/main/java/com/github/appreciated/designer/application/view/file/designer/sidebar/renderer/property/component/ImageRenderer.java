@@ -1,24 +1,23 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.github.appreciated.designer.component.IconButton;
+import com.github.appreciated.designer.component.properties.PropertyComboBox;
+import com.github.appreciated.designer.component.properties.PropertyTextField;
 import com.github.appreciated.designer.dialog.file.FileChooserDialog;
 import com.github.appreciated.designer.vaadin.converter.FileStreamResource;
 import com.github.appreciated.designer.vaadin.converter.PathValidator;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.Binder;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class ImageRenderer extends AbstractPropertyRenderer<Image> {
+public class ImageRenderer extends AbstractComponentPropertyRenderer<Image> {
     @Override
     public boolean canRender(Component propertyParent) {
         return propertyParent instanceof Image;
@@ -26,8 +25,7 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
 
     @Override
     public Stream<RenderPair> render(Image component) {
-        TextField src = new TextField();
-        src.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        PropertyTextField src = new PropertyTextField();
         src.setSuffixComponent(new IconButton(VaadinIcon.FOLDER.create(), buttonClickEvent -> {
             new FileChooserDialog(getProjectFileModel().getInformation().getProject().getFrontendFolder(),
                     file -> src.setValue("." + file.getPath().substring(getProjectFileModel().getInformation().getProject().getFrontendFolder().getPath().length()).replace("\\", "/")))
@@ -40,7 +38,9 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
             is.setSrc(component.getSrc());
             src.setValue(component.getSrc());
             setSrc(component, src);
-        } else if (getProjectFileModel().getInformation().getCompilationMetaInformation(component).hasPropertyReplacement("src")) {
+        } else if (
+                getProjectFileModel().getInformation().hasCompilationMetaInformation(component) &&
+                        getProjectFileModel().getInformation().getCompilationMetaInformation(component).hasPropertyReplacement("src")) {
             is.setSrc((String) getProjectFileModel().getInformation().getCompilationMetaInformation(component).getPropertyReplacement("src"));
         }
         sourceBinder.setBean(is);
@@ -55,15 +55,14 @@ public class ImageRenderer extends AbstractPropertyRenderer<Image> {
             }
         });
 
-        ComboBox<String> objectFitComponent = new ComboBox<>();
+        PropertyComboBox<String> objectFitComponent = new PropertyComboBox<>();
         objectFitComponent.setItems(Arrays.asList("fill", "contain", "cover", "none", "scale-down"));
         setValueButNull(objectFitComponent, "fill");
         objectFitComponent.addValueChangeListener(event -> component.getStyle().set("object-fit", event.getValue()));
-
         return Stream.of(new RenderPair("src", src), new RenderPair("object-fit", objectFitComponent));
     }
 
-    public void setSrc(Image component, TextField src) {
+    public void setSrc(Image component, PropertyTextField src) {
         if (component != null) {
             if (src.getValue() != null && (src.getValue() != null && !src.getValue().equals(""))) {
                 component.setSrc(new FileStreamResource(new File(getProjectFileModel().getInformation().getProject().getFrontendFolder() + File.separator + src.getValue().replace("/", File.separator))));

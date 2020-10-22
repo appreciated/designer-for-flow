@@ -6,7 +6,7 @@ import com.vaadin.flow.component.HasValue;
 
 import java.util.stream.Stream;
 
-public abstract class AbstractPropertyRenderer<T> {
+public abstract class AbstractComponentPropertyRenderer<T> {
     ProjectFileModel projectFileModel;
 
     public abstract boolean canRender(Component propertyParent);

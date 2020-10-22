@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -8,7 +8,7 @@ import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 
 import java.util.stream.Stream;
 
-public class ThemeableLayoutRenderer extends AbstractPropertyRenderer<ThemableLayout> {
+public class ThemeableLayoutRenderer extends AbstractComponentPropertyRenderer<ThemableLayout> {
 
     @Override
     public boolean canRender(Component propertyParent) {

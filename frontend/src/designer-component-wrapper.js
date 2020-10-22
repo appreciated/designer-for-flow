@@ -31,7 +31,7 @@ class DesignerComponentWrapper extends PolymerElement {
             }
         </style>
         <div id="wrapper" style="position: relative;display: flex;">
-            <slot id="content"></slot>
+            <slot></slot>
         </div>`;
     }
 
@@ -42,30 +42,34 @@ class DesignerComponentWrapper extends PolymerElement {
             ev.stopPropagation();
             polymerThis.componentClicked();
         });
+    }
 
+    attached() {
         var slot = this.shadowRoot.querySelectorAll('slot')[0];
         var nodes = slot.assignedNodes();
-        var firstChild = nodes[0];
-        if (firstChild.style["width"]) {
-            this.style["width"] = firstChild.style["width"];
+        this.firstChild = nodes[0];
+        if (this.firstChild.style["width"]) {
+            this.style["width"] = this.firstChild.style["width"];
         }
-        if (firstChild.style["height"]) {
-            this.style["height"] = firstChild.style["height"];
+        if (this.firstChild.style["height"]) {
+            this.style["height"] = this.firstChild.style["height"];
         }
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-                if (firstChild.style["width"] && firstChild.style["width"].endsWith("%")) {
-                    polymerThis.style["width"] = firstChild.style["width"];
-                }
-                if (firstChild.style["height"] && firstChild.style["height"].endsWith("%")) {
-                    polymerThis.style["height"] = firstChild.style["height"];
-                }
+        if (this.mutationObserver == null) {
+            this.mutationObserver = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (firstChild.style["width"] && firstChild.style["width"].endsWith("%")) {
+                        polymerThis.style["width"] = firstChild.style["width"];
+                    }
+                    if (firstChild.style["height"] && firstChild.style["height"].endsWith("%")) {
+                        polymerThis.style["height"] = firstChild.style["height"];
+                    }
+                });
             });
-        });
-        observer.observe(firstChild, {
-            attributes: true,
-            attributeFilter: ["style"]
-        });
+            this.mutationObserver.observe(firstChild, {
+                attributes: true,
+                attributeFilter: ["style"]
+            });
+        }
     }
 
     componentClicked() {

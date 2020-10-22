@@ -1,8 +1,7 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type;
 
+import com.github.appreciated.designer.component.properties.PropertyTextField;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -16,8 +15,7 @@ public class DurationPropertyRenderer extends AbstractPropertyRenderer<Duration>
     }
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
-        TextField durationField = new TextField();
-        durationField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        PropertyTextField durationField = new PropertyTextField();
         try {
             String property = ((Duration) propertyDescriptor.getReadMethod().invoke(propertyParent)).toString();
             setValueButNull(durationField, property);
