@@ -32,6 +32,10 @@ public class StructureView extends BaseView {
         super("structure");
 
         grid = new TreeGrid<>();
+        grid.getStyle()
+                .set("--lumo-space-xs", "0px")
+                .set("--lumo-space-m", "0px");
+
         grid.setVerticalScrollingEnabled(true);
         grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER);
         info = projectFileModel.getInformation();
