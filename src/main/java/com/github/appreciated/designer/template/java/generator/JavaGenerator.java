@@ -3,7 +3,6 @@ package com.github.appreciated.designer.template.java.generator;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
-import com.github.appreciated.designer.template.java.generator.interfaces.VaadinComponentJavaGeneratorCollection;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -24,9 +23,7 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,11 +33,11 @@ public class JavaGenerator {
     private final SourceRoot sourceRoot;
     private final DesignCompilerInformation designCompilerInformation;
     private final Map<String, Integer> counters = new HashMap<>();
-    private final VaadinComponentJavaGeneratorCollection compilerCollection;
+    private final JavaGeneratorCollection compilerCollection;
     private ClassOrInterfaceDeclaration componentClass;
 
     public JavaGenerator(DesignCompilerInformation designCompilerInformation) {
-        compilerCollection = new VaadinComponentJavaGeneratorCollection(designCompilerInformation);
+        compilerCollection = new JavaGeneratorCollection(designCompilerInformation);
         this.designCompilerInformation = designCompilerInformation;
         Component component = designCompilerInformation.getComponent();
         File file = designCompilerInformation.getDesign();
@@ -129,9 +126,18 @@ public class JavaGenerator {
 
     private void addFieldProperties(Expression field, Component component) {
         Component actualComponent = unwrapComponent(component);
-        compilerCollection.stream()
+        List<String> parsedProperties = new ArrayList<>();
+        compilerCollection.getComponentJavaGenerators().stream()
                 .filter(parser -> parser.canParse(actualComponent) && parser.requiresParsing(actualComponent))
+                .peek(componentJavaGenerator -> parsedProperties.addAll(componentJavaGenerator.generatedProperties()))
                 .map(parser -> (Stream<Expression>) parser.parse(compilationUnit, actualComponent, field))
+                .forEach(expressionStream ->
+                        expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))
+                );
+        compilerCollection.getPropertyComponentJavaGenerators().stream()
+                .peek(propertyComponentJavaGenerator -> propertyComponentJavaGenerator.setAlreadyParsedProperties(parsedProperties.stream()))
+                .filter(parser -> parser.canParse(actualComponent) && parser.requiresParsing(actualComponent))
+                .map(parser -> parser.parse(compilationUnit, actualComponent, field))
                 .forEach(expressionStream ->
                         expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))
                 );

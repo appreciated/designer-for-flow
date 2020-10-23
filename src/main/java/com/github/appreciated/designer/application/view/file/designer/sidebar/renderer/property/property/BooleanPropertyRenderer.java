@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type;
+package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;

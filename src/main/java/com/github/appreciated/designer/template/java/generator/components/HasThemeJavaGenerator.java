@@ -1,5 +1,6 @@
-package com.github.appreciated.designer.template.java.generator.interfaces;
+package com.github.appreciated.designer.template.java.generator.components;
 
+import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -8,9 +9,11 @@ import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasTheme;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
-public class HasThemeJavaGenerator implements VaadinComponentJavaGenerator<HasTheme> {
+public class HasThemeJavaGenerator implements ComponentJavaGenerator<HasTheme> {
 
     @Override
     public boolean canParse(Component propertyParent) {
@@ -28,4 +31,8 @@ public class HasThemeJavaGenerator implements VaadinComponentJavaGenerator<HasTh
         return Stream.of(textAssignment);
     }
 
+    @Override
+    public List<String> generatedProperties() {
+        return Arrays.asList("themeName");
+    }
 }

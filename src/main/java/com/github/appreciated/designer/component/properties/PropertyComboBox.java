@@ -8,6 +8,8 @@ public class PropertyComboBox<T> extends ComboBox<T> {
         getStyle()
                 .set("padding", "0px")
                 .set("min-width", "100px")
+                .set("max-width", "200px")
+                .set("margin-left", "auto")
                 .set("--lumo-space-xs", "0");
     }
 }

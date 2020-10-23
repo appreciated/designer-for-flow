@@ -1,5 +1,6 @@
-package com.github.appreciated.designer.template.java.generator.interfaces;
+package com.github.appreciated.designer.template.java.generator.components;
 
+import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -10,10 +11,11 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FlexComponentJavaGenerator implements VaadinComponentJavaGenerator<FlexComponent> {
+public class FlexComponentJavaGenerator implements ComponentJavaGenerator<FlexComponent> {
 
     @Override
     public boolean canParse(Component propertyParent) {
@@ -51,6 +53,11 @@ public class FlexComponentJavaGenerator implements VaadinComponentJavaGenerator<
                     )));
         }
         return expressionList.stream();
+    }
+
+    @Override
+    public List<String> generatedProperties() {
+        return Arrays.asList("alignItems", "justifyContentMode");
     }
 
 }

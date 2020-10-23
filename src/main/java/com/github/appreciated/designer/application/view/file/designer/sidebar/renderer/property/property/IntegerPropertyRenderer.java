@@ -1,4 +1,4 @@
-package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type;
+package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property;
 
 import com.github.appreciated.designer.component.properties.PropertyNumberField;
 import com.vaadin.flow.component.Component;
@@ -14,6 +14,7 @@ public class IntegerPropertyRenderer extends AbstractPropertyRenderer<Integer> {
 
     public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
         PropertyNumberField numberField = new PropertyNumberField();
+        numberField.setStep(1);
         numberField.setHasControls(true);
         numberField.setValueChangeMode(ValueChangeMode.EAGER);
         numberField.addValueChangeListener(checkboxBooleanComponentValueChangeEvent -> applyValue(propertyParent, propertyDescriptor, numberField.getValue().intValue()));

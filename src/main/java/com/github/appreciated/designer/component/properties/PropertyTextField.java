@@ -9,6 +9,8 @@ public class PropertyTextField extends TextField {
         getStyle()
                 .set("padding", "0px")
                 .set("min-width", "100px")
+                .set("max-width", "200px")
+                .set("margin-left", "auto")
                 .set("--lumo-space-xs", "0");
         setHeight("30px");
         addThemeVariants(TextFieldVariant.LUMO_SMALL);

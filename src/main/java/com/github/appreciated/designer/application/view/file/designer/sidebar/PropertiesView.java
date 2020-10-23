@@ -5,7 +5,7 @@ import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.Renderers;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.HasStyleRenderer;
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.AbstractPropertyRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property.AbstractPropertyRenderer;
 import com.github.appreciated.designer.component.ComponentPropertyParser;
 import com.github.appreciated.designer.component.designer.StyleEditor;
 import com.vaadin.flow.component.Component;
@@ -41,6 +41,7 @@ public class PropertiesView extends BaseView {
                 .addEventConsumer(elementFocusedEvent ->
                         getUI().ifPresent(ui -> ui.access(() -> onFocus(elementFocusedEvent.getFocus())))
                 );
+        properties.getStyle().set("overflow", "hidden");
     }
 
     private void onFocus(Component propertyParent) {

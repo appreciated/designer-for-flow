@@ -8,10 +8,11 @@ public class PropertyNumberField extends NumberField {
         getStyle()
                 .set("padding", "0px")
                 .set("min-width", "100px")
+                .set("max-width", "200px")
+                .set("margin-left", "auto")
                 .set("--lumo-space-xs", "0");
         setHeight("34px");
         setValueChangeMode(ValueChangeMode.EAGER);
         setHasControls(true);
-        setStep(0.01);
     }
 }

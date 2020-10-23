@@ -1,5 +1,6 @@
-package com.github.appreciated.designer.template.java.generator.interfaces;
+package com.github.appreciated.designer.template.java.generator.components;
 
+import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -9,10 +10,11 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class HasStyleJavaGenerator implements VaadinComponentJavaGenerator<HasStyle> {
+public class HasStyleJavaGenerator implements ComponentJavaGenerator<HasStyle> {
 
     @Override
     public boolean canParse(Component propertyParent) {
@@ -37,6 +39,11 @@ public class HasStyleJavaGenerator implements VaadinComponentJavaGenerator<HasSt
                         ))
                 ));
         return expressionList.stream();
+    }
+
+    @Override
+    public List<String> generatedProperties() {
+        return Arrays.asList("style");
     }
 
 }

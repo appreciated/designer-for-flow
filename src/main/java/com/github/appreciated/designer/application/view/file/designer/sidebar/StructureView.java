@@ -30,7 +30,6 @@ public class StructureView extends BaseView {
 
     public StructureView(final ProjectFileModel projectFileModel) {
         super("structure");
-
         grid = new TreeGrid<>();
         grid.getStyle()
                 .set("--lumo-space-xs", "0px")

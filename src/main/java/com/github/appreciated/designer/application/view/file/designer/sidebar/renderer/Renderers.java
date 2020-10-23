@@ -6,7 +6,7 @@ import com.github.appreciated.designer.application.view.file.designer.sidebar.re
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.ImageRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.TimePickerRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.*;
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.type.*;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
