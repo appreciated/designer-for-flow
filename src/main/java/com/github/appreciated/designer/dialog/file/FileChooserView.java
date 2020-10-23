@@ -182,4 +182,8 @@ public class FileChooserView extends VerticalLayout {
         }
         return Math.max(expand, 0);
     }
+
+    public HorizontalLayout getButtons() {
+        return buttons;
+    }
 }

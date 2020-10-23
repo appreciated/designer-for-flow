@@ -1,6 +1,8 @@
 package com.github.appreciated.designer.dialog.file;
 
 
+import com.github.appreciated.designer.helper.UrlHelper;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -44,6 +46,9 @@ public class OpenProjectDialog extends Dialog {
         projectTypeTabs.addSelectedChangeListener(event -> setTab(event.getSelectedTab()));
         add(wrapper);
         wrapper.setWidthFull();
+
+        Button create = new Button(getTranslation("create.new.project"), event -> UrlHelper.openUrl("https://start.vaadin.com/?preset=lts"));
+        mavenProjectChooserView.getButtons().addComponentAtIndex(0, create);
     }
 
     private void setTab(Tab selectedTab) {

@@ -109,6 +109,8 @@ public class ComponentTreeParser {
             return ((StringLiteralExpr) arg).asString();
         } else if (arg instanceof BooleanLiteralExpr) {
             return ((BooleanLiteralExpr) arg).getValue();
+        } else if (arg instanceof DoubleLiteralExpr) {
+            return ((DoubleLiteralExpr) arg).asDouble();
         } else if (arg instanceof NameExpr) {
             return fieldMap.get(((NameExpr) arg).getNameAsString());
         } else if (arg instanceof FieldAccessExpr) {

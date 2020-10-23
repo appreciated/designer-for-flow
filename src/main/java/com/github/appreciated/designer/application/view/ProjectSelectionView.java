@@ -26,6 +26,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -85,6 +86,7 @@ public class ProjectSelectionView extends VerticalLayout {
             add(new Label(getTranslation("get.started.by.adding.a.project")));
         } else {
             repository.findAll().forEach(projectPath -> layout.add(getCard(projectPath)));
+            layout.add(getCreateCard());
         }
         AddButton button = new AddButton(VaadinIcon.PLUS.create(),
                 buttonClickEvent -> new OpenProjectDialog(this::addProject).open()
@@ -129,12 +131,30 @@ public class ProjectSelectionView extends VerticalLayout {
         return card;
     }
 
+    private Component getCreateCard() {
+        final Icon img = VaadinIcon.PLUS.create();
+        H4 h4 = new H4(getTranslation("add.new.project"));
+        h4.getElement().setAttribute("style", "margin-top: unset;margin-bottom: unset;");
+        HorizontalLayout hl = new HorizontalLayout(img, h4);
+        hl.setAlignItems(Alignment.CENTER);
+        hl.setJustifyContentMode(JustifyContentMode.CENTER);
+        final VerticalLayout content = new VerticalLayout(hl);
+        content.setAlignItems(Alignment.CENTER);
+        content.setJustifyContentMode(JustifyContentMode.CENTER);
+        final RippleClickableCard card = new RippleClickableCard(event -> new OpenProjectDialog(this::addProject).open(), content);
+        content.setSizeFull();
+        card.setElevation(0);
+        card.getStyle().set("margin", "5px");
+        card.setBackground("var(--lumo-contrast-5pct)");
+        return card;
+    }
+
+
     private void addProject(final File directory) {
         final ProjectTypes types = new ProjectTypes(directory);
 
         if (types.hasFittingProjectType()) {
             final ProjectPath projectPath = repository.save(new ProjectPath(directory.getPath()));
-
             openProject(projectPath);
         } else {
             Notification.show(getTranslation("this.project.seems.to.be.missing.files"));

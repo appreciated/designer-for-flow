@@ -11,6 +11,7 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.AccordionPanel;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.tabs.Tab;
 
 import java.io.File;
@@ -41,7 +42,12 @@ public class DesignerComponentTreeParser {
                 if (child instanceof AccordionPanel || child instanceof Tab) {
                     addComponent(component, child);
                 } else {
-                    addComponent(component, wrap(child, information));
+                    if (component instanceof Scroller) {
+                        // Workaround for Scroller.
+                        ((Scroller) component).setContent(null);
+                    }
+                    Component wrapped = wrap(child, information);
+                    addComponent(component, wrapped);
                 }
             });
             return new DesignerComponentWrapper(component, isProjectComponent(component, information));
