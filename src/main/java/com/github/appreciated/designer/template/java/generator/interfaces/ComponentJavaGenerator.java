@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 public interface ComponentJavaGenerator<T> {
     boolean canParse(Component propertyParent);
 
-    boolean requiresParsing(T propertyParent);
+    boolean requiresGeneration(T propertyParent);
 
-    Stream<Expression> parse(CompilationUnit compilationUnit, T propertyParent, Expression nameExpr);
+    Stream<Expression> generate(CompilationUnit compilationUnit, T propertyParent, Expression nameExpr);
 
     List<String> generatedProperties();
 }

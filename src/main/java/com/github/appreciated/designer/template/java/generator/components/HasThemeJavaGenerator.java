@@ -21,12 +21,12 @@ public class HasThemeJavaGenerator implements ComponentJavaGenerator<HasTheme> {
     }
 
     @Override
-    public boolean requiresParsing(HasTheme propertyParent) {
+    public boolean requiresGeneration(HasTheme propertyParent) {
         return propertyParent.getThemeName() != null;
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, HasTheme propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, HasTheme propertyParent, Expression nameExpr) {
         MethodCallExpr textAssignment = new MethodCallExpr(nameExpr, "setThemeName", new NodeList<>(new StringLiteralExpr(propertyParent.getThemeName())));
         return Stream.of(textAssignment);
     }

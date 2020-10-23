@@ -22,7 +22,7 @@ public class HasSizeJavaGenerator implements ComponentJavaGenerator<HasSize> {
     }
 
     @Override
-    public boolean requiresParsing(HasSize propertyParent) {
+    public boolean requiresGeneration(HasSize propertyParent) {
         if (propertyParent instanceof Component && ((Component) propertyParent).getParent().isPresent()) {
             Component parent = ((Component) propertyParent).getParent().get();
             if (parent instanceof HasSize) {
@@ -34,7 +34,7 @@ public class HasSizeJavaGenerator implements ComponentJavaGenerator<HasSize> {
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, HasSize propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, HasSize propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
         HasSize parent = ((HasSize) ((Component) propertyParent).getParent().get());
         if (parent.getWidth() != null && !parent.getWidth().equals("")) {

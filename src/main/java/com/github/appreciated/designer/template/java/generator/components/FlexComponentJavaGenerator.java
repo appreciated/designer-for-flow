@@ -23,12 +23,12 @@ public class FlexComponentJavaGenerator implements ComponentJavaGenerator<FlexCo
     }
 
     @Override
-    public boolean requiresParsing(FlexComponent propertyParent) {
+    public boolean requiresGeneration(FlexComponent propertyParent) {
         return propertyParent.getAlignItems() != null || propertyParent.getJustifyContentMode() != null;
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, FlexComponent propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, FlexComponent propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
         if (propertyParent.getAlignItems() != null) {
             compilationUnit.addImport(FlexComponent.class);

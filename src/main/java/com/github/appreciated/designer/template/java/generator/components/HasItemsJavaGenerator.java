@@ -30,12 +30,12 @@ public class HasItemsJavaGenerator implements ComponentJavaGenerator<HasItems> {
     }
 
     @Override
-    public boolean requiresParsing(HasItems propertyParent) {
+    public boolean requiresGeneration(HasItems propertyParent) {
         return designCompilerInformation.hasCompilationMetaInformation((Component) propertyParent) && designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).hasPropertyReplacement("items");
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, HasItems propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, HasItems propertyParent, Expression nameExpr) {
         Collection<String> items = (Collection<String>) designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).getPropertyReplacement("items");
         return Stream.of(new MethodCallExpr(nameExpr, "setItems", new NodeList<>(items.stream().map(StringLiteralExpr::new).collect(Collectors.toList()))));
     }

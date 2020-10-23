@@ -22,12 +22,12 @@ public class ThemeableLayoutJavaGenerator implements ComponentJavaGenerator<Them
     }
 
     @Override
-    public boolean requiresParsing(ThemableLayout propertyParent) {
+    public boolean requiresGeneration(ThemableLayout propertyParent) {
         return propertyParent instanceof ThemableLayout;
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, ThemableLayout propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, ThemableLayout propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
         expressionList.add(new MethodCallExpr(nameExpr, "setMargin", new NodeList<>(new BooleanLiteralExpr(propertyParent.isMargin()))));
         expressionList.add(new MethodCallExpr(nameExpr, "setPadding", new NodeList<>(new BooleanLiteralExpr(propertyParent.isPadding()))));

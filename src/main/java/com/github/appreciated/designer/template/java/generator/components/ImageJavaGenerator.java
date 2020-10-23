@@ -29,12 +29,12 @@ public class ImageJavaGenerator implements ComponentJavaGenerator<Image> {
     }
 
     @Override
-    public boolean requiresParsing(Image propertyParent) {
+    public boolean requiresGeneration(Image propertyParent) {
         return propertyParent.getSrc() != null;
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, Image propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, Image propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
         if (propertyParent.getSrc() != null &&
                 designCompilerInformation.hasCompilationMetaInformation(propertyParent) &&

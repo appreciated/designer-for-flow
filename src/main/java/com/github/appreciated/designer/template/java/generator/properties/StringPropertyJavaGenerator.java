@@ -29,7 +29,7 @@ public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerat
     }
 
     @Override
-    public boolean canParse(Component propertyParent) {
+    public boolean canGenerate(Component propertyParent) {
         return propertyParent instanceof HasText;
     }
 
@@ -39,7 +39,7 @@ public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerat
     }
 
     @Override
-    public boolean requiresParsing(Component propertyParent) {
+    public boolean requiresGeneration(Component propertyParent) {
         ComponentPropertyParser propertyParser = new ComponentPropertyParser(propertyParent);
         propertiesRequireParsing = propertyParser.getProperties().values().stream()
                 .filter(propertyDescriptor -> alreadyParsedProperties.noneMatch(s -> s.equals(propertyDescriptor.getName())))
@@ -49,7 +49,7 @@ public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerat
     }
 
     @Override
-    public Stream<MethodCallExpr> parse(CompilationUnit compilationUnit, Component propertyParent, Expression nameExpr) {
+    public Stream<MethodCallExpr> generate(CompilationUnit compilationUnit, Component propertyParent, Expression nameExpr) {
         return propertiesRequireParsing.stream()
                 .map(propertyDescriptor -> {
                     try {

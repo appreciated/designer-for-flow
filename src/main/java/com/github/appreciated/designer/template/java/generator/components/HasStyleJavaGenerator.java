@@ -22,12 +22,12 @@ public class HasStyleJavaGenerator implements ComponentJavaGenerator<HasStyle> {
     }
 
     @Override
-    public boolean requiresParsing(HasStyle propertyParent) {
+    public boolean requiresGeneration(HasStyle propertyParent) {
         return propertyParent.getStyle().getNames().count() > 0;
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, HasStyle propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, HasStyle propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
         propertyParent.getStyle().getNames().forEach(s ->
                 // TODO why is the test String required?

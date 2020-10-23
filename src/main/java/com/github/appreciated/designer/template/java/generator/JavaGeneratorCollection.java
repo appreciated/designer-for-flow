@@ -9,11 +9,12 @@ import com.github.appreciated.designer.template.java.generator.properties.String
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class JavaGeneratorCollection {
 
-    private final ArrayList<ComponentJavaGenerator> componentJavaGenerators = new ArrayList<>();
-    private final ArrayList<PropertyComponentJavaGenerator> propertyComponentJavaGenerators = new ArrayList<>();
+    private final List<ComponentJavaGenerator> componentJavaGenerators = new ArrayList<>();
+    private final List<PropertyComponentJavaGenerator> propertyComponentJavaGenerators = new ArrayList<>();
 
     public JavaGeneratorCollection(DesignCompilerInformation designCompilerInformation) {
         componentJavaGenerators.addAll(Arrays.asList(
@@ -33,11 +34,11 @@ public class JavaGeneratorCollection {
         ));
     }
 
-    public ArrayList<ComponentJavaGenerator> getComponentJavaGenerators() {
+    public List<ComponentJavaGenerator> getComponentJavaGenerators() {
         return componentJavaGenerators;
     }
 
-    public ArrayList<PropertyComponentJavaGenerator> getPropertyComponentJavaGenerators() {
+    public List<PropertyComponentJavaGenerator> getPropertyComponentJavaGenerators() {
         return propertyComponentJavaGenerators;
     }
 }

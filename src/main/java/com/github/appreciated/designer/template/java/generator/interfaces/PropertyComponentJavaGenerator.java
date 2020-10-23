@@ -9,12 +9,12 @@ import java.util.stream.Stream;
 
 public interface PropertyComponentJavaGenerator {
 
-    boolean canParse(Component propertyParent);
+    boolean canGenerate(Component propertyParent);
 
     void setAlreadyParsedProperties(Stream<String> alreadyParsedProperties);
 
-    boolean requiresParsing(Component propertyParent);
+    boolean requiresGeneration(Component propertyParent);
 
-    Stream<MethodCallExpr> parse(CompilationUnit compilationUnit, Component propertyParent, Expression nameExpr);
+    Stream<MethodCallExpr> generate(CompilationUnit compilationUnit, Component propertyParent, Expression nameExpr);
 
 }

@@ -3,6 +3,7 @@ package com.github.appreciated.designer.template.java.generator;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
+import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -128,16 +129,16 @@ public class JavaGenerator {
         Component actualComponent = unwrapComponent(component);
         List<String> parsedProperties = new ArrayList<>();
         compilerCollection.getComponentJavaGenerators().stream()
-                .filter(parser -> parser.canParse(actualComponent) && parser.requiresParsing(actualComponent))
+                .filter(javaGenerator -> javaGenerator.canParse(actualComponent) && javaGenerator.requiresGeneration(actualComponent))
                 .peek(componentJavaGenerator -> parsedProperties.addAll(componentJavaGenerator.generatedProperties()))
-                .map(parser -> (Stream<Expression>) parser.parse(compilationUnit, actualComponent, field))
+                .map(javaGenerator -> ((ComponentJavaGenerator) javaGenerator).generate(compilationUnit, actualComponent, field))
                 .forEach(expressionStream ->
-                        expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))
+                        ((Stream<Expression>)expressionStream).forEach(expression -> constructor.getBody().addAndGetStatement(expression))
                 );
         compilerCollection.getPropertyComponentJavaGenerators().stream()
                 .peek(propertyComponentJavaGenerator -> propertyComponentJavaGenerator.setAlreadyParsedProperties(parsedProperties.stream()))
-                .filter(parser -> parser.canParse(actualComponent) && parser.requiresParsing(actualComponent))
-                .map(parser -> parser.parse(compilationUnit, actualComponent, field))
+                .filter(parser -> parser.canGenerate(actualComponent) && parser.requiresGeneration(actualComponent))
+                .map(parser -> parser.generate(compilationUnit, actualComponent, field))
                 .forEach(expressionStream ->
                         expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))
                 );

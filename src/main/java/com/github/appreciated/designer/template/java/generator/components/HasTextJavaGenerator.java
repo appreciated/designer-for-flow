@@ -29,12 +29,12 @@ public class HasTextJavaGenerator implements ComponentJavaGenerator<HasText> {
     }
 
     @Override
-    public boolean requiresParsing(HasText propertyParent) {
+    public boolean requiresGeneration(HasText propertyParent) {
         return propertyParent.getText() != null && !propertyParent.getText().equals("");
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, HasText propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, HasText propertyParent, Expression nameExpr) {
         if (designCompilerInformation.hasCompilationMetaInformation((Component) propertyParent) && designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).hasPropertyReplacement("text")) {
             List<Expression> expressionList = new ArrayList<>();
             if (propertyParent.getText() != null && designCompilerInformation.getCompilationMetaInformation((Component) propertyParent).hasPropertyReplacement("text")) {

@@ -29,13 +29,13 @@ public class TextFieldJavaGenerator implements ComponentJavaGenerator<TextField>
     }
 
     @Override
-    public boolean requiresParsing(TextField propertyParent) {
+    public boolean requiresGeneration(TextField propertyParent) {
         return designCompilerInformation.hasCompilationMetaInformation(propertyParent) &&
                 (designCompilerInformation.getCompilationMetaInformation(propertyParent).hasPropertyReplacement("label") || designCompilerInformation.getCompilationMetaInformation(propertyParent).hasPropertyReplacement("caption"));
     }
 
     @Override
-    public Stream<Expression> parse(CompilationUnit compilationUnit, TextField propertyParent, Expression nameExpr) {
+    public Stream<Expression> generate(CompilationUnit compilationUnit, TextField propertyParent, Expression nameExpr) {
         List<Expression> expressionList = new ArrayList<>();
         if (designCompilerInformation.hasCompilationMetaInformation(propertyParent) && designCompilerInformation.getCompilationMetaInformation(propertyParent).hasPropertyReplacement("label")) {
             if (propertyParent.getLabel() != null && designCompilerInformation.getCompilationMetaInformation(propertyParent).hasPropertyReplacement("label")) {
