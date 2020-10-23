@@ -7,6 +7,7 @@ import com.github.appreciated.designer.application.view.file.designer.sidebar.re
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.HasStyleRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property.AbstractPropertyRenderer;
 import com.github.appreciated.designer.component.ComponentPropertyParser;
+import com.github.appreciated.designer.component.CustomPropertyDescriptor;
 import com.github.appreciated.designer.component.designer.StyleEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -17,7 +18,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import java.beans.PropertyDescriptor;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -72,7 +72,7 @@ public class PropertiesView extends BaseView {
         }
     }
 
-    private void addRenderer(HasComponents formLayout, Map.Entry<String, PropertyDescriptor> entrySet, Component propertyParent) {
+    private void addRenderer(HasComponents formLayout, Map.Entry<String, CustomPropertyDescriptor> entrySet, Component propertyParent) {
         if (renderers.getPropertyRenderers()
                 .stream()
                 .filter(abstractPropertyRenderer -> abstractPropertyRenderer.canRender(propertyParent))

@@ -1,29 +1,30 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property;
 
 import com.github.appreciated.designer.component.CustomPropertyDescriptor;
-import com.github.appreciated.designer.component.properties.PropertyTextField;
+import com.github.appreciated.designer.component.properties.PropertyNumberField;
 import com.vaadin.flow.component.Component;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class StringPropertyRenderer extends AbstractPropertyRenderer<String> {
+public class DoubleWrapperPropertyRenderer extends AbstractPropertyRenderer<Double> {
     @Override
     public boolean canRender(Component propertyParent, String propertyName, CustomPropertyDescriptor propertyDescriptor) {
-        return propertyDescriptor.getPropertyType() == String.class;
+        return propertyDescriptor.getPropertyType() == Double.class;
     }
 
     public Component render(String propertyName, CustomPropertyDescriptor propertyDescriptor, Component propertyParent) {
-        PropertyTextField textField = new PropertyTextField();
+        PropertyNumberField numberField = new PropertyNumberField();
         try {
-            String value = (String) propertyDescriptor.getReadMethod().invoke(propertyParent);
+            Double value = (Double) propertyDescriptor.getReadMethod().invoke(propertyParent);
             if (value != null) {
-                textField.setValue(value);
+                numberField.setValue(value);
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        textField.addValueChangeListener(checkboxBooleanComponentValueChangeEvent -> applyValue(propertyParent, propertyDescriptor, textField.getValue()));
-        return textField;
+        numberField.addValueChangeListener(checkboxBooleanComponentValueChangeEvent -> {
+            applyValue(propertyParent, propertyDescriptor, numberField.getValue());
+        });
+        return numberField;
     }
 }
-

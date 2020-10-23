@@ -22,7 +22,9 @@ public class Renderers {
                 new StringPropertyRenderer(),
                 new BooleanPropertyRenderer(),
                 new IntegerPropertyRenderer(),
+                new IntegerWrapperPropertyRenderer(),
                 new DoublePropertyRenderer(),
+                new DoubleWrapperPropertyRenderer(),
                 new IconPropertyRenderer(),
                 new LocalDateTimePropertyRenderer(),
                 new DurationPropertyRenderer()

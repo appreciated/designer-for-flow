@@ -4,11 +4,11 @@ import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.template.java.generator.components.*;
 import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.appreciated.designer.template.java.generator.interfaces.PropertyComponentJavaGenerator;
+import com.github.appreciated.designer.template.java.generator.properties.DoublePropertyJavaGenerator;
 import com.github.appreciated.designer.template.java.generator.properties.StringPropertyJavaGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class JavaGeneratorCollection {
@@ -29,8 +29,9 @@ public class JavaGeneratorCollection {
                 new HasItemsJavaGenerator(designCompilerInformation)
         ));
 
-        propertyComponentJavaGenerators.addAll(Collections.singletonList(
-                new StringPropertyJavaGenerator(designCompilerInformation)
+        propertyComponentJavaGenerators.addAll(Arrays.asList(
+                new StringPropertyJavaGenerator(designCompilerInformation),
+                new DoublePropertyJavaGenerator(designCompilerInformation)
         ));
     }
 

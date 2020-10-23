@@ -137,7 +137,7 @@ public class JavaGenerator {
                 );
         compilerCollection.getPropertyComponentJavaGenerators().stream()
                 .peek(propertyComponentJavaGenerator -> propertyComponentJavaGenerator.setAlreadyParsedProperties(parsedProperties.stream()))
-                .filter(parser -> parser.canGenerate(actualComponent) && parser.requiresGeneration(actualComponent))
+                .filter(parser -> parser.requiresGeneration(actualComponent))
                 .map(parser -> parser.generate(compilationUnit, actualComponent, field))
                 .forEach(expressionStream ->
                         expressionStream.forEach(expression -> constructor.getBody().addAndGetStatement(expression))

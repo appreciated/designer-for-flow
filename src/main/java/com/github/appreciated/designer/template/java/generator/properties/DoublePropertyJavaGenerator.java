@@ -6,9 +6,9 @@ import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.template.java.generator.interfaces.PropertyComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.vaadin.flow.component.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerator {
+public class DoublePropertyJavaGenerator implements PropertyComponentJavaGenerator {
 
     private final DesignCompilerInformation designCompilerInformation;
     private List<String> alreadyParsedProperties;
     private List<CustomPropertyDescriptor> propertiesRequireParsing;
 
-    public StringPropertyJavaGenerator(DesignCompilerInformation designCompilerInformation) {
+    public DoublePropertyJavaGenerator(DesignCompilerInformation designCompilerInformation) {
         this.designCompilerInformation = designCompilerInformation;
     }
 
@@ -38,7 +38,7 @@ public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerat
         Map<String, CustomPropertyDescriptor> properties = propertyParser.getProperties();
         propertiesRequireParsing = properties.values().stream()
                 .filter(propertyDescriptor -> alreadyParsedProperties.stream().noneMatch(s -> s.equals(propertyDescriptor.getName())))
-                .filter(propertyDescriptor -> propertyDescriptor.getPropertyType() == String.class)
+                .filter(propertyDescriptor -> propertyDescriptor.getPropertyType() == Double.class || propertyDescriptor.getPropertyType() == double.class)
                 .collect(Collectors.toList());
         return propertiesRequireParsing.size() > 0;
     }
@@ -48,8 +48,8 @@ public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerat
         return propertiesRequireParsing.stream()
                 .filter(propertyDescriptor -> {
                     try {
-                        String value = ((String) propertyDescriptor.getReadMethod().invoke(propertyParent));
-                        return value != null && !value.equals("");
+                        Double value = ((Double) propertyDescriptor.getReadMethod().invoke(propertyParent));
+                        return value != null && !value.equals("0.0") && !value.isInfinite();
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
@@ -57,7 +57,7 @@ public class StringPropertyJavaGenerator implements PropertyComponentJavaGenerat
                 })
                 .map(propertyDescriptor -> {
                     try {
-                        return new MethodCallExpr(nameExpr, propertyDescriptor.getWriteMethod().getName(), new NodeList<>(new StringLiteralExpr((String) propertyDescriptor.getReadMethod().invoke(propertyParent))));
+                        return new MethodCallExpr(nameExpr, propertyDescriptor.getWriteMethod().getName(), new NodeList<>(new DoubleLiteralExpr((Double) propertyDescriptor.getReadMethod().invoke(propertyParent))));
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }

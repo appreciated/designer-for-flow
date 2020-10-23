@@ -1,19 +1,19 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property;
 
+import com.github.appreciated.designer.component.CustomPropertyDescriptor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
 public class LocalDateTimePropertyRenderer extends AbstractPropertyRenderer<LocalDateTime> {
     @Override
-    public boolean canRender(Component propertyParent, String propertyName, PropertyDescriptor propertyDescriptor) {
+    public boolean canRender(Component propertyParent, String propertyName, CustomPropertyDescriptor propertyDescriptor) {
         return propertyDescriptor.getPropertyType() == LocalDateTime.class;
     }
 
-    public Component render(String propertyName, PropertyDescriptor propertyDescriptor, Component propertyParent) {
+    public Component render(String propertyName, CustomPropertyDescriptor propertyDescriptor, Component propertyParent) {
         DateTimePicker dateTimePicker = new DateTimePicker();
         try {
             LocalDateTime property = (LocalDateTime) propertyDescriptor.getReadMethod().invoke(propertyParent);

@@ -9,8 +9,6 @@ import java.util.stream.Stream;
 
 public interface PropertyComponentJavaGenerator {
 
-    boolean canGenerate(Component propertyParent);
-
     void setAlreadyParsedProperties(Stream<String> alreadyParsedProperties);
 
     boolean requiresGeneration(Component propertyParent);
