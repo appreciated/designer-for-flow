@@ -1,1 +1,2 @@
+cd ..
 .\target\electron\designer-for-flow-win32-x64\resources\app\java\jre\bin\java "-Dvaadin.productionMode=true" -jar .\target\electron\designer-for-flow-win32-x64\resources\app\java\designer-for-flow-0.7.6-SNAPSHOT.jar --logging.file=flow-designer.log

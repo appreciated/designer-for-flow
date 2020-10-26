@@ -3,6 +3,7 @@ package com.github.appreciated.designer.template.java.generator;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
+import com.github.appreciated.designer.model.DesignFileState;
 import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -75,8 +76,9 @@ public class JavaGenerator {
         }
     }
 
-    public void save() {
+    public DesignFileState save() throws IOException {
         sourceRoot.saveAll(designCompilerInformation.getDesign().toPath());
+        return new DesignFileState(designCompilerInformation.getDesign());
     }
 
     private FieldDeclaration addComponent(Component component) {

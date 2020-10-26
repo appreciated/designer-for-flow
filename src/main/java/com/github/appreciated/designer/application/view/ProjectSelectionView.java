@@ -89,7 +89,7 @@ public class ProjectSelectionView extends VerticalLayout {
             layout.add(getCreateCard());
         }
         AddButton button = new AddButton(VaadinIcon.PLUS.create(),
-                buttonClickEvent -> new OpenProjectDialog(this::addProject).open()
+                buttonClickEvent -> new OpenProjectDialog(file -> addProject(file, true)).open()
         );
         button.setBottom("30px");
         add(button);
@@ -116,7 +116,7 @@ public class ProjectSelectionView extends VerticalLayout {
 
         item.setSizeFull();
 
-        final RippleClickableCard card = new RippleClickableCard(event -> openProject(projectPath), item);
+        final RippleClickableCard card = new RippleClickableCard(event -> openProject(projectPath, false), item);
         card.getStyle().set("margin", "5px");
         card.setBackground("var(--lumo-primary-contrast-color)");
 
@@ -141,7 +141,10 @@ public class ProjectSelectionView extends VerticalLayout {
         final VerticalLayout content = new VerticalLayout(hl);
         content.setAlignItems(Alignment.CENTER);
         content.setJustifyContentMode(JustifyContentMode.CENTER);
-        final RippleClickableCard card = new RippleClickableCard(event -> new OpenProjectDialog(this::addProject).open(), content);
+        final RippleClickableCard card = new RippleClickableCard(event ->
+                new OpenProjectDialog(file -> addProject(file, true)).open()
+                , content
+        );
         content.setSizeFull();
         card.setElevation(0);
         card.getStyle().set("margin", "5px");
@@ -150,18 +153,18 @@ public class ProjectSelectionView extends VerticalLayout {
     }
 
 
-    private void addProject(final File directory) {
+    private void addProject(final File directory, boolean firstStart) {
         final ProjectTypes types = new ProjectTypes(directory);
 
         if (types.hasFittingProjectType()) {
             final ProjectPath projectPath = repository.save(new ProjectPath(directory.getPath()));
-            openProject(projectPath);
+            openProject(projectPath, firstStart);
         } else {
             Notification.show(getTranslation("this.project.seems.to.be.missing.files"));
         }
     }
 
-    private void openProject(final ProjectPath directory) {
+    private void openProject(final ProjectPath directory, boolean firstStart) {
         getUI().flatMap(ui -> ui.getRouter()
                 .getRegistry()
                 .getTargetUrl(ProjectPresenter.class))
@@ -170,6 +173,9 @@ public class ProjectSelectionView extends VerticalLayout {
                     final Map<String, List<String>> map = Maps.newHashMap();
                     try {
                         map.put("path", Collections.singletonList(URLEncoder.encode(directory.getPath(), "UTF-8")));
+                        if (firstStart) {
+                            map.put("firstStart", Collections.singletonList("true"));
+                        }
                         // using UI#navigate causes many Components to not be drawn incorrectly
                         getUI().get().getPage().executeJs("location.href = \"" + urlPath + "?" + new QueryParameters(map).getQueryString() + "\"");
                     } catch (UnsupportedEncodingException e) {

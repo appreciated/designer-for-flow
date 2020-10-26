@@ -3,13 +3,17 @@ net session >nul 2>&1
 setlocal enableDelayedExpansion
 if !ERRORLEVEL! EQU 0 (
     cd %~dp0
+    cd ..
     cd src\main\resources
     dir /b /a-d "i18n_de.properties" | find "i18n_de.properties" >nul
     if !ERRORLEVEL! EQU 0 (
-      cd ../../..
+      cd ..\..\..
       mvn clean install -Pproduction
-      ubuntu2004 run dos2unix.exe zip-darwin-windows.sh
-      ubuntu2004 run bash zip-darwin-windows.sh
+      cd scripts
+      dir
+      ubuntu2004 run dos2unix.exe zip-electron-builds.sh
+      ubuntu2004 run bash zip-electron-builds.sh
+      PAUSE
     ) else (
       echo "i18n_de.properties" does not exist  
     )

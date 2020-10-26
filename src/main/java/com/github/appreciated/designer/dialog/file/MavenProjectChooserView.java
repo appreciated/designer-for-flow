@@ -25,7 +25,8 @@ public class MavenProjectChooserView extends FileChooserView {
         });
         setGetRowComponentForFile(file -> {
             HorizontalLayout layout = new HorizontalLayout();
-            if (file.isDirectory() && file.list() != null && Arrays.asList(file.list()).contains("pom.xml")) {
+            layout.getStyle().set("user-select", "none");
+            if (isVaadinProject(file)) {
                 layout.add(VaadinIcon.VAADIN_H.create());
             } else if (file.isDirectory()) {
                 layout.add(VaadinIcon.FOLDER.create());
@@ -35,5 +36,17 @@ public class MavenProjectChooserView extends FileChooserView {
             layout.add(new Span(file.getName()));
             return layout;
         });
+        setProcessDoubleClickEvent(fileItemDoubleClickEvent -> {
+            File file = fileItemDoubleClickEvent.getItem();
+            if (isVaadinProject(file)) {
+                getOnSelect().accept(file);
+            } else if (file.isDirectory()) {
+                getGrid().expand(file);
+            }
+        });
+    }
+
+    boolean isVaadinProject(File file) {
+        return file.isDirectory() && file.list() != null && Arrays.asList(file.list()).contains("pom.xml");
     }
 }

@@ -32,7 +32,7 @@ public class OpenProjectDialog extends Dialog {
         projectTypeTabs.add(mavenTab);
         projectTypeTabs.setSelectedTab(mavenTab);
         VerticalLayout wrapper = new VerticalLayout();
-        H2 header = new H2(getTranslation("select.a.project.folder"));
+        H2 header = new H2(getTranslation("select.project.folder"));
         wrapper.add(header);
         wrapper.add(projectTypeTabs);
         wrapper.setMargin(false);

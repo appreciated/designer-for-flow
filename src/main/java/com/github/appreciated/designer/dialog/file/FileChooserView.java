@@ -40,6 +40,7 @@ public class FileChooserView extends VerticalLayout {
     protected File parentFile;
     protected Function<File, Component> getRowComponentForFile = file -> {
         HorizontalLayout layout = new HorizontalLayout();
+        layout.getStyle().set("user-select", "none");
         layout.add(new Span(file.getName()));
         return layout;
     };
@@ -59,6 +60,8 @@ public class FileChooserView extends VerticalLayout {
         final File selectedFile = event.getItem();
         if (selectedFile != null && !selectedFile.isDirectory()) {
             onSelect.accept(selectedFile);
+        } else {
+            grid.expand(selectedFile);
         }
     };
     private Consumer<File> update = selectedFile -> getSelectFileButton().setEnabled(selectedFile != null && !selectedFile.isDirectory());

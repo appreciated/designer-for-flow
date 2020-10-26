@@ -79,8 +79,12 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         getView().setOnSelect(file -> {
             if (file != null) {
                 if (FilenameUtils.getExtension(file.getName()).equals("java")) {
-                    getView().getFileConsumer().accept(file);
-                    close();
+                    if (isFileDesignerFile(file)) {
+                        getView().getFileConsumer().accept(file);
+                        close();
+                    } else {
+                        Notification.show(getTranslation("only.java.files.created.with.the.designer.can.be.opened"));
+                    }
                 } else {
                     Notification.show(getTranslation("please.select.a.java.file"));
                 }
@@ -101,6 +105,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
         });
         getView().setGetRowComponentForFile(file -> {
             HorizontalLayout layout = new HorizontalLayout();
+            layout.getStyle().set("user-select", "none");
             if (file.isDirectory()) {
                 layout.add(VaadinIcon.FOLDER.create());
             } else {

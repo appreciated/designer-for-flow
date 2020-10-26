@@ -37,6 +37,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
     private final ProjectService projectService;
     private final Map<Tab, ProjectFileModel> fileMap = new HashMap<>();
     private CreateOrOpenDesignTabDialog files;
+    private boolean firstStart;
 
     public ProjectPresenter(@Autowired EventService eventService, @Autowired ProjectService projectService, @Autowired ExceptionService exceptionService) {
         UI ui = UI.getCurrent();
@@ -84,6 +85,16 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
                 addTab(defaultFile);
             }
         }
+        if (firstStart) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                attachEvent.getUI().access(() -> getContent().showHelper());
+            }).start();
+        }
     }
 
     @Override
@@ -91,6 +102,9 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         Location location = beforeEvent.getLocation();
         QueryParameters queryParameters = location.getQueryParameters();
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
+        if (parametersMap.containsKey("firstStart")) {
+            firstStart = true;
+        }
         try {
             String projectPath = URLDecoder.decode(parametersMap.get("path").get(0), "UTF-8");
             projectService.initProject(new File(projectPath));

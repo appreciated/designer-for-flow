@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class CustomTabs extends Tabs {
 
-    private final Tab tab;
+    private final Tab addTab;
     private Runnable addListener;
 
     public CustomTabs() {
@@ -20,12 +20,12 @@ public class CustomTabs extends Tabs {
                 .set("padding", "0px")
                 .set("font-size", "20px")
                 .set("color", "black");
-        tab = new Tab(addButton);
-        tab.getStyle()
+        addTab = new Tab(addButton);
+        addTab.getStyle()
                 .set("--lumo-primary-color", "transparent")
                 .set("--lumo-contrast-60pct", "transparent");
         getStyle().set("padding-right", "0px");
-        super.add(tab);
+        super.add(addTab);
     }
 
     @Override
@@ -39,12 +39,12 @@ public class CustomTabs extends Tabs {
     @Override
     public Registration addSelectedChangeListener(ComponentEventListener<SelectedChangeEvent> listener) {
         return super.addSelectedChangeListener(event -> {
-            if (event.getSelectedTab() == tab) {
+            if (event.getSelectedTab() == addTab) {
                 this.addListener.run();
                 if (event.getPreviousTab() != null && getChildren().anyMatch(component -> component == event.getPreviousTab())) {
                     setSelectedTab(event.getPreviousTab());
                 } else {
-                    tab.setSelected(false);
+                    addTab.setSelected(false);
                 }
             } else {
                 listener.onComponentEvent(event);
@@ -54,5 +54,9 @@ public class CustomTabs extends Tabs {
 
     public void addAddListener(Runnable addListener) {
         this.addListener = addListener;
+    }
+
+    public Tab getAddTab() {
+        return addTab;
     }
 }

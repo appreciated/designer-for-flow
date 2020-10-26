@@ -4,7 +4,7 @@ package com.github.appreciated.designer.template.java.parser;
 import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
-import com.github.appreciated.designer.service.ProjectService;
+import com.github.appreciated.designer.model.project.Project;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.CodeGenerationUtils;
@@ -23,15 +23,15 @@ import static com.github.appreciated.designer.helper.ComponentContainerHelper.*;
 public class DesignerComponentTreeParser {
 
     private final File file;
-    private final ProjectService projectService;
+    private Project project;
     private final ComponentTreeParser generator;
 
-    public DesignerComponentTreeParser(File file, ProjectService projectService) throws ParseException, ClassNotFoundException {
+    public DesignerComponentTreeParser(File file, Project project) throws ParseException, ClassNotFoundException {
         this.file = file;
-        this.projectService = projectService;
-        SourceRoot sourceRoot = new SourceRoot(projectService.getProject().getProjectRoot().toPath());
+        this.project = project;
+        SourceRoot sourceRoot = new SourceRoot(project.getProjectRoot().toPath());
         CompilationUnit compilationUnit = sourceRoot.parse(CodeGenerationUtils.packageToPath(file.getParent()), file.getName());
-        generator = new ComponentTreeParser(compilationUnit, projectService.getProject());
+        generator = new ComponentTreeParser(compilationUnit, project);
     }
 
     public static Component wrap(Component component, DesignCompilerInformation information) {
@@ -58,7 +58,7 @@ public class DesignerComponentTreeParser {
     public DesignCompilerInformation getRootDesignCompilerInformation() {
         DesignCompilerInformation info = new DesignCompilerInformation();
         info.setDesign(file);
-        info.setProject(projectService.getProject());
+        info.setProject(project);
         info.setCompilationMetaInformation(generator.getCompilationMetaInformation());
         info.setClassName(generator.getClassName());
         Component parsedComponent = generator.getComponent();

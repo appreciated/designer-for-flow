@@ -2,6 +2,7 @@
 net session >nul 2>&1
 if %errorLevel% == 0 (
     cd %~dp0
+    cd ..
     mvn clean install -Pproduction -DskipTests
     PAUSE
 ) else (

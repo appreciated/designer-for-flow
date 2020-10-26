@@ -30,7 +30,7 @@ public class ProjectService {
         if (file.exists()) {
             DesignerComponentTreeParser parser = null;
             try {
-                parser = new DesignerComponentTreeParser(file, this);
+                parser = new DesignerComponentTreeParser(file, this.getProject());
             } catch (ParseException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

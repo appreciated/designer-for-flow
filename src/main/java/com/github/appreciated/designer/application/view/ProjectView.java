@@ -5,16 +5,24 @@ import com.github.appreciated.designer.component.CustomTabs;
 import com.github.appreciated.designer.component.IconButton;
 import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.github.appreciated.designer.helper.UrlHelper;
+import com.vaadin.componentfactory.Tooltip;
+import com.vaadin.componentfactory.TooltipAlignment;
+import com.vaadin.componentfactory.TooltipPosition;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
+import org.vaadin.addon.driverjs.DriverJS;
+import org.vaadin.addon.driverjs.model.DriverDefinition;
+import org.vaadin.addon.driverjs.model.StepDefinitionBuilder;
+import org.vaadin.addon.driverjs.model.StepPosition;
 
 import javax.validation.constraints.NotNull;
 import java.util.function.Consumer;
@@ -40,16 +48,25 @@ public class ProjectView extends VerticalLayout {
         label.getStyle()
                 .set("white-space", "nowrap")
                 .set("line-height", "56px");
-        Button button = new Button(VaadinIcon.ANGLE_LEFT.create());
-        button.getStyle().set("font-size", "25px").set("margin-right", "-20px");
-        button.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        button.addClickListener(event -> UI.getCurrent().navigate(ProjectSelectionView.class));
-        Button donate = new Button(getTranslation("donate"), VaadinIcon.COFFEE.create(), event -> UrlHelper.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RH84HC939XQHS"));
+        Button backButton = new Button(VaadinIcon.ANGLE_LEFT.create());
+
+        Tooltip tooltip = new Tooltip();
+        tooltip.setPosition(TooltipPosition.RIGHT);
+        tooltip.setAlignment(TooltipAlignment.CENTER);
+        tooltip.attachToComponent(backButton);
+        tooltip.add(new Span(getTranslation("back.to.project.selection")));
+
+        backButton.getStyle().set("font-size", "25px").set("margin-right", "-20px");
+        backButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        backButton.addClickListener(event -> UI.getCurrent().navigate(ProjectSelectionView.class));
+        Button donate = new Button(getTranslation("donate"), VaadinIcon.COFFEE.create(), event -> {
+            UrlHelper.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RH84HC939XQHS");
+        });
         donate.getStyle()
                 .set("flex-shrink", "0")
                 .set("margin-right", "10px");
         donate.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        appBar.add(button, logo, label, tabs, donate);
+        appBar.add(backButton, tooltip, logo, label, tabs, donate);
         appBar.setAlignItems(Alignment.CENTER);
         appBar.getStyle()
                 .set("box-shadow", "var(--lumo-box-shadow-s)")
@@ -69,6 +86,27 @@ public class ProjectView extends VerticalLayout {
         setSpacing(false);
         add(dial);
         setSizeFull();
+    }
+
+    public void showHelper() {
+        DriverJS driver = new DriverJS();
+        driver.setStepDefinitions(
+                StepDefinitionBuilder.ofComponent(tabs.getAddTab())
+                        .withTitle(getTranslation("introduction"))
+                        .withPosition(StepPosition.BOTTOM_CENTER)
+                        .withDescription(getTranslation("start.by.adding.a.new.design.here")),
+                StepDefinitionBuilder.ofComponent(dial)
+                        .withTitle(getTranslation("start.by.adding.a.new.design.here.second"))
+                        .withPosition(StepPosition.TOP_RIGHT)
+        );
+        DriverDefinition definition = new DriverDefinition();
+        definition.setCloseBtnText(getTranslation("close"));
+        definition.setPrevBtnText(getTranslation("previous"));
+        definition.setNextBtnText(getTranslation("next"));
+        definition.setDoneBtnText(getTranslation("done"));
+        driver.setupDriver(definition);
+        driver.start();
+        add(driver);
     }
 
     public Tab createTab(@NotNull String name, Consumer<Tab> clickListener) {
