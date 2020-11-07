@@ -6,6 +6,8 @@ import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDrop
 import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDropEventPublisher;
 import com.github.appreciated.designer.events.designer.focus.ElementFocusedEventListener;
 import com.github.appreciated.designer.events.designer.focus.ElementFocusedEventPublisher;
+import com.github.appreciated.designer.events.designer.save.SaveRequiredEventListener;
+import com.github.appreciated.designer.events.designer.save.SaveRequiredEventPublisher;
 import com.github.appreciated.designer.events.designer.structure.StructureChangedEventListener;
 import com.github.appreciated.designer.events.designer.structure.StructureChangedEventPublisher;
 import com.github.appreciated.designer.events.designer.theme.ThemeChangedEventListener;
@@ -28,11 +30,15 @@ public class EventService {
     private final DesignerComponentDropEventPublisher designerComponentDropEventPublisher;
     private final DesignerComponentDragEventListener designerComponentDragListener;
     private final DesignerComponentDragEventPublisher designerComponentDragEventPublisher;
+    private final SaveRequiredEventListener saveRequiredEventListener;
+    private final SaveRequiredEventPublisher saveRequiredEventPublisher;
 
     public EventService(@Autowired ElementFocusedEventPublisher focusedEventPublisher,
                         @Autowired ElementFocusedEventListener focusedEventListener,
                         @Autowired StructureChangedEventPublisher structureChangedEventPublisher,
                         @Autowired StructureChangedEventListener structureChangedEventListener,
+                        @Autowired SaveRequiredEventPublisher saveRequiredEventPublisher,
+                        @Autowired SaveRequiredEventListener saveRequiredEventListener,
                         @Autowired ThemeChangedEventPublisher themeChangedEventPublisher,
                         @Autowired ThemeChangedEventListener themeChangedEventListener,
                         @Autowired DesignerComponentDropEventListener designerComponentDropListener,
@@ -45,6 +51,8 @@ public class EventService {
         this.themeChangedEventPublisher = themeChangedEventPublisher;
         this.focusedEventListener = focusedEventListener;
         this.structureChangedEventListener = structureChangedEventListener;
+        this.saveRequiredEventPublisher = saveRequiredEventPublisher;
+        this.saveRequiredEventListener = saveRequiredEventListener;
         this.themeChangedEventListener = themeChangedEventListener;
         this.designerComponentDropListener = designerComponentDropListener;
         this.designerComponentDropEventPublisher = designerComponentDropEventPublisher;
@@ -90,5 +98,13 @@ public class EventService {
 
     public DesignerComponentDragEventPublisher getDesignerComponentDragEventPublisher() {
         return designerComponentDragEventPublisher;
+    }
+
+    public SaveRequiredEventListener getSaveRequiredEventListener() {
+        return saveRequiredEventListener;
+    }
+
+    public SaveRequiredEventPublisher getSaveRequiredEventPublisher() {
+        return saveRequiredEventPublisher;
     }
 }

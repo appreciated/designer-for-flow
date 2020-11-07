@@ -1,24 +1,23 @@
 package com.github.appreciated.designer.application.view.file.designer.template;
 
 import com.github.appreciated.designer.application.view.BaseView;
+import com.github.appreciated.designer.component.CustomSelect;
+import com.github.appreciated.designer.component.IconButton;
+import com.vaadin.componentfactory.Tooltip;
+import com.vaadin.componentfactory.TooltipAlignment;
+import com.vaadin.componentfactory.TooltipPosition;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.tabs.Tabs.SelectedChangeEvent;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.Result;
-import com.vaadin.flow.data.binder.ValidationResult;
-import com.vaadin.flow.data.binder.ValueContext;
-import com.vaadin.flow.data.converter.Converter;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import lombok.Getter;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class DesignerView extends BaseView {
@@ -33,31 +32,16 @@ public class DesignerView extends BaseView {
     protected final HorizontalLayout header;
     protected final H3 title;
 
-    // Tabs
-    protected final Tabs tabs;
-    protected final Tab resizeableTab;
-    protected final Tab mobileTab;
-    protected final Tab mobileLandscapeTab;
-    protected final Tab tabletTab;
-    protected final Tab tabletLandscapeTab;
-    protected final Tab laptopTab;
-    private final ComboBox<String> sizes;
+    private final CustomSelect<Size> sizes;
+    private final IconButton rotateButton;
+    private final IconButton undoButton;
+    private final IconButton redoButton;
+    private final Button saveButton;
 
     public DesignerView() {
         super();
 
-
-        // Tabs
-        tabs = new Tabs();
-
-        HorizontalLayout designerViewSizeInput = new HorizontalLayout(tabs);
-
-        resizeableTab = createTab(tabs, VaadinIcon.EXPAND_SQUARE);
-        mobileTab = createTab(tabs, VaadinIcon.MOBILE);
-        mobileLandscapeTab = createTab(tabs, VaadinIcon.MOBILE, 90);
-        tabletTab = createTab(tabs, VaadinIcon.TABLET, 90);
-        tabletLandscapeTab = createTab(tabs, VaadinIcon.TABLET);
-        laptopTab = createTab(tabs, VaadinIcon.LAPTOP);
+        HorizontalLayout designerViewSizeInput = new HorizontalLayout();
 
         title = new H3("Design");
         title.getStyle().set("margin-top", "0");
@@ -82,54 +66,103 @@ public class DesignerView extends BaseView {
         designWrapper.setWidth("98%");
         designWrapper.setHeight("98%");
 
-        sizes = new ComboBox<>();
-        sizes.setPlaceholder(getTranslation("select.a.resolution"));
-        Binder<AtomicReference<Size>> binder = new Binder<>();
-        binder.forField(sizes)
-                .withValidator((size, valueContext) -> {
-                    try {
-                        return ValidationResult.ok();
-                    } catch (Exception e) {
-                        return ValidationResult.error(getTranslation("input.requires.the.following.format"));
-                    }
-                })
-                .withConverter(new Converter<String, Size>() {
-                    @Override
-                    public Result<Size> convertToModel(String s, ValueContext valueContext) {
-                        if (s == null) {
-                            return Result.ok(null);
-                        }
-                        try {
-                            return Result.ok(Size.parse(s));
-                        } catch (NumberFormatException e) {
-                            return Result.error(getTranslation("input.requires.the.following.format"));
-                        }
-                    }
-
-                    @Override
-                    public String convertToPresentation(Size size, ValueContext valueContext) {
-                        return Size.present(size);
-                    }
-                })
-                .bind(AtomicReference::get, AtomicReference::set);
-        binder.setBean(null);
-        binder.addValueChangeListener((HasValue.ValueChangeListener<HasValue.ValueChangeEvent<?>>) valueChangeEvent -> {
-            if (valueChangeEvent.getValue() != null) {
-                Size value = Size.parse((String) valueChangeEvent.getValue());
-                designWrapper.setWidth(value.getWidthAsString());
-                designWrapper.setHeight(value.getHeightAsString());
-                designWrapper.getStyle()
-                        .set("resize", "none")
-                        .set("border", "3px solid black")
-                        .set("box-shadow", "var(--design-shadow-m)")
-                        .set("border-radius", "10px");
-                tabs.setSelectedTab(null);
+        sizes = new CustomSelect<>();
+        sizes.setInputRenderer((size, sizeConsumer) -> {
+            HorizontalLayout wrapper = new HorizontalLayout();
+            wrapper.setAlignItems(Alignment.CENTER);
+            wrapper.setWidthFull();
+            wrapper.getElement().setAttribute("theme", "spacing-s");
+            TextField width = new TextField();
+            width.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+            width.setPlaceholder(getTranslation("width"));
+            width.setWidth("70px");
+            width.getStyle()
+                    .set("flex", "1 1")
+                    .set("min-width", "0")
+                    .set("--lumo-contrast-10pct", "transparent");
+            TextField height = new TextField();
+            height.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+            height.setPlaceholder(getTranslation("height"));
+            height.getStyle()
+                    .set("flex", "1 1")
+                    .set("min-width", "0")
+                    .set("--lumo-contrast-10pct", "transparent");
+            Span x = new Span("x");
+            height.setWidth("70px");
+            if (size.isPresent() && !size.get().isForceAlternativeDisplay()) {
+                width.setValue(size.get().getWidth());
+                height.setValue(size.get().getHeight());
             }
+            HasValue.ValueChangeListener<? super AbstractField.ComponentValueChangeEvent<TextField, String>> listener = changeEvent -> {
+                if (width.getValue() != null && height.getValue() != null) {
+                    sizeConsumer.accept(new Size("", height.getValue(), width.getValue()));
+                } else if (size.isPresent()) {
+                    if (width.getValue() != null) {
+                        sizeConsumer.accept(new Size("", size.get().getHeight(), width.getValue()));
+                    } else if (height.getValue() != null) {
+                        sizeConsumer.accept(new Size("", height.getValue(), size.get().getWidth()));
+                    }
+                }
+            };
+            width.addValueChangeListener(listener);
+            height.addValueChangeListener(listener);
+            wrapper.add(width, x, height);
+            wrapper.setSpacing(false);
+            wrapper.setWidthFull();
+            return wrapper;
         });
-        sizes.setItems("1024x600", "1280x720", "1920x1080");
-        sizes.addCustomValueSetListener(event -> sizes.setValue(event.getDetail()));
-        sizes.setAllowCustomValue(true);
-        designerViewSizeInput.addComponentAtIndex(0, sizes);
+        sizes.setItemLabelGenerator(Size::getName);
+
+        //sizes.setPlaceholder(getTranslation("select.a.resolution"));
+        sizes.setItems(
+                new Size("Fullsize", "98%", "98%", true),
+                new Size("1024x600", "1024px", "600px"),
+                new Size("1280x720", "1280px", "720px"),
+                new Size("1920x1080", "1920px", "1080px"),
+                new Size("Phone", "calc(2.81em * 7)", "calc(2.81em * 14)", true),
+                new Size("Tablet", "calc(2.81em * 17)", "calc(2.81em * 24)", true),
+                new Size("Laptop", "calc(2.81em * 33.2)", "calc(2.81em * 18.7)", true)
+        );
+
+        sizes.setValueChangeListener(size -> setWithAndHeight(size.getWidth(), size.getHeight()));
+
+        rotateButton = new IconButton(VaadinIcon.ROTATE_RIGHT.create(), buttonClickEvent -> {
+            String currentHeight = designWrapper.getHeight();
+            String currentWidth = designWrapper.getWidth();
+            designWrapper.setWidth(currentHeight);
+            designWrapper.setHeight(currentWidth);
+        });
+        Tooltip rotateTooltip = new Tooltip(rotateButton);
+        rotateTooltip.setPosition(TooltipPosition.BOTTOM);
+        rotateTooltip.setAlignment(TooltipAlignment.CENTER);
+        rotateTooltip.add(new Span(getTranslation("rotate")));
+
+        undoButton = new IconButton(VaadinIcon.ARROW_LEFT.create());
+        Tooltip undoTooltip = new Tooltip(undoButton);
+        undoTooltip.setPosition(TooltipPosition.BOTTOM);
+        undoTooltip.setAlignment(TooltipAlignment.CENTER);
+        undoTooltip.add(new Span(getTranslation("undo")));
+
+        redoButton = new IconButton(VaadinIcon.ARROW_RIGHT.create());
+        Tooltip redoTooltip = new Tooltip(redoButton);
+        redoTooltip.setPosition(TooltipPosition.BOTTOM);
+        redoTooltip.setAlignment(TooltipAlignment.CENTER);
+        redoTooltip.add(new Span(getTranslation("redo")));
+
+        saveButton = new Button("\uD83D\uDCBE");
+        saveButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        Tooltip saveTooltip = new Tooltip(saveButton);
+        saveTooltip.setPosition(TooltipPosition.BOTTOM);
+        saveTooltip.setAlignment(TooltipAlignment.RIGHT);
+        saveTooltip.add(new Span(getTranslation("save")));
+
+        designerViewSizeInput.add(
+                undoButton, undoTooltip,
+                redoButton, redoTooltip,
+                sizes,
+                rotateButton, rotateTooltip,
+                saveButton, saveTooltip
+        );
 
         wrapperContainer = new Div(designWrapper);
         wrapperContainer.getStyle().set("overflow", "auto");
@@ -137,137 +170,68 @@ public class DesignerView extends BaseView {
         wrapperContainer.setSizeFull();
 
         designerViewSizeInput.getStyle().set("align-self", "flex-end");
-        tabs.addSelectedChangeListener(this::checkTabIfPresentAndSetup);
-        tabs.setSelectedTab(resizeableTab);
+
         add(header, wrapperContainer);
         setPadding(false);
         setSpacing(false);
     }
 
-    protected void checkTabIfPresentAndSetup(final SelectedChangeEvent event) {
-        if (event.getSelectedTab() != null) {
-            sizes.setValue(null);
-        }
-        if (resizeableTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("98%");
-            designWrapper.setHeight("98%");
-            designWrapper.getStyle()
-                    .set("resize", "both")
-                    .set("border", "unset")
-                    .set("box-shadow", "var(--design-shadow-xs)")
-                    .set("border-radius", "0px");
-        } else if (mobileTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("calc(2.81em * 7)");
-            designWrapper.setHeight("calc(2.81em * 14)");
-            designWrapper.getStyle()
-                    .set("resize", "none")
-                    .set("border", "3px solid black")
-                    .set("box-shadow", "var(--design-shadow-m)")
-                    .set("border-radius", "10px");
-        } else if (mobileLandscapeTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("calc(2.81em * 14)");
-            designWrapper.setHeight("calc(2.81em * 7)");
-            designWrapper.getStyle()
-                    .set("resize", "none")
-                    .set("border", "3px solid black")
-                    .set("box-shadow", "var(--design-shadow-m)")
-                    .set("border-radius", "10px");
-        } else if (tabletTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("calc(2.81em * 17)");
-            designWrapper.setHeight("calc(2.81em * 24)");
-            designWrapper.getStyle()
-                    .set("resize", "none")
-                    .set("border", "3px solid black")
-                    .set("box-shadow", "var(--design-shadow-m)")
-                    .set("border-radius", "10px");
-        } else if (tabletLandscapeTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("calc(2.81em * 24)");
-            designWrapper.setHeight("calc(2.81em * 17)");
-            designWrapper.getStyle()
-                    .set("resize", "none")
-                    .set("border", "3px solid black")
-                    .set("box-shadow", "var(--design-shadow-m)")
-                    .set("border-radius", "10px");
-        } else if (laptopTab.equals(event.getSelectedTab())) {
-            designWrapper.setWidth("calc(2.81em * 33.2)");
-            designWrapper.setHeight("calc(2.81em * 18.7)");
-            designWrapper.getStyle()
-                    .set("resize", "none")
-                    .set("border", "3px solid black")
-                    .set("box-shadow", "var(--design-shadow-l)")
-                    .set("border-radius", "10px");
-        }
-    }
-
-    private Tab createTab(final Tabs tabs, final VaadinIcon icon) {
-        return createTab(tabs, icon, 0);
-    }
-
-    private Tab createTab(final Tabs tabs, final VaadinIcon icon, final int degree) {
-        final Tab tab = new Tab(getRotatedIcon(icon, degree));
-        tabs.add(tab);
-        return tab;
-    }
-
-    private Icon getRotatedIcon(final VaadinIcon icon, final int degree) {
-        Icon i = icon.create();
-
-        if (degree != 0) {
-            i.getStyle().set("transform", "rotate(" + degree + "deg)");
-        }
-
-        return i;
+    private void setWithAndHeight(String width, String height) {
+        designWrapper.setWidth(width);
+        designWrapper.setHeight(height);
+        designWrapper.getStyle()
+                .set("resize", "none")
+                .set("border", "3px solid black")
+                .set("box-shadow", "var(--design-shadow-m)")
+                .set("border-radius", "10px");
     }
 }
 
 class Size {
 
-    private int width;
-    private int height;
+    private String name;
+    private boolean forceAlternativeDisplay;
+    private String width;
+    private String height;
 
-    public Size() {
+    public Size(String name, String width, String height) {
+        this(name, width, height, false);
     }
 
-    public Size(int width, int height) {
+    public Size(String name, String width, String height, boolean forceAlternativeDisplay) {
         this.width = width;
         this.height = height;
-    }
-
-    static Size parse(String value) {
-        if (value != null && value.contains("x") && value.split("x").length == 2) {
-            int x = Integer.parseInt(value.split("x")[0]);
-            int y = Integer.parseInt(value.split("x")[1]);
-            return new Size(x, y);
-        }
-        throw new NumberFormatException("invalid String");
+        this.name = name;
+        this.forceAlternativeDisplay = forceAlternativeDisplay;
     }
 
     static String present(Size size) {
         return size.getWidth() + "x" + size.getHeight();
     }
 
-    public int getWidth() {
+    public String getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(String width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public String getWidthAsString() {
-        return width + "px";
+    public String getName() {
+        return name;
     }
 
-    public String getHeightAsString() {
-        return height + "px";
+    public boolean isForceAlternativeDisplay() {
+        return forceAlternativeDisplay;
     }
+
 
 }

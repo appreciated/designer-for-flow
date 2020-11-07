@@ -13,7 +13,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -44,7 +43,7 @@ public class ProjectView extends VerticalLayout {
         Image logo = new Image("img/logo-floating-low.png", "logo");
         logo.getStyle().set("padding", "4px");
         logo.setHeight("48px");
-        Label label = new Label(getTranslation("designer.for.flow"));
+        Span label = new Span(getTranslation("designer.for.flow"));
         label.getStyle()
                 .set("white-space", "nowrap")
                 .set("line-height", "56px");
@@ -84,7 +83,12 @@ public class ProjectView extends VerticalLayout {
         setMargin(false);
         setPadding(false);
         setSpacing(false);
-        add(dial);
+
+        Tooltip addTooltip = new Tooltip(dial);
+        addTooltip.setPosition(TooltipPosition.LEFT);
+        addTooltip.setAlignment(TooltipAlignment.CENTER);
+        addTooltip.add(new Span(getTranslation("add.new.design")));
+        add(dial, addTooltip);
         setSizeFull();
     }
 
@@ -113,7 +117,7 @@ public class ProjectView extends VerticalLayout {
         Tab tab = new Tab();
         IconButton button = new IconButton(VaadinIcon.CLOSE_SMALL.create(), event -> clickListener.accept(tab));
         button.getStyle().set("--_lumo-button-color", "gray");
-        tab.add(new Label(name), button);
+        tab.add(new Span(name), button);
         return tab;
     }
 

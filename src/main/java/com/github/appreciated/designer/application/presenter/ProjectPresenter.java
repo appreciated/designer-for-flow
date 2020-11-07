@@ -18,10 +18,13 @@ import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.ErrorEvent;
 import com.vaadin.flow.shared.ui.Transport;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -58,11 +61,20 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
     }
 
     void showOpenTabDialog() {
-        files = new CreateOrOpenDesignTabDialog(projectService.getProject(), projectService.getProject().getSourceFolder(), this::addTab);
+        files = new CreateOrOpenDesignTabDialog(projectService.getProject(), projectService.getProject().getSourceFolder(), file -> {
+            getUI().get().access(() -> {
+                try {
+                    this.addTab(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    getUI().get().getSession().getErrorHandler().error(new ErrorEvent(e));
+                }
+            });
+        });
         files.open();
     }
 
-    public void addTab(File file) {
+    public void addTab(File file) throws IOException {
         DesignCompilerInformation info = projectService.create(file);
         ProjectFileModel model = new ProjectFileModel(info, eventService);
         ProjectFilePresenter presenter = new ProjectFilePresenter(model);
@@ -75,6 +87,7 @@ public class ProjectPresenter extends Presenter<ProjectModel, ProjectView> imple
         getContent().getContent().add(presenter);
     }
 
+    @SneakyThrows
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);

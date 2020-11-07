@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.application.view.file.designer;
 
 import com.github.appreciated.designer.component.ironpages.IronPages;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
@@ -21,8 +21,8 @@ public class SideBarView extends VerticalLayout {
         propertiesAndStructure.setSizeFull();
 
         tabs = new Tabs();
-        editorTab = new Tab(VaadinIcon.EDIT.create(), new Label(getTranslation("editor")));
-        themeTab = new Tab(VaadinIcon.PAINTBRUSH.create(), new Label(getTranslation("theme")));
+        editorTab = new Tab(VaadinIcon.EDIT.create(), new Span(getTranslation("editor")));
+        themeTab = new Tab(VaadinIcon.PAINTBRUSH.create(), new Span(getTranslation("theme")));
         tabs.add(editorTab, themeTab);
         add(tabs);
 

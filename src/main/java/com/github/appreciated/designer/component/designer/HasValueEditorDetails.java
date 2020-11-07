@@ -5,7 +5,7 @@ import com.vaadin.flow.component.HasOrderedComponents;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -39,7 +39,7 @@ public abstract class HasValueEditorDetails<T extends HasValueEditorDetails> ext
         setWidthFull();
         this.editable = editable;
         if (editable) {
-            addButton = new Button("Add", VaadinIcon.PLUS.create());
+            addButton = new Button(getTranslation("add"), VaadinIcon.PLUS.create());
             addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             addButton.setWidthFull();
             wrapper.add(addButton);
@@ -51,9 +51,9 @@ public abstract class HasValueEditorDetails<T extends HasValueEditorDetails> ext
     }
 
     public T withFormField(String caption, Component field, Consumer<Boolean> onRemoveListener) {
-        Label label = null;
+        Span label = null;
         if (caption != null) {
-            label = new Label(caption);
+            label = new Span(caption);
             label.getStyle()
                     .set("flex-basis", "125px")
                     .set("font-size", "13px")

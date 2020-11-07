@@ -12,6 +12,10 @@ public class StructureChangedEventPublisher {
     private ApplicationEventPublisher applicationEventPublisher;
 
     public void publish(com.vaadin.flow.component.Component component) {
-        applicationEventPublisher.publishEvent(new StructureChangedEvent(this, component));
+        applicationEventPublisher.publishEvent(new StructureChangedEvent(this, component, false));
+    }
+
+    public void publish(com.vaadin.flow.component.Component component, boolean forceReload) {
+        applicationEventPublisher.publishEvent(new StructureChangedEvent(this, component, forceReload));
     }
 }

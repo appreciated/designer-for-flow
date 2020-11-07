@@ -42,19 +42,17 @@ public class Shortcuts {
         }, Key.DELETE);
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_C, KeyModifier.CONTROL);
+        ui.addShortcutListener(shortcutEvent -> service.getCurrentProjectFileModel().save(ui, true), Key.KEY_S, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_V, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> service.getCurrentProjectFileModel().undo(ui), Key.KEY_Z, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> service.getCurrentProjectFileModel().redo(ui), Key.KEY_Y, KeyModifier.CONTROL);
-        eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
-            save(ui, service);
-        });
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
             if (service.getCurrentProjectFileModel() != null) {
                 service.getCurrentProjectFileModel().setCurrentFocus(elementFocusedEvent.getFocus());
             }
         });
-        eventService.getStructureChangedEventListener().addAfterEventConsumer(structureChangedEvent -> save(ui, service));
+        eventService.getSaveRequiredEventListener().addEventConsumer(saveRequiredEvent -> save(ui, service, saveRequiredEvent.isShowNotification()));
     }
 
     private static boolean isNoDialogOpen(UI ui) {
@@ -70,7 +68,7 @@ public class Shortcuts {
         }
     }
 
-    private static void save(UI ui, ProjectService service) {
-        service.getCurrentProjectFileModel().save(ui);
+    private static void save(UI ui, ProjectService service, boolean showNotification) {
+        service.getCurrentProjectFileModel().save(ui, showNotification);
     }
 }

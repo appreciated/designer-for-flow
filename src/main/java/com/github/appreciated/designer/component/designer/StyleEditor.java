@@ -3,7 +3,7 @@ package com.github.appreciated.designer.component.designer;
 import com.github.appreciated.designer.theme.css.style.CssStyle;
 import com.github.appreciated.designer.theme.css.style.CssStyles;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
@@ -60,7 +60,7 @@ public class StyleEditor extends HasValueEditorDetails<StyleEditor> {
         propertyName.setAllowCustomValue(true);
         propertyName.getElement().setAttribute("theme", TextFieldVariant.LUMO_ALIGN_RIGHT.getVariantName());
         propertyName.setRenderer(new ComponentRenderer<>(item -> {
-            Label artist = new Label(item);
+            Span artist = new Span(item);
             artist.getStyle().set("fontSize", "smaller");
             return artist;
         }));

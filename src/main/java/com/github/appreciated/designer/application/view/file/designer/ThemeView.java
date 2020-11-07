@@ -8,7 +8,7 @@ import com.github.appreciated.designer.application.view.file.designer.theme.Size
 import com.github.appreciated.designer.application.view.file.designer.theme.TypographyStyleView;
 import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -36,10 +36,10 @@ public class ThemeView extends BaseView {
             SizeAndSpaceStyleView sizeAndSpaceStyleView = new SizeAndSpaceStyleView(projectFileModel, projectFileModel.getEventService());
             OtherStyleView otherStyleView = new OtherStyleView(projectFileModel, projectFileModel.getEventService());
 
-            Tab colorTab = new Tab(VaadinIcon.PALETE.create(), new Label(getTranslation("color")));
-            Tab typographyTab = new Tab(VaadinIcon.FONT.create(), new Label(getTranslation("typography")));
-            Tab sizeTab = new Tab(VaadinIcon.BACKSPACE.create(), new Label(getTranslation("size.space")));
-            Tab otherTab = new Tab(VaadinIcon.EDIT.create(), new Label(getTranslation("other")));
+            Tab colorTab = new Tab(VaadinIcon.PALETE.create(), new Span(getTranslation("color")));
+            Tab typographyTab = new Tab(VaadinIcon.FONT.create(), new Span(getTranslation("typography")));
+            Tab sizeTab = new Tab(VaadinIcon.BACKSPACE.create(), new Span(getTranslation("size.space")));
+            Tab otherTab = new Tab(VaadinIcon.EDIT.create(), new Span(getTranslation("other")));
 
             tabs = new Tabs();
             tabs.add(colorTab, typographyTab, sizeTab, otherTab);
@@ -53,7 +53,7 @@ public class ThemeView extends BaseView {
             tabs.setSelectedTab(colorTab);
         } else {
             setAlignItems(Alignment.CENTER);
-            add(new Label(getTranslation("there.was.no.theme.file.found")));
+            add(new Span(getTranslation("there.was.no.theme.file.found")));
 
             final Button createButton = new Button(getTranslation("create"), VaadinIcon.PLUS.create(), e -> {
                 if (projectFileModel.getInformation().getProject().createThemeFile()) {

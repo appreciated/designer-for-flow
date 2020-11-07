@@ -26,31 +26,11 @@ public class ProjectFileModel implements Model<ProjectFileModel> {
     private Stack<DesignFileState> states = new Stack<>();
     private DesignFileState currentState;
 
-    public ProjectFileModel(final DesignCompilerInformation information, final EventService eventService) {
+    public ProjectFileModel(final DesignCompilerInformation information, final EventService eventService) throws IOException {
         this.eventService = eventService;
         this.information = information;
         this.project = information.getProject();
-    }
-
-    public void setCurrentDragItem(Component item) {
-        this.currentDragItem = item;
-    }
-
-    public synchronized void removeCurrentDragItem() {
-        currentDragItem = null;
-    }
-
-    public void save(UI ui) {
-        JavaGenerator compiler = new JavaGenerator(getInformation());
-        try {
-            pushState(compiler.save());
-            Notification.show(ui.getTranslation("design.was.saved"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Notification notification = new Notification(ui.getTranslation("design.could.not.be.saved"), 5000, Notification.Position.MIDDLE);
-            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-            notification.open();
-        }
+        pushState(new DesignFileState(information.getDesign()));
     }
 
     private void pushState(DesignFileState state) {
@@ -71,31 +51,63 @@ public class ProjectFileModel implements Model<ProjectFileModel> {
         return currentState;
     }
 
-    public void undo(UI ui) {
+    public void setCurrentDragItem(Component item) {
+        this.currentDragItem = item;
+    }
+
+    public synchronized void removeCurrentDragItem() {
+        currentDragItem = null;
+    }
+
+    public void save(UI ui, boolean showNotification) {
+        save(ui, showNotification, true);
+    }
+
+    public void save(UI ui, boolean showNotification, boolean pushState) {
+        JavaGenerator compiler = new JavaGenerator(getInformation());
+        try {
+            DesignFileState model = compiler.save();
+            if (pushState) {
+                pushState(model);
+            }
+            if (showNotification) {
+                Notification.show(ui.getTranslation("design.was.saved"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Notification notification = new Notification(ui.getTranslation("design.could.not.be.saved"), 5000, Notification.Position.MIDDLE);
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            notification.open();
+        }
+    }
+
+    public void redo(UI ui) {
         if (getStates().peek() != getCurrentState()) {
             currentState = getStates().elementAt(getStates().indexOf(getCurrentState()) + 1);
             revertState(ui);
         } else {
-            Notification.show(ui.getTranslation("cannot.undo.further"));
+            Notification.show(ui.getTranslation("cannot.redo.further"));
         }
     }
 
     private void revertState(UI ui) {
         try {
             information = currentState.revert(project);
-            eventService.getStructureChangedEventPublisher().publish(information.getComponent());
+            save(ui, false, false);
+            eventService.getStructureChangedEventPublisher().publish(information.getComponent(), true);
+            eventService.getFocusedEventPublisher().publish(null);
         } catch (IOException e) {
             e.printStackTrace();
             Notification.show(ui.getTranslation("reverting.to.another.state.failed"));
         }
     }
 
-    public void redo(UI ui) {
+    public void undo(UI ui) {
         if (getStates().elementAt(0) != getCurrentState()) {
             currentState = getStates().elementAt(getStates().indexOf(getCurrentState()) - 1);
             revertState(ui);
         } else {
-            Notification.show(ui.getTranslation("cannot.redo.further"));
+            Notification.show(ui.getTranslation("cannot.undo.further"));
         }
     }
 }

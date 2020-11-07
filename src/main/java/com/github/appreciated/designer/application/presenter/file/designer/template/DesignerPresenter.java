@@ -37,39 +37,24 @@ import static com.github.appreciated.designer.helper.ComponentContainerHelper.re
 @CssImport(value = "./styles/presenter-styles-vaadin-accordion-panel.css", themeFor = "vaadin-accordion-panel")
 public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView> {
 
-    private final DesignerComponentWrapper designerRoot;
-    private final DropHandler[] dropHandlers;
-    private final DragHandler[] dragTargetHandlers;
     private final ProjectFileModel projectFileModel;
+    private final EventService eventService;
+    private DesignerComponentWrapper designerRoot;
+    private DropHandler[] dropHandlers;
+    private DragHandler[] dragTargetHandlers;
     private DesignerComponentWrapper currentFocus;
 
     public DesignerPresenter(ProjectFileModel projectFileModel) {
         super(projectFileModel);
-        EventService eventService = projectFileModel.getEventService();
+        eventService = projectFileModel.getEventService();
         this.projectFileModel = projectFileModel;
-
-        getContent().getDesignWrapper().removeAll();
-        designerRoot = (DesignerComponentWrapper) projectFileModel.getInformation().getComponent();
-        getContent().getDesignWrapper().add(designerRoot);
-        initDesignerComponentWrappers(designerRoot);
-
-        DropTarget<Component> dropTarget = DropTarget.create(designerRoot);
-        dropTarget.setDropEffect(DropEffect.MOVE);
-        dropTarget.addDropListener(event -> {
-            List<Component> components = designerRoot.getActualComponent().getChildren().collect(Collectors.toList());
-
-            Component currentDragItem = projectFileModel.getCurrentDragItem() != null ? projectFileModel.getCurrentDragItem() : event.getDragSourceComponent().get();
-
-            handleDropEvent(currentDragItem, components.get(components.size() - 1));
-        });
-
-        ComponentContainerHelper.getChildren(designerRoot.getActualComponent()).forEach(this::initDragAndDropListeners);
-
         eventService.getFocusedEventListener().addEventConsumer(elementFocusedEvent -> {
-            if (elementFocusedEvent.getFocus() instanceof DesignerComponentWrapper) {
-                focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getFocus());
-            } else if (elementFocusedEvent.getFocus().getParent().isPresent() && elementFocusedEvent.getFocus().getParent().get() instanceof DesignerComponentWrapper) {
-                focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getFocus().getParent().get());
+            if (elementFocusedEvent.getFocus() != null) {
+                if (elementFocusedEvent.getFocus() instanceof DesignerComponentWrapper) {
+                    focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getFocus());
+                } else if (elementFocusedEvent.getFocus().getParent().isPresent() && elementFocusedEvent.getFocus().getParent().get() instanceof DesignerComponentWrapper) {
+                    focusElementVisually((DesignerComponentWrapper) elementFocusedEvent.getFocus().getParent().get());
+                }
             }
         });
         eventService.getThemeChangedEventListener().addEventConsumer(themeChangedEvent -> {
@@ -94,6 +79,27 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         eventService.getDesignerComponentDragListener().addEventConsumer(dragEvent ->
                 setComponentContainerFillerVisible(dragEvent.isStarted(), dragEvent.getDraggedComponent())
         );
+        eventService.getStructureChangedEventListener().addEventConsumer(structureChangedEvent -> {
+            if (structureChangedEvent.isForceReload()) {
+                init();
+            }
+        });
+        init();
+    }
+
+    private void init() {
+        getContent().getDesignWrapper().removeAll();
+        designerRoot = (DesignerComponentWrapper) projectFileModel.getInformation().getComponent();
+        getContent().getDesignWrapper().add(designerRoot);
+        initDesignerComponentWrappers(designerRoot);
+        DropTarget<Component> dropTarget = DropTarget.create(designerRoot);
+        dropTarget.setDropEffect(DropEffect.MOVE);
+        dropTarget.addDropListener(event -> {
+            List<Component> components = designerRoot.getActualComponent().getChildren().collect(Collectors.toList());
+            Component currentDragItem = projectFileModel.getCurrentDragItem() != null ? projectFileModel.getCurrentDragItem() : event.getDragSourceComponent().get();
+            handleDropEvent(currentDragItem, components.get(components.size() - 1));
+        });
+        ComponentContainerHelper.getChildren(designerRoot.getActualComponent()).forEach(this::initDragAndDropListeners);
     }
 
     public void setDragClass(boolean isDragging) {
@@ -120,6 +126,9 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         notifyStructureListeners();
+        getContent().getRedoButton().addClickListener(buttonClickEvent -> projectFileModel.redo(attachEvent.getUI()));
+        getContent().getUndoButton().addClickListener(buttonClickEvent -> projectFileModel.undo(attachEvent.getUI()));
+        getContent().getSaveButton().addClickListener(buttonClickEvent -> projectFileModel.save(attachEvent.getUI(), true));
     }
 
     private void notifyStructureListeners() {
@@ -239,6 +248,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             }
         }
         notifyFocusListeners(draggedComponent);
+        getModel().getEventService().getSaveRequiredEventPublisher().publish(getModel().getInformation().getComponent(), true);
     }
 
     private boolean dropWasHandled(Component draggedComponent, Component targetComponent) {

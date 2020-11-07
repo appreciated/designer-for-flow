@@ -27,7 +27,7 @@ import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -83,7 +83,7 @@ public class ProjectSelectionView extends VerticalLayout {
         setPadding(true);
         add(layout);
         if (repository.findAll().size() == 0) {
-            add(new Label(getTranslation("get.started.by.adding.a.project")));
+            add(new Span(getTranslation("get.started.by.adding.a.project")));
         } else {
             repository.findAll().forEach(projectPath -> layout.add(getCard(projectPath)));
             layout.add(getCreateCard());
@@ -124,7 +124,7 @@ public class ProjectSelectionView extends VerticalLayout {
             repository.delete(projectPath);
             layout.remove(card);
             if (repository.findAll().size() == 0) {
-                add(new Label(getTranslation("get.started.by.adding.a.project")));
+                add(new Span(getTranslation("get.started.by.adding.a.project")));
             }
         });
 

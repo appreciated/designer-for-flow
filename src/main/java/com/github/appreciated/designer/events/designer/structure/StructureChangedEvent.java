@@ -6,13 +6,19 @@ import org.springframework.context.ApplicationEvent;
 public class StructureChangedEvent extends ApplicationEvent {
 
     private final Component component;
+    private boolean isForceReload;
 
-    public StructureChangedEvent(Object source, Component component) {
+    public StructureChangedEvent(Object source, Component component, boolean isForceReload) {
         super(source);
         this.component = component;
+        this.isForceReload = isForceReload;
     }
 
     public Component getComponent() {
         return component;
+    }
+
+    public boolean isForceReload() {
+        return isForceReload;
     }
 }

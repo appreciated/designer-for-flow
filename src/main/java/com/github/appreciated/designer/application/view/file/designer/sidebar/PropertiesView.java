@@ -14,7 +14,7 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.details.Details;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -45,30 +45,32 @@ public class PropertiesView extends BaseView {
     }
 
     private void onFocus(Component propertyParent) {
-        ComponentPropertyParser parser = new ComponentPropertyParser(propertyParent);
         properties.removeAll();
-        parser.getProperties()
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entrySet -> addRenderer(properties, entrySet, propertyParent));
+        if (propertyParent != null) {
+            ComponentPropertyParser parser = new ComponentPropertyParser(propertyParent);
+            parser.getProperties()
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entrySet -> addRenderer(properties, entrySet, propertyParent));
 
-        renderers.getPropertyRenderers().stream()
-                .filter(propertyRenderer -> propertyRenderer.canRender(propertyParent))
-                .map(render -> (Stream<RenderPair>) render.render(propertyParent))
-                .forEach(renderers -> renderers.forEach(renderPair ->
-                        properties.add(getLabelComponent(renderPair.getPropertyName(), renderPair.getPropertyComponent()))
-                ));
-
-        HasStyleRenderer renderer = new HasStyleRenderer();
-        if (renderer.canRender(propertyParent)) {
-            Stream<RenderPair> component = renderer.render((HasStyle) propertyParent);
-            RenderPair pair = component.findFirst().get();
-            StyleEditor details = (StyleEditor) pair.getPropertyComponent();
             renderers.getPropertyRenderers().stream()
-                    .filter(interfaceRenderer -> interfaceRenderer.canRender(propertyParent))
-                    .forEach(interfaceRenderer -> details.removeRenderedStyles(interfaceRenderer.rendersCssStyle()));
-            addRenderedComponent(properties, pair.getPropertyName(), details);
+                    .filter(propertyRenderer -> propertyRenderer.canRender(propertyParent))
+                    .map(render -> (Stream<RenderPair>) render.render(propertyParent))
+                    .forEach(renderers -> renderers.forEach(renderPair ->
+                            properties.add(getLabelComponent(renderPair.getPropertyName(), renderPair.getPropertyComponent()))
+                    ));
+
+            HasStyleRenderer renderer = new HasStyleRenderer();
+            if (renderer.canRender(propertyParent)) {
+                Stream<RenderPair> component = renderer.render((HasStyle) propertyParent);
+                RenderPair pair = component.findFirst().get();
+                StyleEditor details = (StyleEditor) pair.getPropertyComponent();
+                renderers.getPropertyRenderers().stream()
+                        .filter(interfaceRenderer -> interfaceRenderer.canRender(propertyParent))
+                        .forEach(interfaceRenderer -> details.removeRenderedStyles(interfaceRenderer.rendersCssStyle()));
+                addRenderedComponent(properties, pair.getPropertyName(), details);
+            }
         }
     }
 
@@ -104,7 +106,7 @@ public class PropertiesView extends BaseView {
                 .set("--lumo-contrast-10pct", "transparent");
 
         hl.setAlignItems(Alignment.CENTER);
-        Label label = new Label(caption);
+        Span label = new Span(caption);
         label.getStyle().set("flex-basis", "110px");
         if (!(input instanceof Details)) {
             hl.add(label);
