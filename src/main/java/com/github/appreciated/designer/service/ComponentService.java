@@ -186,5 +186,15 @@ public class ComponentService {
         return Stream.empty();
     }
 
+    public Stream<DesignerComponent> getAllComponents(Project project) {
+        return Stream.concat(
+                Stream.concat(
+                        Stream.concat(getHtmlComponents(), getVaadinComponents())
+                        , getVaadinLayoutsComponents()
+                ),
+                getProjectComponents(project)
+        );
+    }
+
 
 }

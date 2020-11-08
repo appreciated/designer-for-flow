@@ -51,7 +51,7 @@ public class CompilationMetaInformation {
     }
 
     public boolean hasVariableName() {
-        return false;
+        return variableName != null;
     }
 
     public String getVariableName() {

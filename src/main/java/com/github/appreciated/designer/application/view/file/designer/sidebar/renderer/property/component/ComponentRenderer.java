@@ -6,7 +6,10 @@ import com.github.appreciated.designer.component.properties.PropertyTextField;
 import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.Validator;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 public class ComponentRenderer extends AbstractComponentPropertyRenderer<Component> {
@@ -26,13 +29,33 @@ public class ComponentRenderer extends AbstractComponentPropertyRenderer<Compone
         componentBinder.setBean(component);
 
         PropertyTextField variableName = new PropertyTextField();
+
+        Binder<AtomicReference<String>> variableNameBinder = new Binder<>();
+        variableNameBinder
+                .forField(variableName)
+                .withValidator((Validator<String>) (s, valueContext) -> {
+                    if (getProjectFileModel().getInformation().isVariableNameValid(s, component)) {
+                        return ValidationResult.ok();
+                    } else {
+                        return ValidationResult.error(component.getTranslation("variable.name.invalid.or.already.used"));
+                    }
+                })
+                .bind(AtomicReference::get, AtomicReference::set);
+
+        variableNameBinder.addValueChangeListener(valueChangeEvent -> {
+            if (variableNameBinder.isValid() && valueChangeEvent.getValue() != null) {
+                getProjectFileModel().getInformation()
+                        .getOrCreateCompilationMetaInformation(component)
+                        .setVariableName((String) valueChangeEvent.getValue());
+            }
+        });
+
         boolean hasInfo = getProjectFileModel().getInformation().hasCompilationMetaInformation(component);
         CompilationMetaInformation info = getProjectFileModel().getInformation().getCompilationMetaInformation(component);
         if (hasInfo && info.hasVariableName()) {
             variableName.setValue(info.getVariableName());
         }
-        variableName.addValueChangeListener(event -> info.setVariableName(event.getValue()));
-        return Stream.of(new RenderPair("id", id), new RenderPair("variableName", variableName));
+        return Stream.of(new RenderPair("id", id), new RenderPair("fieldName", variableName));
     }
 
 }

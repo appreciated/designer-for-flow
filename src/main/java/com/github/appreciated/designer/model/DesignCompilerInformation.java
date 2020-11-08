@@ -1,5 +1,6 @@
 package com.github.appreciated.designer.model;
 
+import com.github.appreciated.designer.helper.FieldNameHelper;
 import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.Component;
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @Configurable
@@ -23,6 +26,7 @@ public class DesignCompilerInformation {
 
     private String className;
     private Map<Component, CompilationMetaInformation> compilationMetaInformation = new HashMap<>();
+    private List<String> components;
 
     public void setProject(Project project) {
         this.project = project;
@@ -30,6 +34,7 @@ public class DesignCompilerInformation {
         if (project.hasThemeFile()) {
             this.theme = new Theme(project);
         }
+        components = FieldNameHelper.getComponents(project).collect(Collectors.toList());
     }
 
     public CompilationMetaInformation getCompilationMetaInformation(Component component) {
@@ -49,5 +54,10 @@ public class DesignCompilerInformation {
             compilationMetaInformation.put(component, new CompilationMetaInformation());
         }
         return compilationMetaInformation.get(component);
+    }
+
+
+    public boolean isVariableNameValid(String s, Component component) {
+        return FieldNameHelper.isFieldNameValid(s, component, components.stream(), compilationMetaInformation);
     }
 }

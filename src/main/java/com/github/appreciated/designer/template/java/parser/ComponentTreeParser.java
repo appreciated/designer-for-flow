@@ -1,6 +1,7 @@
 package com.github.appreciated.designer.template.java.parser;
 
 import com.github.appreciated.designer.helper.DesignerFileHelper;
+import com.github.appreciated.designer.helper.FieldNameHelper;
 import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.service.ComponentService;
@@ -30,6 +31,7 @@ public class ComponentTreeParser {
     private final CompilationUnit compilationUnit;
     private final Project project;
     private final Map<Component, CompilationMetaInformation> compilationMetaInformation = new HashMap<>();
+    private final List<String> components;
     Component rootComponent;
     Map<String, Component> fieldMap = new HashMap<>();
     private String className;
@@ -38,6 +40,7 @@ public class ComponentTreeParser {
         this.compilationUnit = compilationUnit;
         this.project = project;
         service = new ComponentService();
+        components = FieldNameHelper.getComponents(project).collect(Collectors.toList());
         if (compilationUnit.getPrimaryType().isPresent()) {
             TypeDeclaration<?> definition = compilationUnit.getPrimaryType().get();
             if (definition instanceof ClassOrInterfaceDeclaration) {
@@ -211,23 +214,37 @@ public class ComponentTreeParser {
         } catch (ClassNotFoundException e) {
         }
         if (fieldType.isPresent() && isClassAvailable) {
-            fieldMap.put(fieldName, (Component) instantiateClassWithName(field.getElementType().asString()));
+            Component component = (Component) instantiateClassWithName(field.getElementType().asString());
+            fieldMap.put(fieldName, component);
+            if (FieldNameHelper.isFieldNameValid(fieldName, component, components.stream(), compilationMetaInformation)) {
+                getOrCreateCompilationMetaInformation(component).setVariableName(fieldName);
+            }
         } else if (isFieldProjectComponent(field)) {
-            fieldMap.put(fieldName, (Component) instantiateProjectComponentClassWithName(field));
+            Component component = (Component) instantiateProjectComponentClassWithName(field);
+            fieldMap.put(fieldName, component);
+            if (FieldNameHelper.isFieldNameValid(fieldName, component, components.stream(), compilationMetaInformation)) {
+                getOrCreateCompilationMetaInformation(component).setVariableName(fieldName);
+            }
         } else {
             throw new UnsupportedOperationException("Could not instantiate field with name: " + fieldName);
         }
+    }
+
+    private CompilationMetaInformation getOrCreateCompilationMetaInformation(Component component) {
+        if (!compilationMetaInformation.containsKey(component)) {
+            compilationMetaInformation.put(component, new CompilationMetaInformation());
+        }
+        return compilationMetaInformation.get(component);
     }
 
     private Object instantiateProjectComponentClassWithName(FieldDeclaration declaration) {
         try {
             CompilationUnit unit = getDesignerFileForField(declaration).get();
             Component component = new ComponentTreeParser(getDesignerFileForField(declaration).get(), project).getComponent();
-            CompilationMetaInformation info = new CompilationMetaInformation();
+            CompilationMetaInformation info = getOrCreateCompilationMetaInformation(component);
             info.setProjectComponent(true);
             info.setPackage(unit.getPackageDeclaration().get().getName().asString());
             info.setClassName(unit.getPrimaryTypeName().get());
-            compilationMetaInformation.put(component, info);
             return component;
         } catch (ParseException | ClassNotFoundException e) {
             e.printStackTrace();
