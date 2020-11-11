@@ -34,16 +34,16 @@ public class ComponentRenderer extends AbstractComponentPropertyRenderer<Compone
         variableNameBinder
                 .forField(variableName)
                 .withValidator((Validator<String>) (s, valueContext) -> {
-                    if (getProjectFileModel().getInformation().isVariableNameValid(s, component)) {
+                    if (s == null || s.equals("") || getProjectFileModel().getInformation().isVariableNameValid(s, component)) {
                         return ValidationResult.ok();
                     } else {
-                        return ValidationResult.error(component.getTranslation("variable.name.invalid.or.already.used"));
+                        return ValidationResult.error(component.getTranslation("attribute.name.invalid.or.already.used"));
                     }
                 })
                 .bind(AtomicReference::get, AtomicReference::set);
 
         variableNameBinder.addValueChangeListener(valueChangeEvent -> {
-            if (variableNameBinder.isValid() && valueChangeEvent.getValue() != null) {
+            if (variableNameBinder.isValid() && valueChangeEvent.getValue() != null && !valueChangeEvent.getValue().equals("")) {
                 getProjectFileModel().getInformation()
                         .getOrCreateCompilationMetaInformation(component)
                         .setVariableName((String) valueChangeEvent.getValue());
