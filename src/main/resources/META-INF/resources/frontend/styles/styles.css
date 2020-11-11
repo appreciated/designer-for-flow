@@ -2,6 +2,20 @@
     background: var(--lumo-primary-color-10pct);
 }
 
+[data-tippy-root=""] {
+    pointer-events: all !important;
+}
+
+.tippy-box {
+    background: var(--lumo-primary-color) !important;
+    border-radius: 0px !important;
+}
+
+.tippy-content {
+    padding: unset !important;
+    --lumo-primary-text-color: white;
+}
+
 html {
     --design-background: var(--lumo-base-color);
     --design-grid-color-1: var(--lumo-contrast-10pct);

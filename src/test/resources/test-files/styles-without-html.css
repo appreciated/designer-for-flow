@@ -14,6 +14,7 @@
 }
 
 .design-view {
+    margin-top: 36px;
     box-shadow: var(--lumo-box-shadow-s);
     background-color: var(--design-background);
     background-image: linear-gradient(var(--lumo-contrast-10pct) -1px, transparent 1px),

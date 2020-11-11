@@ -111,8 +111,11 @@ public class DesignerComponentsView extends BaseView {
 
     DesignerComponentWrapper generateDesignerComponentWrapper(DesignerComponent component) {
         DesignerComponentWrapper designerComponentWrapper = component.generateComponent(projectFileModel);
-        designerComponentWrapper.setNonNestedClickListener(o ->
+        designerComponentWrapper.setNonNestedClickListener(() ->
                 projectFileModel.getEventService().getFocusedEventPublisher().publish(designerComponentWrapper.getActualComponent())
+        );
+        designerComponentWrapper.setRemoveListener(() ->
+                projectFileModel.getEventService().getDesignerComponentRemovedEventPublisher().publish(designerComponentWrapper)
         );
         return designerComponentWrapper;
     }

@@ -10,8 +10,10 @@ import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
-
-import java.util.function.Consumer;
+import dev.mett.vaadin.tooltip.Tooltips;
+import dev.mett.vaadin.tooltip.config.TC_HIDE_ON_CLICK;
+import dev.mett.vaadin.tooltip.config.TC_PLACEMENT;
+import dev.mett.vaadin.tooltip.config.TooltipConfiguration;
 
 import static com.github.appreciated.designer.helper.ComponentContainerHelper.isComponentContainer;
 
@@ -23,7 +25,8 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     Div wrapper;
     private final Component actualComponent;
     private final boolean isProjectComponent;
-    private Consumer consumer;
+    private Runnable consumer;
+    private Runnable removeListener;
 
     public DesignerComponentWrapper(Component component, boolean isProjectComponent) {
         this.actualComponent = component;
@@ -41,6 +44,20 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
             }
             ((HasSize) actualComponent).setSizeUndefined();
         }
+
+        TooltipConfiguration ttconfig = new TooltipConfiguration("<vaadin-button onclick=\"window.deleteButtonClickObserver()\" id=\"delete\" theme=\"icon tertiary\" style=\"padding:0;margin:0;\" aria-label=\"Delete item\">\n" +
+                "<iron-icon icon=\"vaadin:trash\" slot=\"prefix\"></iron-icon>\n" +
+                "</vaadin-button>");
+        ttconfig.setAllowHTML(true);
+        ttconfig.setDuration(null, 20);
+        ttconfig.setTrigger("manual");
+        ttconfig.setArrow(false);
+        ttconfig.setOffset(0, 0);
+        //ttconfig.setInteractive(true);
+        ttconfig.setPlacement(TC_PLACEMENT.TOP_START);
+        ttconfig.setHideOnClick(TC_HIDE_ON_CLICK.FALSE);
+        ttconfig.setShowOnCreate(false);
+        Tooltips.getCurrent().setTooltip(this, ttconfig);
     }
 
     @Override
@@ -58,15 +75,25 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
     @EventHandler
     private void componentClicked() {
         if (consumer != null) {
-            consumer.accept(null);
+            consumer.run();
+        }
+    }
+
+    @EventHandler
+    private void deleteClicked() {
+        System.out.println("deleteClicked!");
+        if (removeListener != null) {
+            removeListener.run();
         }
     }
 
     public void setFocus(boolean focus) {
         if (focus) {
             wrapper.addClassName("focus");
+            Tooltips.getCurrent().showTooltip(this);
         } else {
             wrapper.removeClassName("focus");
+            Tooltips.getCurrent().hideTooltip(this);
         }
     }
 
@@ -92,11 +119,15 @@ public class DesignerComponentWrapper extends PolymerTemplate<TemplateModel> imp
         return actualComponent;
     }
 
-    public void setNonNestedClickListener(Consumer consumer) {
+    public void setNonNestedClickListener(Runnable consumer) {
         this.consumer = consumer;
     }
 
     public boolean isProjectComponent() {
         return isProjectComponent;
+    }
+
+    public void setRemoveListener(Runnable removeListener) {
+        this.removeListener = removeListener;
     }
 }

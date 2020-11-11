@@ -16,10 +16,12 @@ import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.mvp.Presenter;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.dnd.DropEffect;
 import com.vaadin.flow.component.dnd.DropTarget;
@@ -35,6 +37,7 @@ import static com.github.appreciated.designer.helper.ComponentContainerHelper.is
 import static com.github.appreciated.designer.helper.ComponentContainerHelper.removeChild;
 
 @CssImport(value = "./styles/presenter-styles-vaadin-accordion-panel.css", themeFor = "vaadin-accordion-panel")
+@JavaScript("./js/delete-button-click-observer.js")
 public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView> {
 
     private final ProjectFileModel projectFileModel;
@@ -85,6 +88,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             }
         });
         init();
+        getElement().executeJs("initDeleteButtonClickObserver($0)", getElement());
     }
 
     private void init() {
@@ -279,7 +283,8 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
     }
 
     private void initDesignerComponentWrapper(DesignerComponentWrapper generatedComponent) {
-        generatedComponent.setNonNestedClickListener(o -> notifyFocusListeners(generatedComponent.getActualComponent()));
+        generatedComponent.setNonNestedClickListener(() -> notifyFocusListeners(generatedComponent.getActualComponent()));
+        generatedComponent.setRemoveListener(() -> eventService.getDesignerComponentRemovedEventPublisher().publish(generatedComponent));
     }
 
     private void focusElementVisually(DesignerComponentWrapper generatedComponent) {
@@ -294,4 +299,8 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
         getModel().getEventService().getFocusedEventPublisher().publish(unwrapDesignerComponent(actualComponent));
     }
 
+    @ClientCallable
+    public void deleteButtonClickEvent() {
+        getModel().getEventService().getDesignerComponentRemovedEventPublisher().publish((DesignerComponentWrapper) getModel().getCurrentFocus().getParent().get());
+    }
 }

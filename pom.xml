@@ -162,6 +162,11 @@
             <version>4.0.1</version>
         </dependency>
         <dependency>
+            <groupId>dev.mett.vaadin</groupId>
+            <artifactId>tooltip</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.appreciated</groupId>
             <artifactId>color-picker-field-flow</artifactId>
             <version>2.0.0.beta6</version>

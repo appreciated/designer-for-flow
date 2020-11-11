@@ -6,6 +6,8 @@ import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDrop
 import com.github.appreciated.designer.events.designer.dnd.DesignerComponentDropEventPublisher;
 import com.github.appreciated.designer.events.designer.focus.ElementFocusedEventListener;
 import com.github.appreciated.designer.events.designer.focus.ElementFocusedEventPublisher;
+import com.github.appreciated.designer.events.designer.remove.DesignerComponentRemoveEventListener;
+import com.github.appreciated.designer.events.designer.remove.DesignerComponentRemoveEventPublisher;
 import com.github.appreciated.designer.events.designer.save.SaveRequiredEventListener;
 import com.github.appreciated.designer.events.designer.save.SaveRequiredEventPublisher;
 import com.github.appreciated.designer.events.designer.structure.StructureChangedEventListener;
@@ -30,6 +32,8 @@ public class EventService {
     private final DesignerComponentDropEventPublisher designerComponentDropEventPublisher;
     private final DesignerComponentDragEventListener designerComponentDragListener;
     private final DesignerComponentDragEventPublisher designerComponentDragEventPublisher;
+    private final DesignerComponentRemoveEventListener designerComponentRemoveEventListener;
+    private final DesignerComponentRemoveEventPublisher designerComponentRemoveEventPublisher;
     private final SaveRequiredEventListener saveRequiredEventListener;
     private final SaveRequiredEventPublisher saveRequiredEventPublisher;
 
@@ -44,7 +48,9 @@ public class EventService {
                         @Autowired DesignerComponentDropEventListener designerComponentDropListener,
                         @Autowired DesignerComponentDropEventPublisher designerComponentDropEventPublisher,
                         @Autowired DesignerComponentDragEventListener designerComponentDragListener,
-                        @Autowired DesignerComponentDragEventPublisher designerComponentDragEventPublisher
+                        @Autowired DesignerComponentDragEventPublisher designerComponentDragEventPublisher,
+                        @Autowired DesignerComponentRemoveEventListener designerComponentRemoveEventListener,
+                        @Autowired DesignerComponentRemoveEventPublisher designerComponentRemoveEventPublisher
     ) {
         this.focusedEventPublisher = focusedEventPublisher;
         this.structureChangedEventPublisher = structureChangedEventPublisher;
@@ -58,6 +64,8 @@ public class EventService {
         this.designerComponentDropEventPublisher = designerComponentDropEventPublisher;
         this.designerComponentDragListener = designerComponentDragListener;
         this.designerComponentDragEventPublisher = designerComponentDragEventPublisher;
+        this.designerComponentRemoveEventListener = designerComponentRemoveEventListener;
+        this.designerComponentRemoveEventPublisher = designerComponentRemoveEventPublisher;
     }
 
     public ThemeChangedEventListener getThemeChangedEventListener() {
@@ -106,5 +114,13 @@ public class EventService {
 
     public SaveRequiredEventPublisher getSaveRequiredEventPublisher() {
         return saveRequiredEventPublisher;
+    }
+
+    public DesignerComponentRemoveEventListener getDesignerComponentRemovedEventListener() {
+        return designerComponentRemoveEventListener;
+    }
+
+    public DesignerComponentRemoveEventPublisher getDesignerComponentRemovedEventPublisher() {
+        return designerComponentRemoveEventPublisher;
     }
 }

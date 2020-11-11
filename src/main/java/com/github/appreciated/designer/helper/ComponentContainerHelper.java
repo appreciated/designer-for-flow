@@ -5,6 +5,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -30,7 +31,7 @@ public class ComponentContainerHelper {
         for (Method method : classInstance.getMethods()) {
             if (method.getName().equals("add") || method.getName().equals("addContent") || method.getName().equals("setContent")) {
                 if (method.getParameterCount() == 1) {
-                    if (!(component instanceof HasText || component instanceof CheckboxGroup || isProjectComponent)) {
+                    if (component instanceof Div || !((component instanceof HasText) || component instanceof CheckboxGroup || isProjectComponent)) {
                         return true;
                     }
                 }

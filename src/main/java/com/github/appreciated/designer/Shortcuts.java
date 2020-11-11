@@ -23,25 +23,29 @@ public class Shortcuts {
                 if (service.getCurrentProjectFileModel() != null && service.getCurrentProjectFileModel().getCurrentFocus() != null) {
                     Component currentFocus = service.getCurrentProjectFileModel().getCurrentFocus();
                     Optional<Component> optionalParent = currentFocus.getParent();
-                    if (optionalParent.isPresent()) {
-                        Component parent;
-                        if (optionalParent.get() instanceof DesignerComponentWrapper) {
-                            parent = optionalParent.get().getParent().get();
-                        } else {
-                            parent = optionalParent.get();
-                        }
-                        removeComponent(parent, service, eventService, ui);
-                        eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFileModel().getInformation().getComponent());
-                    } else {
-                        Notification.show(ui.getTranslation("node.cannot.be.removed.since.it.has.no.parent"));
-                    }
+                    onDelete(ui, service, eventService, currentFocus, optionalParent);
                 } else {
                     Notification.show(ui.getTranslation("no.component.has.currently.focus"));
                 }
             }
         }, Key.DELETE);
+        eventService.getDesignerComponentRemovedEventListener().addEventConsumer(designerComponentRemoveEvent ->
+                onDelete(ui, service, eventService, designerComponentRemoveEvent.getRemovedComponent(), designerComponentRemoveEvent.getRemovedComponent().getParent())
+        );
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_C, KeyModifier.CONTROL);
+
+        ui.addShortcutListener(shortcutEvent -> {
+            if (service.getCurrentProjectFileModel().getCurrentFocus() != null) {
+                Optional<Component> parent = service.getCurrentProjectFileModel().getCurrentFocus().getParent();
+                if (parent.isPresent() && parent.get() instanceof DesignerComponentWrapper) {
+                    ((DesignerComponentWrapper) parent.get()).setFocus(false);
+                    service.getCurrentProjectFileModel().setCurrentFocus(null);
+                    eventService.getFocusedEventPublisher().publish(null);
+                }
+            }
+        }, Key.ESCAPE);
+
         ui.addShortcutListener(shortcutEvent -> service.getCurrentProjectFileModel().save(ui, true), Key.KEY_S, KeyModifier.CONTROL);
         ui.addShortcutListener(shortcutEvent -> {
         }, Key.KEY_V, KeyModifier.CONTROL);
@@ -59,16 +63,31 @@ public class Shortcuts {
         return ui.getChildren().noneMatch(component -> component instanceof Dialog);
     }
 
-    public static void removeComponent(Component parent, ProjectService service, EventService eventService, UI ui) {
-        if (isComponentContainer(parent, service.getCurrentProjectFileModel().getInformation())) {
-            removeChild(parent, service.getCurrentProjectFileModel().getCurrentFocus().getParent().get());
+    public static void onDelete(UI ui, ProjectService service, EventService eventService, Component currentFocus, Optional<Component> optionalParent) {
+        if (optionalParent.isPresent()) {
+            Component parent;
+            if (optionalParent.get() instanceof DesignerComponentWrapper) {
+                parent = optionalParent.get().getParent().get();
+            } else {
+                parent = optionalParent.get();
+            }
+            removeComponent(parent, currentFocus, service, eventService, ui);
             eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFileModel().getInformation().getComponent());
         } else {
-            Notification.show(ui.getTranslation("parent.node.is.no.component.container"));
+            Notification.show(ui.getTranslation("node.cannot.be.removed.since.it.has.no.parent"));
         }
     }
 
     private static void save(UI ui, ProjectService service, boolean showNotification) {
         service.getCurrentProjectFileModel().save(ui, showNotification);
+    }
+
+    public static void removeComponent(Component parent, Component currentFocus, ProjectService service, EventService eventService, UI ui) {
+        if (isComponentContainer(parent, service.getCurrentProjectFileModel().getInformation())) {
+            removeChild(parent, currentFocus);
+            eventService.getStructureChangedEventPublisher().publish(service.getCurrentProjectFileModel().getInformation().getComponent());
+        } else {
+            Notification.show(ui.getTranslation("parent.node.is.no.component.container"));
+        }
     }
 }

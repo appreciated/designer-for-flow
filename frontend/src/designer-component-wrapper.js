@@ -46,6 +46,11 @@ class DesignerComponentWrapper extends PolymerElement {
 
     attached() {
         var slot = this.shadowRoot.querySelectorAll('slot')[0];
+        var deleteButton = this.shadowRoot.getElementById("delete");
+        deleteButton.addEventListener('click', function () {
+            polymerThis.deleteClicked();
+        });
+
         var nodes = slot.assignedNodes();
         this.firstChild = nodes[0];
         if (this.firstChild.style["width"]) {
