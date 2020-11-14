@@ -1,10 +1,7 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer;
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.ComponentRenderer;
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.DateTimePickerRenderer;
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.ImageRenderer;
-import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.TimePickerRenderer;
+import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component.*;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.*;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property.*;
 
@@ -42,7 +39,9 @@ public class Renderers {
         ));
         propertyRenderer.addAll(Arrays.asList(
                 new ComponentRenderer(),
-                new ImageRenderer()
+                new ImageRenderer(),
+                new FormLayoutRenderer(),
+                new FormLayoutChildRenderer()
         ));
         typeRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));
         propertyRenderer.forEach(abstractPropertyRenderer -> abstractPropertyRenderer.setProjectFileModel(projectFileModel));

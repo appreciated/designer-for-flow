@@ -46,6 +46,15 @@ public abstract class HasValueEditorDetails<T extends HasValueEditorDetails> ext
         }
     }
 
+    public T withFormField(Component field) {
+        return withFormField((String) null, field, null);
+    }
+
+    public T withFormField(Component field, Consumer<Boolean> onRemoveListener) {
+        return withFormField((String) null, field, onRemoveListener);
+    }
+
+
     public T withFormField(String caption, Component field) {
         return withFormField(caption, field, null);
     }

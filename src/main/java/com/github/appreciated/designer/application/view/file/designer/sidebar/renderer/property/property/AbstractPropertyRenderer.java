@@ -19,7 +19,7 @@ public abstract class AbstractPropertyRenderer<T> {
     public void applyValue(Component propertyParent, CustomPropertyDescriptor propertyDescriptor, T object) {
         try {
             propertyDescriptor.getWriteMethod().invoke(propertyParent, object);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }

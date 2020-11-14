@@ -89,7 +89,7 @@ public class PropertiesView extends BaseView {
             );
 
             if (!fittingRenderer.isPresent()) {
-                System.out.println("The Property \"" + propertyParent.getClass().getName() + "." + entrySet.getKey() + "\" with type \"" + entrySet.getValue().getPropertyType().getName() + " cannot be rendered");
+                System.out.println("The Property \"" + propertyParent.getClass().getName() + "." + entrySet.getKey() + "\" with type \"" + entrySet.getValue().getReadMethod().getReturnType().getName() + "\" cannot be rendered");
             }
         } else {
 

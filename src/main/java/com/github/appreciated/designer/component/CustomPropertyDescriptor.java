@@ -13,7 +13,11 @@ public class CustomPropertyDescriptor {
         this.readMethod = readMethod.getMethod();
         this.writeMethod = writeMethod.getMethod();
         name = readMethod.getName().substring(3);
-        propertyType = readMethod.getMethod().getReturnType();
+        if (writeMethod.getMethod().getParameterCount() == 1 && readMethod.getMethod().getParameterCount() == 0) {
+            propertyType = readMethod.getMethod().getReturnType();
+        } else {
+            propertyType = null;
+        }
     }
 
     public Class<?> getPropertyType() {
