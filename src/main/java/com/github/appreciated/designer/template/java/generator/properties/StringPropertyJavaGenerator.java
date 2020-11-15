@@ -2,7 +2,7 @@ package com.github.appreciated.designer.template.java.generator.properties;
 
 import com.github.appreciated.designer.application.component.ComponentPropertyParser;
 import com.github.appreciated.designer.application.component.CustomPropertyDescriptor;
-import com.github.appreciated.designer.model.DesignCompilerInformation;
+import com.github.appreciated.designer.application.model.DesignCompilerInformation;
 import com.github.appreciated.designer.template.java.generator.interfaces.PropertyComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;

@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.template.java.generator;
 
 import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.application.model.DesignCompilerInformation;
+import com.github.appreciated.designer.application.model.DesignFileState;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
-import com.github.appreciated.designer.model.DesignCompilerInformation;
-import com.github.appreciated.designer.model.DesignFileState;
 import com.github.appreciated.designer.template.java.generator.interfaces.ComponentJavaGenerator;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;

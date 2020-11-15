@@ -52,6 +52,7 @@ public class ResponsiveStepsItemsEditor extends AbstractItemsEditor<FormLayout.R
         );
 
         TextField textField = new TextField();
+        textField.setValueChangeMode(ValueChangeMode.EAGER);
 
         binder.forField(textField)
                 .withValidator(new RegexpValidator("Not a valid css length", CssRegex.getLengthRegex()))
@@ -71,7 +72,7 @@ public class ResponsiveStepsItemsEditor extends AbstractItemsEditor<FormLayout.R
                             }
                         }
                 );
-
+        binder.addValueChangeListener(valueChangeEvent -> updateValues());
         return new HorizontalLayout(numberField, textField);
     }
 

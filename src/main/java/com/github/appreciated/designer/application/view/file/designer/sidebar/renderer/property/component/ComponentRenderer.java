@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component;
 
 import com.github.appreciated.designer.application.component.properties.PropertyTextField;
+import com.github.appreciated.designer.application.model.CompilationMetaInformation;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
-import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;

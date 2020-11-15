@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.helper;
 
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
-import com.github.appreciated.designer.model.project.Project;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;

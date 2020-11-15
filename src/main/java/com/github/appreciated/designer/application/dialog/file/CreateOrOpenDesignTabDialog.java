@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.application.dialog.file;
 
 import com.github.appreciated.designer.application.dialog.PreconditionDialog;
-import com.github.appreciated.designer.file.JavaFile;
-import com.github.appreciated.designer.model.project.Project;
+import com.github.appreciated.designer.application.dialog.file.preconditions.JavaFile;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.github.appreciated.designer.file.JavaFile.PACKAGE;
+import static com.github.appreciated.designer.application.dialog.file.preconditions.JavaFile.PACKAGE;
 import static com.github.appreciated.designer.helper.DesignerFileHelper.isFileDesignerFile;
 
 @Getter

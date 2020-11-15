@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.theme.css;
 
-import com.github.appreciated.designer.model.CssVariable;
-import com.github.appreciated.designer.model.LumoVariables;
-import com.github.appreciated.designer.model.project.Project;
+import com.github.appreciated.designer.application.model.CssVariable;
+import com.github.appreciated.designer.application.model.LumoVariables;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.appreciated.designer.theme.css.compiler.CssCompiler;
 import com.github.appreciated.designer.theme.css.parser.CssParser;
 

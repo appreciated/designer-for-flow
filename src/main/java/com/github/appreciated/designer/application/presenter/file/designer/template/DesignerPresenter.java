@@ -5,6 +5,7 @@ import com.github.appreciated.designer.application.component.droptarget.DropTarg
 import com.github.appreciated.designer.application.component.droptarget.DropTargetComponent;
 import com.github.appreciated.designer.application.component.droptarget.DropTargetDiv;
 import com.github.appreciated.designer.application.component.droptarget.DropTargetTab;
+import com.github.appreciated.designer.application.model.CssVariable;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.presenter.file.designer.template.draghandler.*;
 import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.AccordionPanelDropHandler;
@@ -13,7 +14,6 @@ import com.github.appreciated.designer.application.presenter.file.designer.templ
 import com.github.appreciated.designer.application.service.EventService;
 import com.github.appreciated.designer.application.view.file.designer.template.DesignerView;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
-import com.github.appreciated.designer.model.CssVariable;
 import com.github.appreciated.mvp.Presenter;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;

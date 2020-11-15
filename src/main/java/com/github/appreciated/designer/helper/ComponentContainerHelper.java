@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.helper;
 
-import com.github.appreciated.designer.model.DesignCompilerInformation;
+import com.github.appreciated.designer.application.model.DesignCompilerInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.accordion.AccordionPanel;

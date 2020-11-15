@@ -2,8 +2,8 @@ package com.github.appreciated.designer.application.service;
 
 
 import com.github.appreciated.designer.application.component.DesignerComponent;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.appreciated.designer.helper.DesignerFileHelper;
-import com.github.appreciated.designer.model.project.Project;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.accordion.Accordion;

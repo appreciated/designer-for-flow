@@ -1,14 +1,13 @@
 package com.github.appreciated.designer.template.java.parser;
 
+import com.github.appreciated.designer.application.model.CompilationMetaInformation;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.appreciated.designer.application.service.ComponentService;
 import com.github.appreciated.designer.helper.DesignerFileHelper;
 import com.github.appreciated.designer.helper.FieldNameHelper;
-import com.github.appreciated.designer.model.CompilationMetaInformation;
-import com.github.appreciated.designer.model.project.Project;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -18,6 +17,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.binder.HasItems;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -91,11 +91,12 @@ public class ComponentTreeParser {
                             compilationMetaInformation.put(component, info);
                         }
                     } else {
-                        result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(Component[]::new)});
+                        Class clazz = args[0] instanceof Component ? Component.class : args[0].getClass();
+                        result = foundMethod.invoke(component, new Object[]{Arrays.stream(args).toArray(value -> (Object[]) Array.newInstance(clazz, value))});
                     }
                     found = true;
                 }
-            } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
+            } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException | ArrayStoreException e) {
                 // These are only relevant if no fitting method was found so we save them for later
                 errors.add(e);
             }
@@ -112,12 +113,16 @@ public class ComponentTreeParser {
             return ((StringLiteralExpr) arg).asString();
         } else if (arg instanceof BooleanLiteralExpr) {
             return ((BooleanLiteralExpr) arg).getValue();
+        } else if (arg instanceof IntegerLiteralExpr) {
+            return ((IntegerLiteralExpr) arg).asNumber().intValue();
         } else if (arg instanceof DoubleLiteralExpr) {
             return ((DoubleLiteralExpr) arg).asDouble();
         } else if (arg instanceof NameExpr) {
             return fieldMap.get(((NameExpr) arg).getNameAsString());
         } else if (arg instanceof FieldAccessExpr) {
             return resolveFieldAccess((FieldAccessExpr) arg);
+        } else if (arg instanceof ObjectCreationExpr) {
+            return resolveObjectCreation((ObjectCreationExpr) arg);
         } else if (arg instanceof MethodCallExpr) {
             if (((MethodCallExpr) arg).getNameAsString().equals("getTranslation")) {
                 StringLiteralExpr argumentExpression = (StringLiteralExpr) ((MethodCallExpr) arg).getArguments().getFirst().get();
@@ -130,6 +135,17 @@ public class ComponentTreeParser {
         } else {
             throw new UnsupportedOperationException(arg.getClass().getSimpleName() + " is not supported");
         }
+    }
+
+    private Object resolveObjectCreation(ObjectCreationExpr arg) {
+        return instantiateClassWithName(arg.getTypeAsString(), arg.getArguments().stream().map(expression -> {
+            try {
+                return resolveParameter(expression, null);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).toArray());
     }
 
     private Object resolveFieldAccess(FieldAccessExpr arg) throws ClassNotFoundException {
@@ -164,17 +180,39 @@ public class ComponentTreeParser {
         rootComponent = (Component) instantiateClassWithName(typeName);
     }
 
-    private Object instantiateClassWithName(String typeName) {
+    private Object instantiateClassWithName(String typeName, Object... args) {
         try {
             Class<?> className = Class.forName(resolveName(typeName).get());
-            return className.getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            if (args.length == 0) {
+                return className.getDeclaredConstructor().newInstance();
+            } else {
+                Class[] argClasses = Arrays.stream(args).map(o -> o.getClass())
+                        .map(aClass -> aClass == Integer.class ? int.class : aClass)
+                        .toArray(Class[]::new);
+                return className.getDeclaredConstructor(argClasses).newInstance(args);
+            }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | NoSuchElementException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     private Optional<String> resolveName(String typeName) {
+        if (typeName.contains(".")) {
+            try {
+                String[] test = typeName.split("\\.");
+                String packagePath = Arrays.stream(test)
+                        .reduce((s, s2) -> !Character.isUpperCase(s2.charAt(0)) ? s + "." + s2 : s + "$" + s2)
+                        .get();
+                packagePath = packagePath.replaceFirst("\\$", ".");
+                Class.forName(packagePath);
+                return Optional.of(packagePath);
+            } catch (ClassNotFoundException e) {
+
+            } catch (NoSuchElementException e) {
+                System.out.println();
+            }
+        }
         Optional<ImportDeclaration> declaration = compilationUnit.getImports()
                 .stream()
                 .filter(importDeclaration -> importDeclaration.getName().asString().endsWith(typeName))
@@ -260,9 +298,7 @@ public class ComponentTreeParser {
         Collection<CompilationUnit> files = service.findDesignerClassFilesInPackage(project.getSourceFolder())
                 .map(file -> DesignerFileHelper.getCompilationUnitFromDesignerFile(project.getSourceFolder().toPath(), file))
                 .collect(Collectors.toList());
-        Optional<CompilationUnit> file = Optional.empty();
         for (CompilationUnit compilationUnit1 : files) {
-            Optional<PackageDeclaration> packageDeclaration = compilationUnit1.getPackageDeclaration();
             String projectClassName = compilationUnit1.getPrimaryType().get().getName().asString();
             String fieldClassName = declaration.getElementType().asString();
             if (projectClassName.equals(fieldClassName)) {

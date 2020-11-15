@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.application.model.file;
 
+import com.github.appreciated.designer.application.model.DesignCompilerInformation;
+import com.github.appreciated.designer.application.model.DesignFileState;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.appreciated.designer.application.service.EventService;
-import com.github.appreciated.designer.model.DesignCompilerInformation;
-import com.github.appreciated.designer.model.DesignFileState;
-import com.github.appreciated.designer.model.project.Project;
 import com.github.appreciated.designer.template.java.generator.JavaGenerator;
 import com.github.appreciated.mvp.Model;
 import com.vaadin.flow.component.Component;

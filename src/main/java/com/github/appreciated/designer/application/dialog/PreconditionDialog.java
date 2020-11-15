@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.application.dialog;
 
 import com.github.appreciated.designer.application.component.DesignerComponent;
+import com.github.appreciated.designer.application.dialog.file.preconditions.HasPreconditions;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.appreciated.designer.application.service.ComponentService;
-import com.github.appreciated.designer.file.HasPreconditions;
-import com.github.appreciated.designer.model.project.Project;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;

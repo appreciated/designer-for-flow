@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.application.component;
 
+import com.github.appreciated.designer.application.model.CompilationMetaInformation;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
-import com.github.appreciated.designer.model.CompilationMetaInformation;
-import com.github.appreciated.designer.model.project.Project;
+import com.github.appreciated.designer.application.model.project.Project;
 import com.github.appreciated.designer.template.java.parser.ComponentTreeParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;

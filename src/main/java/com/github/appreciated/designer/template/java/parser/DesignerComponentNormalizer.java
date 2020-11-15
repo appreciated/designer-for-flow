@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.template.java.parser;
 
+import com.github.appreciated.designer.application.model.DesignCompilerInformation;
 import com.github.appreciated.designer.application.util.FileStreamResource;
-import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Image;
 

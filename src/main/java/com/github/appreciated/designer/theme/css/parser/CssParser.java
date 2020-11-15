@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.theme.css.parser;
 
-import com.github.appreciated.designer.model.CssVariable;
-import com.github.appreciated.designer.model.LumoVariables;
+import com.github.appreciated.designer.application.model.CssVariable;
+import com.github.appreciated.designer.application.model.LumoVariables;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CSSStyleRule;

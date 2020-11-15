@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.theme.css;
 
+import com.github.appreciated.designer.application.model.CssVariable;
+import com.github.appreciated.designer.application.model.LumoVariables;
 import com.github.appreciated.designer.helper.resources.ResourceHelper;
 import com.github.appreciated.designer.io.TempFile;
-import com.github.appreciated.designer.model.CssVariable;
-import com.github.appreciated.designer.model.LumoVariables;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
