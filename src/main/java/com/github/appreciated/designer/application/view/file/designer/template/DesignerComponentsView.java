@@ -1,11 +1,11 @@
 package com.github.appreciated.designer.application.view.file.designer.template;
 
+import com.github.appreciated.designer.application.component.DesignerComponent;
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.application.component.designer.DesignerComponentLabel;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
+import com.github.appreciated.designer.application.service.ComponentService;
 import com.github.appreciated.designer.application.view.BaseView;
-import com.github.appreciated.designer.component.DesignerComponent;
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
-import com.github.appreciated.designer.component.designer.DesignerComponentLabel;
-import com.github.appreciated.designer.service.ComponentService;
 import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.VaadinIcon;

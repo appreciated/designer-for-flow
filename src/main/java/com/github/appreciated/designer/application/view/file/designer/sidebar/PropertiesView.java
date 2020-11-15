@@ -1,14 +1,14 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar;
 
+import com.github.appreciated.designer.application.component.ComponentPropertyParser;
+import com.github.appreciated.designer.application.component.CustomPropertyDescriptor;
+import com.github.appreciated.designer.application.component.designer.StyleEditor;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.Renderers;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces.HasStyleRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property.AbstractPropertyRenderer;
-import com.github.appreciated.designer.component.ComponentPropertyParser;
-import com.github.appreciated.designer.component.CustomPropertyDescriptor;
-import com.github.appreciated.designer.component.designer.StyleEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;

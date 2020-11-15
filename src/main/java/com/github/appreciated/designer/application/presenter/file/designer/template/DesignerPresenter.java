@@ -1,19 +1,19 @@
 package com.github.appreciated.designer.application.presenter.file.designer.template;
 
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.application.component.droptarget.DropTargetAccordionPanel;
+import com.github.appreciated.designer.application.component.droptarget.DropTargetComponent;
+import com.github.appreciated.designer.application.component.droptarget.DropTargetDiv;
+import com.github.appreciated.designer.application.component.droptarget.DropTargetTab;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.presenter.file.designer.template.draghandler.*;
 import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.AccordionPanelDropHandler;
 import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.DropHandler;
 import com.github.appreciated.designer.application.presenter.file.designer.template.drophandler.TabsDropHandler;
+import com.github.appreciated.designer.application.service.EventService;
 import com.github.appreciated.designer.application.view.file.designer.template.DesignerView;
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
-import com.github.appreciated.designer.component.droptarget.DropTargetAccordionPanel;
-import com.github.appreciated.designer.component.droptarget.DropTargetComponent;
-import com.github.appreciated.designer.component.droptarget.DropTargetDiv;
-import com.github.appreciated.designer.component.droptarget.DropTargetTab;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.CssVariable;
-import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.mvp.Presenter;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;

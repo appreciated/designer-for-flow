@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.application.presenter.file.designer.template.draghandler;
 
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.application.presenter.file.designer.template.DesignerPresenter;
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;

@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.template.java.parser;
 
 
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.github.appreciated.designer.model.project.Project;

@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
+import com.github.appreciated.designer.application.component.designer.StyleEditor;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
-import com.github.appreciated.designer.component.designer.StyleEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 

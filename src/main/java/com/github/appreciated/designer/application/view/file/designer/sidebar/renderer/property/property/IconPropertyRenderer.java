@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property;
 
-import com.github.appreciated.designer.component.CustomPropertyDescriptor;
-import com.github.appreciated.designer.component.properties.PropertyComboBox;
+import com.github.appreciated.designer.application.component.CustomPropertyDescriptor;
+import com.github.appreciated.designer.application.component.properties.PropertyComboBox;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;

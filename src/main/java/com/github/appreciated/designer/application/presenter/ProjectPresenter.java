@@ -1,16 +1,16 @@
 package com.github.appreciated.designer.application.presenter;
 
 import com.github.appreciated.designer.Shortcuts;
+import com.github.appreciated.designer.application.dialog.ErrorViewDialog;
+import com.github.appreciated.designer.application.dialog.file.CreateOrOpenDesignTabDialog;
 import com.github.appreciated.designer.application.model.ProjectModel;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.presenter.file.ProjectFilePresenter;
+import com.github.appreciated.designer.application.service.EventService;
+import com.github.appreciated.designer.application.service.ExceptionService;
+import com.github.appreciated.designer.application.service.ProjectService;
 import com.github.appreciated.designer.application.view.ProjectView;
-import com.github.appreciated.designer.dialog.ErrorViewDialog;
-import com.github.appreciated.designer.dialog.file.CreateOrOpenDesignTabDialog;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
-import com.github.appreciated.designer.service.EventService;
-import com.github.appreciated.designer.service.ExceptionService;
-import com.github.appreciated.designer.service.ProjectService;
 import com.github.appreciated.mvp.Presenter;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;

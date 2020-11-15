@@ -1,7 +1,7 @@
 package com.github.appreciated.designer.application.view;
 
+import com.github.appreciated.designer.application.service.ExceptionService;
 import com.github.appreciated.designer.helper.UrlHelper;
-import com.github.appreciated.designer.service.ExceptionService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.StyleSheet;

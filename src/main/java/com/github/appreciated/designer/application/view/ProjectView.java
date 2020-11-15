@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.application.view;
 
-import com.github.appreciated.designer.component.AddButton;
-import com.github.appreciated.designer.component.CustomTabs;
-import com.github.appreciated.designer.component.IconButton;
-import com.github.appreciated.designer.component.ironpages.IronPages;
+import com.github.appreciated.designer.application.component.AddButton;
+import com.github.appreciated.designer.application.component.CustomTabs;
+import com.github.appreciated.designer.application.component.IconButton;
+import com.github.appreciated.designer.application.component.ironpages.IronPages;
 import com.github.appreciated.designer.helper.UrlHelper;
 import com.vaadin.componentfactory.Tooltip;
 import com.vaadin.componentfactory.TooltipAlignment;

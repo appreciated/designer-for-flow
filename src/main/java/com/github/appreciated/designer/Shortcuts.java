@@ -1,8 +1,8 @@
 package com.github.appreciated.designer;
 
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
-import com.github.appreciated.designer.service.EventService;
-import com.github.appreciated.designer.service.ProjectService;
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.application.service.EventService;
+import com.github.appreciated.designer.application.service.ProjectService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;

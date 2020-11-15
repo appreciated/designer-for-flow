@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.interfaces;
 
+import com.github.appreciated.designer.application.component.SmallIconButton;
+import com.github.appreciated.designer.application.component.properties.PropertyTextField;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
-import com.github.appreciated.designer.component.SmallIconButton;
-import com.github.appreciated.designer.component.properties.PropertyTextField;
 import com.github.appreciated.designer.regex.CssRegex;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;

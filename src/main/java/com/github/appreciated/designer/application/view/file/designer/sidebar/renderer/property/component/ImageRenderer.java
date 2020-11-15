@@ -1,13 +1,13 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component;
 
+import com.github.appreciated.designer.application.component.IconButton;
+import com.github.appreciated.designer.application.component.properties.PropertyComboBox;
+import com.github.appreciated.designer.application.component.properties.PropertyTextField;
+import com.github.appreciated.designer.application.dialog.file.FileChooserDialog;
+import com.github.appreciated.designer.application.util.FileStreamResource;
+import com.github.appreciated.designer.application.util.PathValidator;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
-import com.github.appreciated.designer.component.IconButton;
-import com.github.appreciated.designer.component.properties.PropertyComboBox;
-import com.github.appreciated.designer.component.properties.PropertyTextField;
-import com.github.appreciated.designer.dialog.file.FileChooserDialog;
-import com.github.appreciated.designer.vaadin.converter.FileStreamResource;
-import com.github.appreciated.designer.vaadin.converter.PathValidator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;

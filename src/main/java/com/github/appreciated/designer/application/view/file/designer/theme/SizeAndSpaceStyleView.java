@@ -1,9 +1,9 @@
 package com.github.appreciated.designer.application.view.file.designer.theme;
 
+import com.github.appreciated.designer.application.component.designer.TextFieldEditorDetails;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
-import com.github.appreciated.designer.component.designer.TextFieldEditorDetails;
+import com.github.appreciated.designer.application.service.EventService;
 import com.github.appreciated.designer.model.LumoVariables;
-import com.github.appreciated.designer.service.EventService;
 import com.github.appreciated.designer.theme.css.Theme;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 

@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.helper;
 
+import com.github.appreciated.designer.application.service.ComponentService;
 import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.github.appreciated.designer.model.project.Project;
-import com.github.appreciated.designer.service.ComponentService;
 import com.vaadin.flow.component.Component;
 
 import javax.lang.model.SourceVersion;

@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.component;
 
+import com.github.appreciated.designer.application.component.properties.PropertyNumberField;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.AbstractComponentPropertyRenderer;
 import com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.RenderPair;
-import com.github.appreciated.designer.component.properties.PropertyNumberField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.value.ValueChangeMode;

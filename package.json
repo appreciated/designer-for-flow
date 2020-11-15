@@ -7,12 +7,12 @@
       "@polymer/polymer": "3.2.0",
       "@webcomponents/webcomponentsjs": "^2.2.10",
       "driver.js": "0.9.7",
-      "@vaadin/vaadin-grid": "5.7.4",
+      "@vaadin/vaadin-grid": "5.7.5",
       "@vaadin/vaadin-icons": "4.3.1",
       "@appreciated/color-picker": "2.0.0-beta.4",
       "@vaadin/vaadin-split-layout": "4.3.0",
-      "@vaadin/vaadin-combo-box": "5.4.1",
-      "@vaadin/vaadin-core-shrinkwrap": "14.4.1",
+      "@vaadin/vaadin-combo-box": "5.4.2",
+      "@vaadin/vaadin-core-shrinkwrap": "14.4.2",
       "@vaadin/vaadin-upload": "4.4.0",
       "@vaadin/vaadin-dialog": "2.5.2",
       "@vaadin/vaadin-select": "2.4.0",
@@ -54,28 +54,28 @@
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
-      "copy-webpack-plugin": "5.1.1",
+      "copy-webpack-plugin": "5.1.2",
       "compression-webpack-plugin": "4.0.1",
       "raw-loader": "3.1.0",
       "webpack-cli": "3.3.11",
       "webpack": "4.42.0",
       "chokidar": "^3.4.0",
       "webpack-merge": "4.2.2",
-      "webpack-dev-server": "3.10.3"
+      "webpack-dev-server": "3.11.0"
     },
-    "hash": "b3db296240ba23a7d5288a947afc1b5dd771ed58440a7f30a47c8d8c24892568"
+    "hash": "0c92312b431a862fb94442b5da4a5bf85123d177970e54b86ae67a9c72834ef9"
   },
   "dependencies": {
     "lit-element": "^2.2.1",
     "@polymer/polymer": "3.2.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "driver.js": "0.9.7",
-    "@vaadin/vaadin-grid": "5.7.4",
+    "@vaadin/vaadin-grid": "5.7.5",
     "@vaadin/vaadin-icons": "4.3.1",
     "@appreciated/color-picker": "2.0.0-beta.4",
     "@vaadin/vaadin-split-layout": "4.3.0",
-    "@vaadin/vaadin-combo-box": "5.4.1",
-    "@vaadin/vaadin-core-shrinkwrap": "14.4.1",
+    "@vaadin/vaadin-combo-box": "5.4.2",
+    "@vaadin/vaadin-core-shrinkwrap": "14.4.2",
     "@vaadin/vaadin-upload": "4.4.0",
     "@vaadin/vaadin-dialog": "2.5.2",
     "@vaadin/vaadin-select": "2.4.0",
@@ -117,13 +117,13 @@
   },
   "devDependencies": {
     "webpack-babel-multi-target-plugin": "2.3.3",
-    "copy-webpack-plugin": "5.1.1",
+    "copy-webpack-plugin": "5.1.2",
     "compression-webpack-plugin": "4.0.1",
     "raw-loader": "3.1.0",
     "webpack-cli": "3.3.11",
     "webpack": "4.42.0",
     "chokidar": "^3.4.0",
     "webpack-merge": "4.2.2",
-    "webpack-dev-server": "3.10.3"
+    "webpack-dev-server": "3.11.0"
   }
 }

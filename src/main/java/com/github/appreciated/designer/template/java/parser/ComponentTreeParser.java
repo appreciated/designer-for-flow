@@ -1,10 +1,10 @@
 package com.github.appreciated.designer.template.java.parser;
 
+import com.github.appreciated.designer.application.service.ComponentService;
 import com.github.appreciated.designer.helper.DesignerFileHelper;
 import com.github.appreciated.designer.helper.FieldNameHelper;
 import com.github.appreciated.designer.model.CompilationMetaInformation;
 import com.github.appreciated.designer.model.project.Project;
-import com.github.appreciated.designer.service.ComponentService;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;

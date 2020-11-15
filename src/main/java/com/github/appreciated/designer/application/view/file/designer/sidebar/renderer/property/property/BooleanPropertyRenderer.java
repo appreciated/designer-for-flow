@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar.renderer.property.property;
 
-import com.github.appreciated.designer.component.CustomPropertyDescriptor;
+import com.github.appreciated.designer.application.component.CustomPropertyDescriptor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 

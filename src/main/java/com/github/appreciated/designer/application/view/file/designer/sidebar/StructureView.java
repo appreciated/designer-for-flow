@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.application.view.file.designer.sidebar;
 
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
 import com.github.appreciated.designer.helper.ComponentContainerHelper;
 import com.github.appreciated.designer.model.DesignCompilerInformation;
 import com.vaadin.flow.component.Component;

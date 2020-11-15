@@ -1,12 +1,12 @@
 package com.github.appreciated.designer.application.view.file.designer;
 
+import com.github.appreciated.designer.application.component.ironpages.IronPages;
 import com.github.appreciated.designer.application.model.file.ProjectFileModel;
 import com.github.appreciated.designer.application.view.BaseView;
 import com.github.appreciated.designer.application.view.file.designer.theme.ColorStyleView;
 import com.github.appreciated.designer.application.view.file.designer.theme.OtherStyleView;
 import com.github.appreciated.designer.application.view.file.designer.theme.SizeAndSpaceStyleView;
 import com.github.appreciated.designer.application.view.file.designer.theme.TypographyStyleView;
-import com.github.appreciated.designer.component.ironpages.IronPages;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;

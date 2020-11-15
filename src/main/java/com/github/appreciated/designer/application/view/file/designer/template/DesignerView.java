@@ -1,8 +1,8 @@
 package com.github.appreciated.designer.application.view.file.designer.template;
 
+import com.github.appreciated.designer.application.component.CustomSelect;
+import com.github.appreciated.designer.application.component.IconButton;
 import com.github.appreciated.designer.application.view.BaseView;
-import com.github.appreciated.designer.component.CustomSelect;
-import com.github.appreciated.designer.component.IconButton;
 import com.vaadin.componentfactory.Tooltip;
 import com.vaadin.componentfactory.TooltipAlignment;
 import com.vaadin.componentfactory.TooltipPosition;

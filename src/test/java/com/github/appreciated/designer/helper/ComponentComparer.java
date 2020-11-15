@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.helper;
 
-import com.github.appreciated.designer.component.DesignerComponentWrapper;
+import com.github.appreciated.designer.application.component.DesignerComponentWrapper;
 import com.vaadin.flow.component.Component;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.github.appreciated.designer.application.view.file.designer;
 
-import com.github.appreciated.designer.component.ironpages.IronPages;
+import com.github.appreciated.designer.application.component.ironpages.IronPages;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
