@@ -40,7 +40,9 @@ public class FormLayoutJavaGenerator implements ComponentJavaGenerator<FormLayou
             List<Expression> expressionList = getActualResponsiveSteps(propertyParent).stream().map(responsiveStep -> {
                 try {
                     return new ObjectCreationExpr()
-                            .setType("com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep")
+                            // FormLayout.ResponsiveStep is enough for this specific case since the only Component that
+                            // has a method using the type is contained in FormLayout
+                            .setType("FormLayout.ResponsiveStep")
                             .setArguments(
                                     NodeList.nodeList(
                                             new StringLiteralExpr((String) FieldUtils.getField(FormLayout.ResponsiveStep.class, "minWidth", true).get(responsiveStep)),

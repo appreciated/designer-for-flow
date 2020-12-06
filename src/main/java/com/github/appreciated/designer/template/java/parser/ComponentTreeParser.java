@@ -198,27 +198,20 @@ public class ComponentTreeParser {
     }
 
     private Optional<String> resolveName(String typeName) {
-        if (typeName.contains(".")) {
-            try {
-                String[] test = typeName.split("\\.");
-                String packagePath = Arrays.stream(test)
-                        .reduce((s, s2) -> !Character.isUpperCase(s2.charAt(0)) ? s + "." + s2 : s + "$" + s2)
-                        .get();
-                packagePath = packagePath.replaceFirst("\\$", ".");
-                Class.forName(packagePath);
-                return Optional.of(packagePath);
-            } catch (ClassNotFoundException e) {
-
-            } catch (NoSuchElementException e) {
-                System.out.println();
-            }
-        }
+        // workaround for subclasses like FormLayout.ResponsiveStep
+        String classTypeName = typeName.contains(".") ? typeName.split("\\.")[0] : typeName;
         Optional<ImportDeclaration> declaration = compilationUnit.getImports()
                 .stream()
-                .filter(importDeclaration -> importDeclaration.getName().asString().endsWith(typeName))
+                .filter(importDeclaration -> importDeclaration.getName().asString().endsWith(classTypeName))
                 .findFirst();
         if (declaration.isPresent()) {
-            return declaration.map(importDeclaration -> importDeclaration.getName().asString());
+            if (typeName.contains(".")) {
+                String name = declaration.get().getNameAsString();
+                name = name.substring(0, name.indexOf(typeName.split("\\.")[0]));
+                return Optional.of(name + typeName.replace(".", "$"));
+            } else {
+                return declaration.map(importDeclaration -> importDeclaration.getName().asString());
+            }
         } else {
             return compilationUnit.getImports()
                     .stream()
