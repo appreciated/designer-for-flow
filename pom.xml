@@ -5,7 +5,7 @@
     <groupId>com.github.appreciated</groupId>
     <artifactId>designer-for-flow</artifactId>
     <name>Designer for Flow</name>
-    <version>0.8.5-SNAPSHOT</version>
+    <version>14.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,20 +15,16 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependencies -->
-        <vaadin.version>14.4.2</vaadin.version>
+        <vaadin.version>14.4.6</vaadin.version>
         <vaadin.bowerMode>false</vaadin.bowerMode>
 
         <!-- Apache -->
-        <apache2.commons.io.version>2.7
-        </apache2.commons.io.version><!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <apache2.commons.net.version>3.6
-        </apache2.commons.net.version><!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
-        <apache2.commons.collections4.version>4.4
-        </apache2.commons.collections4.version><!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4  -->
+        <apache2.commons.io.version>2.7</apache2.commons.io.version>
+        <apache2.commons.net.version>3.6</apache2.commons.net.version>
+        <apache2.commons.collections4.version>4.4</apache2.commons.collections4.version>
 
         <!-- Google -->
-        <google.guava.version>29.0-jre
-        </google.guava.version><!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <google.guava.version>29.0-jre</google.guava.version>
     </properties>
 
     <parent>
