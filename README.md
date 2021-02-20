@@ -17,6 +17,12 @@ The packed Editor will run a Vaadin instance inside electron, using a shipped JD
 # Distribution
 The Editor is not meant to be run manually. [Instead use the prepackaged Releases](https://github.com/appreciated/designer-for-flow/releases).
 
+# Versioning
+The Version of the Editor is required to be coupled with the respective Vaadin version being used in a project. To make it easy for the user to identify which vaadin Version the designer is required a scheme as followed will be used. 
+
+designer-for-flow v14.0.* -> Vaadin 14.0  
+designer-for-flow v14.1.* -> Vaadin 14.1  
+
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
 
@@ -27,12 +33,6 @@ To build the project run the following maven command:
 `mvn clean install -Pproduction` 
 
 After executing the ready to use electron application can be found under `target/electron/designer-for-flow-<archtype>`.
-
-# Versioning
-The Version of the Editor will be coupled to the respective Vaadin version that was used during the build. The Editor will only use patch versioning. This make it more obvious for the user for which vaadin Version the designer ist designated. 
-
-designer-for-flow v14.0.* -> Vaadin 14.0  
-designer-for-flow v14.1.* -> Vaadin 14.1  
 
 # Branching
 
