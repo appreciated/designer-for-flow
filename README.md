@@ -8,8 +8,13 @@ This is a WYSIWYG-Editor that allows creating components for Vaadin flow.
 Currently the following input and output formats are supported:
 - Java Classes    
 
-# Distribution
+# Maturity
+The Editor is currently in alpha (or pre-alpha), it still has quite a fex bugs. Since the development speed decreased over time, I decided to release it before its completion.
 
+# Concept
+The packed Editor will run a Vaadin instance inside electron, using a shipped JDK. 
+
+# Distribution
 The Editor is not meant to be run manually. [Instead use the prepackaged Releases](https://github.com/appreciated/designer-for-flow/releases).
 
 # Executing
