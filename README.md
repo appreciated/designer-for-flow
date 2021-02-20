@@ -10,7 +10,7 @@ Currently the following input and output formats are supported:
 
 # Distribution
 
-The Editor is not meant to be run locally. Instead use the 
+The Editor is not meant to be run manually. [Instead use the prepackaged Releases](https://github.com/appreciated/designer-for-flow/releases).
 
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
