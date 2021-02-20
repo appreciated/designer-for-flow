@@ -9,7 +9,7 @@ Currently the following input and output formats are supported:
 - Java Classes    
 
 # Maturity & Current status
-The Editor is currently in alpha (or pre-alpha), it still has quite a fex bugs. Since the development speed decreased over time, I decided to release it before its completion. I hope that around this editor will develop a community willing to improve and test it. I no longer have the time to develop this product with the wanted speed, so no promises here. 
+The Editor is currently in alpha (or pre-alpha), it still has quite a fex bugs. Since the development speed decreased over time, I decided to release it before its completion. I hope that around this editor will develop a community willing to improve and test it. I no longer have the time to develop this product on my own with the wanted speed. 
 
 # Concept
 The packed Editor will run a Vaadin instance inside electron, using a shipped JDK.
