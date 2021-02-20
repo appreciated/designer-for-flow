@@ -77,10 +77,16 @@ public class StructureView extends BaseView {
                                 .publish(projectFileModel.getCurrentDragItem(), dropLocation.getParent().get());
                         break;
                     case ON_TOP:
-                        List<Component> containedChildren = ComponentContainerHelper.getChildren(dropLocation).collect(Collectors.toList());
-                        projectFileModel.getEventService()
-                                .getDesignerComponentDropEventPublisher()
-                                .publish(projectFileModel.getCurrentDragItem(), containedChildren.get(containedChildren.size() - 1));
+                        if (ComponentContainerHelper.isComponentContainer(dropLocation, false)) {
+                            List<Component> containedChildren = ComponentContainerHelper.getChildren(dropLocation).collect(Collectors.toList());
+                            projectFileModel.getEventService()
+                                    .getDesignerComponentDropEventPublisher()
+                                    .publish(projectFileModel.getCurrentDragItem(), containedChildren.get(containedChildren.size() - 1));
+                        } else {
+                            projectFileModel.getEventService()
+                                    .getDesignerComponentDropEventPublisher()
+                                    .publish(projectFileModel.getCurrentDragItem(), dropLocation.getParent().get());
+                        }
                         break;
                     default:
                         break;
