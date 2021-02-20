@@ -3,10 +3,19 @@
 <h1>Designer for Flow</h1>
 </p> 
 
-This is a WYSIWYG-Editor that allows to create and edit Views for the Vaadin Platform.
+This is a WYSIWYG-Editor that allows creating components for Vaadin flow.
 
 Currently the following input and output formats are supported:
 - Java Classes    
+
+# Maturity & Current status
+The Editor is currently in alpha (or pre-alpha), it still has quite a fex bugs. Since the development speed decreased over time, I decided to release it before its completion. I hope that around this editor will develop a community willing to improve and test it. I no longer have the time to develop this product with the wanted speed, so no promises here. 
+
+# Concept
+The packed Editor will run a Vaadin instance inside electron, using a shipped JDK.
+
+# Distribution
+The Editor is not meant to be run manually. [Instead use the prepackaged Releases](https://github.com/appreciated/designer-for-flow/releases).
 
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
