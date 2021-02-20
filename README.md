@@ -21,7 +21,9 @@ The Editor is not meant to be run manually. [Instead use the prepackaged Release
 The Version of the Editor is required to be coupled with the respective Vaadin version being used in a project. To make it easy for the user to identify which vaadin Version the designer is required a scheme as followed will be used. 
 
 designer-for-flow v14.0.* -> Vaadin 14.0  
-designer-for-flow v14.1.* -> Vaadin 14.1  
+designer-for-flow v14.1.* -> Vaadin 14.1
+...
+designer-for-flow v14.4.* -> Vaadin 14.4
 
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
