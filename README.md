@@ -8,6 +8,10 @@ This is a WYSIWYG-Editor that allows creating components for Vaadin flow.
 Currently the following input and output formats are supported:
 - Java Classes    
 
+# Distribution
+
+The Editor is not meant to be run locally. Instead use the 
+
 # Executing
 Before starting the application via IDE execute `mvn clean install`.
 
