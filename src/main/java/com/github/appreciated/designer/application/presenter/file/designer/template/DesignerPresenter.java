@@ -174,6 +174,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             removeComponentContainerFiller(designerRoot);
             notifyStructureListeners();
             setDragClass(false);
+            getModel().getEventService().getSaveRequiredEventPublisher().publish(getModel().getInformation().getComponent(), true);
         }
     }
 
@@ -221,6 +222,7 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             Component currentDraggedItem = projectFileModel.getCurrentDragItem();
             handleDropEvent(currentDraggedItem == null ? event.getDragSourceComponent().get() : currentDraggedItem, event.getComponent());
             removeComponentContainerFiller(designerRoot);
+            getModel().getEventService().getSaveRequiredEventPublisher().publish(getModel().getInformation().getComponent(), true);
         });
         return div;
     }
@@ -252,7 +254,6 @@ public class DesignerPresenter extends Presenter<ProjectFileModel, DesignerView>
             }
         }
         notifyFocusListeners(draggedComponent);
-        getModel().getEventService().getSaveRequiredEventPublisher().publish(getModel().getInformation().getComponent(), true);
     }
 
     private boolean dropWasHandled(Component draggedComponent, Component targetComponent) {
