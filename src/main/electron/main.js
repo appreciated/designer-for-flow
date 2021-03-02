@@ -12,7 +12,8 @@ let mainWindow = null;
 let loading = null;
 let serverProcess = null;
 let allowClose = false;
-const jreFolder = 'jdk8u265-b01-jre';
+// To determine the jreFolder name unpack the zip / tar.gz in the pom.xml manually and take the root folder name
+const jreFolder = 'jdk-11.0.10+9-jre';
 
 function error_log(exception) {
     fs.appendFile('error.log', exception.stack + "\n", (err) => {
