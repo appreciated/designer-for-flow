@@ -64,7 +64,7 @@ public class CreateOrOpenDesignTabDialog extends FileChooserDialog {
                 return Stream.empty();
             } else {
                 return Arrays.stream(root.listFiles())
-                        .filter(file -> FilenameUtils.getExtension(file.getName()).equals("java") || file.isDirectory());
+                        .filter(file -> FilenameUtils.getExtension(file.getName()).equals("java") || file.isDirectory()).sorted((s1, s2) -> s1.getName().compareTo(s2.getName()));
             }
         });
         getView().setUpdate(selectedFile -> {
