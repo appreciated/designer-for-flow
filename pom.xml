@@ -473,6 +473,7 @@
                                 </goals>
                                 <configuration>
                                     <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
+                                    <!-- Url to the latest release https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest -->
                                     <url>
                                         https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jre_x64_windows_openj9_11.0.10_9_openj9-0.24.0.zip
                                     </url>
@@ -490,8 +491,9 @@
                                 </goals>
                                 <configuration>
                                     <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
+                                    <!-- Url to the latest release https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest -->
                                     <url>
-                                        https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jre_x64_mac_openj9_macosXL_11.0.10_9_openj9-0.24.0.tar.gz
+                                        https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jre_x64_mac_openj9_11.0.10_9_openj9-0.24.0.tar.gz
                                     </url>
                                     <outputDirectory>
                                         ${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java
@@ -507,8 +509,9 @@
                                 </goals>
                                 <configuration>
                                     <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
+                                    <!-- Url to the latest release https://www.azul.com/downloads/zulu-community/?version=java-11-lts&os=macos&architecture=arm-64-bit&package=jdk -->
                                     <url>
-                                        https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jdk_aarch64_linux_openj9_11.0.10_9_openj9-0.24.0.tar.gz
+                                        https://cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz
                                     </url>
                                     <outputDirectory>
                                         ${project.build.directory}/electron/designer-for-flow-darwin-arm64/designer-for-flow.app/Contents/Resources/app/java
@@ -524,8 +527,9 @@
                                 </goals>
                                 <configuration>
                                     <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
+                                    <!-- Url to the latest release https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest -->
                                     <url>
-                                        https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jre_x64_linux_openj9_linuxXL_11.0.10_9_openj9-0.24.0.tar.gz
+                                        https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jdk_x64_linux_openj9_11.0.10_9_openj9-0.24.0.tar.gz
                                     </url>
                                     <outputDirectory>
                                         ${project.build.directory}/electron/designer-for-flow-linux-x64/resources/app/java
