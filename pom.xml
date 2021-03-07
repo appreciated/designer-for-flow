@@ -425,13 +425,24 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>package electron mac</id>
+                                <id>package electron mac x64</id>
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
                                 <phase>package</phase>
                                 <configuration>
-                                    <arguments>run package-mac</arguments>
+                                    <arguments>run package-mac-x64</arguments>
+                                    <workingDirectory>target/electron</workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>package electron mac arm64</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <arguments>run package-mac-arm64</arguments>
                                     <workingDirectory>target/electron</workingDirectory>
                                 </configuration>
                             </execution>
@@ -472,7 +483,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>download-openjdk-jre-mac-os</id>
+                                <id>download-openjdk-jre-mac-os-x64</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>wget</goal>
@@ -484,6 +495,23 @@
                                     </url>
                                     <outputDirectory>
                                         ${project.build.directory}/electron/designer-for-flow-darwin-x64/designer-for-flow.app/Contents/Resources/app/java
+                                    </outputDirectory>
+                                    <outputFileName>jre_mac.tar.gz</outputFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>download-openjdk-jre-mac-os-arm64</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- When updating the URL also update the variable 'jreFolder' in src/main/electron/main.js -->
+                                    <url>
+                                        https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9_openj9-0.24.0/OpenJDK11U-jdk_aarch64_linux_openj9_11.0.10_9_openj9-0.24.0.tar.gz
+                                    </url>
+                                    <outputDirectory>
+                                        ${project.build.directory}/electron/designer-for-flow-darwin-arm64/designer-for-flow.app/Contents/Resources/app/java
                                     </outputDirectory>
                                     <outputFileName>jre_mac.tar.gz</outputFileName>
                                 </configuration>

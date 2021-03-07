@@ -13,11 +13,12 @@
     "package": "electron-packager ./ --icon=icon.ico --ignore=node\\b",
     "package-windows": "electron-packager ./ --icon=icon.ico  --platform=win32",
     "package-linux": "electron-packager ./ --icon=icon.ico  --platform=linux",
-    "package-mac": "electron-packager ./ --icon=icon.ico --platform=darwin",
+    "package-mac-x64": "electron-packager ./ --icon=icon.ico --platform=darwin",
+    "package-mac-arm64": "electron-packager ./ --icon=icon.ico --platform=darwin --arch=arm64",
     "package-all": "electron-packager ./ --icon=icon.ico --platform=all"
   },
   "devDependencies": {
-    "electron-packager": "^15.1.0",
-    "electron": "^10.1.3"
+    "electron-packager": "^15.2.0",
+    "electron": "^12.0.0"
   }
 }

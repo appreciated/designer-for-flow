@@ -10,8 +10,7 @@ if !ERRORLEVEL! EQU 0 (
       cd ..\..\..
       mvn clean install -Pproduction
       cd scripts
-      dir
-      ubuntu2004 run dos2unix.exe zip-electron-builds.sh
+      ubuntu2004 run dos2unix zip-electron-builds.sh
       ubuntu2004 run bash zip-electron-builds.sh
       PAUSE
     ) else (
