@@ -17,7 +17,7 @@ public class MavenProjectChooserView extends FileChooserView {
             if (root.listFiles() == null) {
                 return null;
             } else {
-                return Arrays.stream(root.listFiles()).filter(File::isDirectory);
+                return Arrays.stream(root.listFiles()).filter(File::isDirectory).sorted((s1, s2) -> s1.getName().compareTo(s2.getName()));
             }
         });
         setUpdate(selectedFile -> {
